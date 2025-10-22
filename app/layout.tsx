@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import Navbar from '../components/sections/Navbar'
+import Footer from '../components/sections/Footer'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body className="min-h-dvh antialiased">
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   )

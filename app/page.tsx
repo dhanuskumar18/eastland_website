@@ -4,7 +4,7 @@ import Features from "./home/Features"
 import AboutUs from "./home/AboutUs"
 import Videos from "./home/Videos"
 import Gallery from "./home/Gallery"
-// import Testimonials from "./home/Testimonials"
+import Testimonials from "./home/Testimonials"
 export default function HomePage() {
   return (
     <main className="flex min-h-dvh flex-col">
@@ -15,7 +15,7 @@ export default function HomePage() {
       <Features />
       <WhyChoose />
       <Gallery />
-      {/* <Testimonials /> */}
+      <Testimonials />
     </main>
   )
 }

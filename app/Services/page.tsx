@@ -1,0 +1,290 @@
+import Image from "next/image"
+import Link from "next/link"
+
+export default function ServicesPage() {
+  return (
+    <main className="flex min-h-dvh flex-col">
+      {/* Hero Section */}
+      <section className="relative h-[60vh] min-h-[500px]">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/aboutUs/Rectangle 52.png"
+            alt="Our Services"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+        <div className="relative z-10 flex h-full items-center justify-center">
+          <div className="text-center text-white">
+            <h1 className="text-4xl font-bold sm:text-5xl lg:text-6xl">
+              Our Services
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl">
+              Comprehensive Solutions for Your Business Needs
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Services Section */}
+      <section className="py-20 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-16 md:grid-cols-2">
+            {/* Left Side - Image with custom border radius */}
+            <div className="relative w-full max-w-[543px]">
+              <div 
+                className="relative shadow-lg"
+                style={{
+                  width: '543px',
+                  height: '502px',
+                  border: '1px solid black',
+                  borderTopLeftRadius: '0px',
+                  borderBottomRightRadius: '0px',
+                  borderTopRightRadius: '231px',
+                  borderBottomLeftRadius: '87px',
+                  padding: '20px'
+                }}
+              >
+                <div 
+                  className="relative w-full h-full overflow-hidden"
+                  style={{
+                    borderTopLeftRadius: '0px',
+                    borderBottomRightRadius: '0px',
+                    borderTopRightRadius: '211px',
+                    borderBottomLeftRadius: '67px'
+                  }}
+                >
+                  <Image 
+                    src="/images/aboutUs/Frame 26080088.png" 
+                    alt="Modern Restaurant Interior" 
+                    fill 
+                    className="object-cover" 
+                    style={{ transform: 'scaleX(-1)' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Content */}
+            <div>
+              <p className="text-sm font-semibold text-slate-500">Our Services</p>
+              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+                Expert Kitchen Services with <span className="text-emerald-700">Equipment</span> and <span className="text-emerald-700">Sanitization Product Support</span>
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                Expert Kitchen Services with Essential Equipment and Sanitization Product Support We provide end-to-end commercial kitchen solutions, including design, installation, maintenance, and deep cleaning services.
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                Alongside our expertise, we offer essential kitchen equipment, smallwares, and professional sanitization products to ensure safety, efficiency, and compliance across all food service operations. Our support is tailored to hotels, restaurants, cafeterias, bakeries, and industrial facilities.
+              </p>
+
+              <div className="mt-10">
+                <a href="#enquiry" className="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800">
+                  Enquiry Now <span aria-hidden>→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Cards Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold text-slate-500">Services</p>
+            <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+              Professional Kitchen Installation, Repair and <span className="text-emerald-700">Deep Cleaning Solutions</span>
+            </h2>
+          </div>
+
+          <div className="flex justify-center" style={{ gap: '35px' }}>
+            {/* Card 1: Food Service Equipment */}
+            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              <div className="relative h-full">
+                <Image
+                  src="/images/aboutUs/Frame 26080088.png"
+                  alt="Food Service Equipment"
+                  fill
+                  className="object-cover transition-transform group-hover:scale-110"
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-white font-bold text-lg">Food Service Equipment</h3>
+                </div>
+              </div>
+              
+              {/* Hover Content */}
+              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                <div>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
+                  <h3 className="text-white font-bold text-xl mb-4">Food Service Equipment</h3>
+                  <p className="text-emerald-100 text-sm leading-relaxed">
+                    High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
+                  </p>
+                </div>
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                  Enquiry Now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Card 2: Kitchen Hood Equipments */}
+            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              <div className="relative h-full">
+                <Image
+                  src="/images/aboutUs/Rectangle 52.png"
+                  alt="Kitchen Hood Equipments"
+                  fill
+                  className="object-cover transition-transform group-hover:scale-110"
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-white font-bold text-lg">Kitchen Hood Equipments</h3>
+                </div>
+              </div>
+              
+              {/* Hover Content */}
+              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                <div>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
+                  <h3 className="text-white font-bold text-xl mb-4">Kitchen Hood Equipments</h3>
+                  <p className="text-emerald-100 text-sm leading-relaxed">
+                    Professional ventilation systems and hood equipment for safe and efficient kitchen operations.
+                  </p>
+                </div>
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                  Enquiry Now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Card 3: Smallwares */}
+            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              <div className="relative h-full">
+                <Image
+                  src="/images/aboutUs/Frame 26080088.png"
+                  alt="Smallwares"
+                  fill
+                  className="object-cover transition-transform group-hover:scale-110"
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-white font-bold text-lg">Smallwares</h3>
+                </div>
+              </div>
+              
+              {/* Hover Content */}
+              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                <div>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
+                  <h3 className="text-white font-bold text-xl mb-4">Smallwares</h3>
+                  <p className="text-emerald-100 text-sm leading-relaxed">
+                    High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
+                  </p>
+                </div>
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                  Enquiry Now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Card 4: Hand Sanitization Equipment */}
+            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              <div className="relative h-full">
+                <Image
+                  src="/images/aboutUs/Rectangle 52.png"
+                  alt="Hand Sanitization Equipment"
+                  fill
+                  className="object-cover transition-transform group-hover:scale-110"
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-white font-bold text-lg">Hand Sanitization Equipment</h3>
+                </div>
+              </div>
+              
+              {/* Hover Content */}
+              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                <div>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
+                  <h3 className="text-white font-bold text-xl mb-4">Hand Sanitization Equipment</h3>
+                  <p className="text-emerald-100 text-sm leading-relaxed">
+                    Professional sanitization solutions and equipment for maintaining hygiene standards.
+                  </p>
+                </div>
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                  Enquiry Now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Our Services Section */}
+      <section className="py-20 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-16 md:grid-cols-2">
+            {/* Left Side - Overlapping Images */}
+            <div className="relative w-full max-w-[520px]">
+              {/* Main Image */}
+              <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
+                <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+                  <Image 
+                    src="/images/aboutUs/Frame 26080088.png" 
+                    alt="Modern Commercial Kitchen" 
+                    fill 
+                    className="object-cover" 
+                  />
+                </div>
+              </div>
+
+              {/* Overlapping Secondary Image */}
+              <div className="absolute -bottom-8 right-8 w-[300px] rounded-2xl shadow-2xl">
+                <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
+                  <Image 
+                    src="/images/aboutUs/Rectangle 52.png" 
+                    alt="Professional Kitchen Equipment" 
+                    fill 
+                    className="object-cover" 
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Content */}
+            <div>
+              <p className="text-sm font-semibold text-slate-500">About Our Services</p>
+              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+                High-Quality Products Supporting <span className="text-emerald-700">Safe, Efficient, and Modern Kitchen</span>
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                Founded with a vision to revolutionize the food service industry, we specialize in designing and installing high-performance spaces for quick service restaurants, cafés, and delis. What began as a small setup service has evolved into a full-scale solutions provider offering everything from layout planning and custom fabrication to equipment integration and end-to-end installation.
+              </p>
+
+              <div className="mt-10">
+                <a href="#enquiry" className="inline-flex items-center gap-2 rounded-full border border-emerald-700 px-5 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-700 hover:text-white">
+                  Enquiry Now <span aria-hidden>↗</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
