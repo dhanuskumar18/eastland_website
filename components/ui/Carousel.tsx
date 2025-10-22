@@ -23,6 +23,7 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
   const [isTransitioning, setIsTransitioning] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<HTMLDivElement[]>([])
+  const contentRefs = useRef<HTMLDivElement[]>([])
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
 
   // Add slide to refs array
@@ -32,39 +33,71 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
     }
   }
 
+  // Add content to refs array
+  const addContentToRefs = (el: HTMLDivElement | null) => {
+    if (el && !contentRefs.current.includes(el)) {
+      contentRefs.current.push(el)
+    }
+  }
+
   // GSAP animation for slide transition
   const animateSlide = (fromIndex: number, toIndex: number, direction: 'next' | 'prev') => {
     const fromSlide = slidesRef.current[fromIndex]
     const toSlide = slidesRef.current[toIndex]
+    const fromContent = contentRefs.current[fromIndex]
+    const toContent = contentRefs.current[toIndex]
 
     if (!fromSlide || !toSlide) return
 
     // Set transition state
     setIsTransitioning(true)
 
-    // Set initial positions
+    // Set initial positions for slides - next slide starts off-screen
     gsap.set(toSlide, {
       x: direction === 'next' ? '100%' : '-100%',
-      opacity: 1
+      opacity: 1,
+      zIndex: 10 // Higher z-index to appear on top
     })
 
-    // Animate both slides
+    // Set initial positions for content
+    if (fromContent && toContent) {
+      gsap.set(toContent, {
+        x: direction === 'next' ? '100%' : '-100%',
+        opacity: 1,
+        zIndex: 10 // Higher z-index to appear on top
+      })
+    }
+
+    // Animate both slides and content
     const tl = gsap.timeline({
       onComplete: () => {
+        // Reset z-index after animation
+        gsap.set(fromSlide, { zIndex: 1 })
+        gsap.set(toSlide, { zIndex: 1 })
+        if (fromContent && toContent) {
+          gsap.set(fromContent, { zIndex: 1 })
+          gsap.set(toContent, { zIndex: 1 })
+        }
         setIsTransitioning(false)
       }
     })
     
-    tl.to(fromSlide, {
-      x: direction === 'next' ? '-100%' : '100%',
-      duration: 5,
-      ease: 'power2.inOut'
-    })
-    .to(toSlide, {
+    // Only animate the incoming slide - current slide stays in place
+    tl.to(toSlide, {
       x: '0%',
       duration: 5,
       ease: 'power2.inOut'
-    }, 0) // Start at the same time as the previous animation
+    })
+
+    // Animate content if it exists
+    if (fromContent && toContent) {
+      // Slide in new content - previous content will be covered by the new image
+      tl.to(toContent, {
+        x: '0%',
+        duration: 5,
+        ease: 'power2.inOut'
+      }, 0) // Start at the same time as slide animation
+    }
   }
 
   // Go to next slide
@@ -105,12 +138,22 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
     }
   }, [currentIndex, autoPlay, autoPlayInterval, goToNext])
 
-  // Initialize slides on mount
+  // Initialize slides and content on mount
   useEffect(() => {
     if (slidesRef.current.length > 0) {
       // Set initial positions for all slides
       slidesRef.current.forEach((slide, index) => {
         gsap.set(slide, {
+          x: index === 0 ? '0%' : '100%',
+          opacity: index === 0 ? 1 : 0
+        })
+      })
+    }
+
+    if (contentRefs.current.length > 0) {
+      // Set initial positions for all content
+      contentRefs.current.forEach((content, index) => {
+        gsap.set(content, {
           x: index === 0 ? '0%' : '100%',
           opacity: index === 0 ? 1 : 0
         })
@@ -171,34 +214,38 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
       </div>
 
       {/* Content overlay */}
-      {content && content[currentIndex] && (
-        <div className="absolute inset-0 z-10 flex max-w-full flex-row justify-around items-end px-4 py-24 sm:px-6 lg:px-16 min-h-screen">
+      {content && content.map((slideContent, index) => (
+        <div
+          key={index}
+          ref={addContentToRefs}
+          className="absolute inset-0 z-10 flex max-w-full flex-row justify-around items-end px-4 py-24 sm:px-6 lg:px-16 min-h-screen"
+        >
           <div className="max-w-4xl">
-            {content[currentIndex].title && (
+            {slideContent.title && (
               <h1 className="text-6xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl">
-                {content[currentIndex].title}
+                {slideContent.title}
               </h1>
             )}
-            {content[currentIndex].subtitle && (
+            {slideContent.subtitle && (
               <p className="mt-6 text-2xl font-light text-white/90 sm:text-3xl">
-                {content[currentIndex].subtitle}
+                {slideContent.subtitle}
               </p>
             )}
           </div>
 
           <div className="max-w-2xl">
-            {content[currentIndex].description && (
+            {slideContent.description && (
               <p className="text-lg text-white/80 leading-relaxed sm:text-xl">
-                {content[currentIndex].description}
+                {slideContent.description}
               </p>
             )}
-            {content[currentIndex].buttonText && content[currentIndex].buttonLink && (
+            {slideContent.buttonText && slideContent.buttonLink && (
               <div className="mt-8">
                 <a
-                  href={content[currentIndex].buttonLink}
+                  href={slideContent.buttonLink}
                   className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur transition-all hover:bg-white/20 hover:border-white/50"
                 >
-                  {content[currentIndex].buttonText}
+                  {slideContent.buttonText}
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -207,7 +254,7 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
             )}
           </div>
         </div>
-      )}
+      ))}
 
       {/* Navigation dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
