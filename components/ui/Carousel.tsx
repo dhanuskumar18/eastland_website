@@ -24,6 +24,8 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
   const carouselRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<HTMLDivElement[]>([])
   const contentRefs = useRef<HTMLDivElement[]>([])
+  const descriptionRefs = useRef<HTMLDivElement[]>([])
+  const buttonRefs = useRef<HTMLDivElement[]>([])
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
 
   // Add slide to refs array
@@ -37,6 +39,48 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
   const addContentToRefs = (el: HTMLDivElement | null) => {
     if (el && !contentRefs.current.includes(el)) {
       contentRefs.current.push(el)
+    }
+  }
+
+  // Add description to refs array
+  const addDescriptionToRefs = (el: HTMLDivElement | null) => {
+    if (el && !descriptionRefs.current.includes(el)) {
+      descriptionRefs.current.push(el)
+    }
+  }
+
+  // Add button to refs array
+  const addButtonToRefs = (el: HTMLDivElement | null) => {
+    if (el && !buttonRefs.current.includes(el)) {
+      buttonRefs.current.push(el)
+    }
+  }
+
+  // Fade-in animation for description and button
+  const animateDescriptionAndButton = (index: number) => {
+    const description = descriptionRefs.current[index]
+    const button = buttonRefs.current[index]
+
+    if (description) {
+      gsap.set(description, { opacity: 0, x: 100 })
+      gsap.to(description, {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        ease: 'power2.out',
+        delay: 0.3
+      })
+    }
+
+    if (button) {
+      gsap.set(button, { opacity: 0, x: 100 })
+      gsap.to(button, {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        ease: 'power2.out',
+        delay: 0.6
+      })
     }
   }
 
@@ -74,6 +118,23 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
       })
     }
 
+    // Set initial positions for description and button of incoming slide
+    const incomingDescription = descriptionRefs.current[toIndex]
+    const incomingButton = buttonRefs.current[toIndex]
+    
+    if (incomingDescription) {
+      gsap.set(incomingDescription, { 
+        opacity: 0, 
+        x: direction === 'next' ? 100 : -100 // Start from the same direction as the slide
+      })
+    }
+    if (incomingButton) {
+      gsap.set(incomingButton, { 
+        opacity: 0, 
+        x: direction === 'next' ? 100 : -100 // Start from the same direction as the slide
+      })
+    }
+
     // Animate both slides and content
     const tl = gsap.timeline({
       onComplete: () => {
@@ -94,6 +155,7 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
             x: '0%'
           })
         }
+        
         setIsTransitioning(false)
       }
     })
@@ -113,6 +175,28 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
         duration: 5,
         ease: 'power2.inOut'
       }, 0) // Start at the same time as slide animation
+    }
+
+    // Animate description and button fade-in after 3 seconds from slide transition
+    const description = descriptionRefs.current[toIndex]
+    const button = buttonRefs.current[toIndex]
+
+    if (description) {
+      tl.to(description, {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        ease: 'power2.out'
+      }, 3) // Start 3 seconds into the slide transition
+    }
+
+    if (button) {
+      tl.to(button, {
+        opacity: 1,
+        x: 0,
+        duration: 1.2,
+        ease: 'power2.out'
+      }, 3.3) // Start 3.3 seconds into the slide transition (0.3s after description)
     }
   }
 
@@ -174,6 +258,25 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
           opacity: index === 0 ? 1 : 0
         })
       })
+    }
+
+    // Initialize description and button animations for the first slide
+    if (descriptionRefs.current.length > 0 && buttonRefs.current.length > 0) {
+      // Set initial state for first slide elements
+      const firstDescription = descriptionRefs.current[0]
+      const firstButton = buttonRefs.current[0]
+      
+      if (firstDescription) {
+        gsap.set(firstDescription, { opacity: 0, x: 100 })
+      }
+      if (firstButton) {
+        gsap.set(firstButton, { opacity: 0, x: 100 })
+      }
+      
+      // Animate the first slide's description and button on mount
+      setTimeout(() => {
+        animateDescriptionAndButton(0)
+      }, 500)
     }
   }, [])
 
@@ -253,12 +356,18 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
 
           <div className="max-w-2xl">
             {slideContent.description && (
-              <p className="text-lg text-white/80 leading-relaxed sm:text-xl">
+              <p 
+                ref={addDescriptionToRefs}
+                className="text-lg text-white/80 leading-relaxed sm:text-xl"
+              >
                 {slideContent.description}
               </p>
             )}
             {slideContent.buttonText && slideContent.buttonLink && (
-              <div className="mt-8">
+              <div 
+                ref={addButtonToRefs}
+                className="mt-8"
+              >
                 <a
                   href={slideContent.buttonLink}
                   className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur transition-all hover:bg-white/20 hover:border-white/50"
