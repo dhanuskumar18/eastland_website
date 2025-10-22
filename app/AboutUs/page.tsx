@@ -1,4 +1,15 @@
+"use client"
+
 import Image from "next/image"
+import { useState, useEffect } from "react"
+
+interface TeamMember {
+  id: string
+  name: string
+  title: string
+  description: string
+  image: string
+}
 
 export default function AboutUsPage() {
   return (
@@ -125,6 +136,169 @@ export default function AboutUsPage() {
           </div>
         </div>
       </section>
+
+      {/* Team Section */}
+      <TeamSection />
     </main>
+  )
+}
+
+const teamMembers: TeamMember[] = [
+  {
+    id: "1",
+    name: "Maddy",
+    title: "Senior Designer",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    image: "/images/1.png",
+  },
+  {
+    id: "2",
+    name: "Rhossan",
+    title: "Senior Designer",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    image: "/images/2.png",
+  },
+  {
+    id: "3",
+    name: "Jonathan",
+    title: "Senior Designer",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    image: "/images/2 (1).png",
+  },
+]
+
+function TeamSection() {
+  const [currentIndex, setCurrentIndex] = useState(1) // Start with center card (Rhossan)
+  const [isAnimating, setIsAnimating] = useState(false)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % teamMembers.length)
+        setIsAnimating(false)
+      }, 300)
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const currentMember = teamMembers[currentIndex]
+
+  return (
+    <section className="relative w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl sm:text-5xl font-bold">
+          Our <span className="text-green-600">Team</span>
+        </h1>
+      </div>
+
+      {/* Main Content Container */}
+      <div className="relative w-full mx-auto" style={{ maxWidth: '1600px' }}>
+        {/* Large Background Name with Gradient */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          <h2
+            className={`text-8xl sm:text-9xl md:text-[12rem] font-bold text-center whitespace-nowrap transition-all duration-500 ${
+              isAnimating ? 'opacity-5 scale-50' : 'opacity-20 scale-100'
+            }`}
+            style={{
+              background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              position: 'absolute',
+              left: '50%',
+              top: '35%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+            }}
+          >
+            {currentMember.name}
+          </h2>
+        </div>
+
+        {/* Featured Image - Above Center Card */}
+        <div className="relative mb-8 z-10" style={{ height: '380px' }}>
+          <div
+            className={`absolute transition-all duration-500 ease-in-out rounded-2xl overflow-hidden shadow-2xl ${
+              isAnimating ? 'w-20 h-20 opacity-70 scale-75' : 'w-48 h-64 sm:w-56 sm:h-72 md:w-64 md:h-80 opacity-100 scale-100'
+            }`}
+            style={{
+              top: isAnimating ? '300px' : '40px',
+              left: '50%',
+              transform: isAnimating ? 'translate(-50%, -50%) scale(0.4)' : 'translate(-50%, -50%) scale(1)',
+              transformOrigin: 'center center',
+              zIndex: 10,
+            }}
+          >
+            <Image
+              src={currentMember.image || "/placeholder.svg"}
+              alt={currentMember.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Three Cards Carousel Container - All Visible */}
+        <div className="relative z-20 w-full overflow-visible" style={{ minHeight: '200px', width: '100%' }}>
+          <div
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{
+              transform: `translateX(-${currentIndex * 33.333}%)`,
+              width: `${teamMembers.length * 33.333}%`
+            }}
+          >
+            {/* All Three Cards in Carousel - All Visible */}
+            {teamMembers.map((member, index) => (
+              <div
+                key={member.id}
+                className="flex-shrink-0"
+                style={{ width: '33.333%', flexBasis: '33.333%' }}
+              >
+                <div
+                  className={`bg-white rounded-2xl p-4 shadow-lg border-2 transition-all duration-300 cursor-pointer h-full ${
+                    currentIndex === index
+                      ? 'ring-2 ring-green-500 ring-opacity-50 transform scale-105 shadow-2xl border-green-500'
+                      : 'border-gray-300 hover:shadow-xl hover:scale-105 hover:ring-2 hover:ring-gray-300 hover:border-gray-400'
+                  }`}
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+                      <Image
+                        src={member.image || "/placeholder.svg"}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-base text-gray-900">{member.name}</h3>
+                      <p className="text-xs text-gray-600">{member.title}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">{member.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </div>
+
+      {/* CTA Button */}
+      <div className="flex justify-center mt-16 relative z-20">
+        <button className="px-8 py-3 border-2 border-green-600 text-green-600 rounded-full font-semibold hover:bg-green-50 transition-colors flex items-center gap-2">
+          See More
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </section>
   )
 }

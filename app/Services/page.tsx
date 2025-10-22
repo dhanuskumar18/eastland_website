@@ -28,7 +28,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Our Services Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white animate-slide-up opacity-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Image with custom border radius */}
@@ -90,7 +90,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Cards Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 animate-slide-up-delay opacity-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-slate-500">Services</p>
@@ -236,7 +236,7 @@ export default function ServicesPage() {
       </section>
 
       {/* About Our Services Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white animate-slide-up-cards opacity-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Overlapping Images */}
