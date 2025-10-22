@@ -61,10 +61,16 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
 
     // Set initial positions for content
     if (fromContent && toContent) {
+      // Set current content to lower z-index
+      gsap.set(fromContent, {
+        zIndex: 1
+      })
+      
+      // Set new content to higher z-index and off-screen position
       gsap.set(toContent, {
         x: direction === 'next' ? '100%' : '-100%',
         opacity: 1,
-        zIndex: 10 // Higher z-index to appear on top
+        zIndex: 20 // Higher z-index to appear on top of everything
       })
     }
 
@@ -75,8 +81,18 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
         gsap.set(fromSlide, { zIndex: 1 })
         gsap.set(toSlide, { zIndex: 1 })
         if (fromContent && toContent) {
-          gsap.set(fromContent, { zIndex: 1 })
-          gsap.set(toContent, { zIndex: 1 })
+          // Hide the previous content completely
+          gsap.set(fromContent, { 
+            zIndex: 1,
+            opacity: 0,
+            x: '0%'
+          })
+          // Keep the new content visible
+          gsap.set(toContent, { 
+            zIndex: 1,
+            opacity: 1,
+            x: '0%'
+          })
         }
         setIsTransitioning(false)
       }
@@ -218,7 +234,9 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
         <div
           key={index}
           ref={addContentToRefs}
-          className="absolute inset-0 z-10 flex max-w-full flex-row justify-around items-end px-4 py-24 sm:px-6 lg:px-16 min-h-screen"
+          className={`absolute inset-0 flex max-w-full flex-row justify-around items-end px-4 py-24 sm:px-6 lg:px-16 min-h-screen ${
+            index === currentIndex ? 'z-20' : 'z-10'
+          }`}
         >
           <div className="max-w-4xl">
             {slideContent.title && (
