@@ -1,14 +1,96 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { useState, useEffect, useRef } from "react"
 
 export default function ServicesPage() {
+  const firstContentRef = useRef<HTMLDivElement>(null)
+  const middleContentRef = useRef<HTMLDivElement>(null)
+  const card1Ref = useRef<HTMLDivElement>(null)
+  const card2Ref = useRef<HTMLDivElement>(null)
+  const card3Ref = useRef<HTMLDivElement>(null)
+  const card4Ref = useRef<HTMLDivElement>(null)
+  const lastContentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+            // Mark as animated to prevent re-triggering
+            entry.target.setAttribute('data-animated', 'true')
+            
+            // Remove opacity-0 class
+            entry.target.classList.remove('opacity-0')
+
+            if (entry.target === firstContentRef.current) {
+              // First content - slide up with bounce
+              console.log('Animating first content')
+              entry.target.classList.add('animate-slide-up-bounce')
+            } else if (entry.target === middleContentRef.current) {
+              // Middle content - slide up with bounce
+              console.log('Animating middle content')
+              entry.target.classList.add('animate-slide-up-bounce')
+            } else if (entry.target === card1Ref.current) {
+              // Card 1 - slide up with bounce
+              console.log('Animating card 1')
+              entry.target.classList.add('animate-slide-up-bounce')
+            } else if (entry.target === card2Ref.current) {
+              // Card 2 - slide up with bounce
+              console.log('Animating card 2')
+              entry.target.classList.add('animate-slide-up-bounce')
+            } else if (entry.target === card3Ref.current) {
+              // Card 3 - slide up with bounce
+              console.log('Animating card 3')
+              entry.target.classList.add('animate-slide-up-bounce')
+            } else if (entry.target === card4Ref.current) {
+              // Card 4 - slide up with bounce
+              console.log('Animating card 4')
+              entry.target.classList.add('animate-slide-up-bounce')
+            } else if (entry.target === lastContentRef.current) {
+              // Last content - slide up with bounce
+              console.log('Animating last content')
+              entry.target.classList.add('animate-slide-up-bounce')
+            }
+
+            // Stop observing this element to prevent re-triggering
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+
+    // Observe content
+    if (firstContentRef.current) observer.observe(firstContentRef.current)
+    if (middleContentRef.current) observer.observe(middleContentRef.current)
+    if (card1Ref.current) observer.observe(card1Ref.current)
+    if (card2Ref.current) observer.observe(card2Ref.current)
+    if (card3Ref.current) observer.observe(card3Ref.current)
+    if (card4Ref.current) observer.observe(card4Ref.current)
+    if (lastContentRef.current) observer.observe(lastContentRef.current)
+
+    return () => {
+      if (firstContentRef.current) observer.unobserve(firstContentRef.current)
+      if (middleContentRef.current) observer.unobserve(middleContentRef.current)
+      if (card1Ref.current) observer.unobserve(card1Ref.current)
+      if (card2Ref.current) observer.unobserve(card2Ref.current)
+      if (card3Ref.current) observer.unobserve(card3Ref.current)
+      if (card4Ref.current) observer.unobserve(card4Ref.current)
+      if (lastContentRef.current) observer.unobserve(lastContentRef.current)
+    }
+  }, [])
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
           <Image
-            src="/images/aboutUs/Rectangle 52.png"
+            src="/images/Services/Rectangle 52 (4).png"
             alt="Our Services"
             fill
             className="object-cover"
@@ -28,9 +110,9 @@ export default function ServicesPage() {
       </section>
 
       {/* Our Services Section */}
-      <section className="py-20 bg-white animate-slide-up opacity-0">
+      <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-16 md:grid-cols-2">
+          <div ref={firstContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Image with custom border radius */}
             <div className="relative w-full max-w-[543px]">
               <div 
@@ -56,7 +138,7 @@ export default function ServicesPage() {
                   }}
                 >
                   <Image 
-                    src="/images/aboutUs/Frame 26080088.png" 
+                    src="/images/Services/1 (9).png" 
                     alt="Modern Restaurant Interior" 
                     fill 
                     className="object-cover" 
@@ -80,8 +162,21 @@ export default function ServicesPage() {
               </p>
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800">
-                  Enquiry Now <span aria-hidden>→</span>
+                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-emerald-800 hover:scale-105 group">
+                  Enquiry Now
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  </svg>
                 </a>
               </div>
             </div>
@@ -90,9 +185,9 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Cards Section */}
-      <section className="py-20 bg-gray-50 animate-slide-up-delay opacity-0">
+      <section className="py-20 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div ref={middleContentRef} className="text-center mb-16 opacity-0">
             <p className="text-sm font-semibold text-slate-500">Services</p>
             <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
               Professional Kitchen Installation, Repair and <span className="text-emerald-700">Deep Cleaning Solutions</span>
@@ -100,11 +195,11 @@ export default function ServicesPage() {
           </div>
 
           <div className="flex justify-center" style={{ gap: '35px' }}>
-            {/* Card 1: Food Service Equipment */}
-            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              {/* Card 1: Food Service Equipment */}
+              <div ref={card1Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/aboutUs/Frame 26080088.png"
+                  src="/images/Services/Rectangle 35.png"
                   alt="Food Service Equipment"
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
@@ -124,20 +219,30 @@ export default function ServicesPage() {
                     High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
                   Enquiry Now
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
                 </button>
               </div>
             </div>
 
-            {/* Card 2: Kitchen Hood Equipments */}
-            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              {/* Card 2: Kitchen Hood Equipments */}
+              <div ref={card2Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/aboutUs/Rectangle 52.png"
+                  src="/images/Services/Rectangle 35 (1).png"
                   alt="Kitchen Hood Equipments"
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
@@ -157,20 +262,30 @@ export default function ServicesPage() {
                     Professional ventilation systems and hood equipment for safe and efficient kitchen operations.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
                   Enquiry Now
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
                 </button>
               </div>
             </div>
 
-            {/* Card 3: Smallwares */}
-            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              {/* Card 3: Smallwares */}
+              <div ref={card3Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/aboutUs/Frame 26080088.png"
+                  src="/images/Services/Rectangle 35 (2).png"
                   alt="Smallwares"
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
@@ -190,20 +305,30 @@ export default function ServicesPage() {
                     High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
                   Enquiry Now
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
                 </button>
               </div>
             </div>
 
-            {/* Card 4: Hand Sanitization Equipment */}
-            <div className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer" style={{ width: '270px', height: '410px' }}>
+              {/* Card 4: Hand Sanitization Equipment */}
+              <div ref={card4Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/aboutUs/Rectangle 52.png"
+                  src="/images/Services/Rectangle 35 (3).png"
                   alt="Hand Sanitization Equipment"
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
@@ -223,10 +348,20 @@ export default function ServicesPage() {
                     Professional sanitization solutions and equipment for maintaining hygiene standards.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
                   Enquiry Now
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
                 </button>
               </div>
@@ -236,16 +371,16 @@ export default function ServicesPage() {
       </section>
 
       {/* About Our Services Section */}
-      <section className="py-20 bg-white animate-slide-up-cards opacity-0">
+      <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-16 md:grid-cols-2">
+          <div ref={lastContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px]">
               {/* Main Image */}
               <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
                 <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
                   <Image 
-                    src="/images/aboutUs/Frame 26080088.png" 
+                    src="/images/Services/1 (8).png" 
                     alt="Modern Commercial Kitchen" 
                     fill 
                     className="object-cover" 
@@ -257,7 +392,7 @@ export default function ServicesPage() {
               <div className="absolute -bottom-8 right-8 w-[300px] rounded-2xl shadow-2xl">
                 <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
                   <Image 
-                    src="/images/aboutUs/Rectangle 52.png" 
+                    src="/images/Services/1 (9).png" 
                     alt="Professional Kitchen Equipment" 
                     fill 
                     className="object-cover" 
@@ -277,8 +412,21 @@ export default function ServicesPage() {
               </p>
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 rounded-full border border-emerald-700 px-5 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-700 hover:text-white">
-                  Enquiry Now <span aria-hidden>↗</span>
+                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                  Enquiry Now
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  </svg>
                 </a>
               </div>
             </div>

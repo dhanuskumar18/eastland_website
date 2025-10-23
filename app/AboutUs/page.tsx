@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface TeamMember {
   id: string
@@ -12,6 +12,54 @@ interface TeamMember {
 }
 
 export default function AboutUsPage() {
+  const imageRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const missionRef = useRef<HTMLDivElement>(null)
+  const visionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === missionRef.current) {
+              // Mission section - slide from left
+              entry.target.classList.add('animate-slide-left')
+            } else if (entry.target === visionRef.current) {
+              // Vision section - slide from right
+              entry.target.classList.add('animate-slide-right')
+            } else if (entry.target === sectionRef.current) {
+              // Company background section - slide up with bounce
+              if (imageRef.current) {
+                imageRef.current.classList.add('animate-slide-up-bounce')
+              }
+              if (contentRef.current) {
+                contentRef.current.classList.add('animate-slide-up-bounce-delayed')
+              }
+            }
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.15, // Trigger when 15% of section is visible
+        rootMargin: '0px 0px -30px 0px' // Trigger slightly before section fully enters
+      }
+    )
+
+    // Observe all sections
+    if (sectionRef.current) observer.observe(sectionRef.current)
+    if (missionRef.current) observer.observe(missionRef.current)
+    if (visionRef.current) observer.observe(visionRef.current)
+
+    return () => {
+      if (sectionRef.current) observer.unobserve(sectionRef.current)
+      if (missionRef.current) observer.unobserve(missionRef.current)
+      if (visionRef.current) observer.unobserve(visionRef.current)
+    }
+  }, [])
+
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Top Panel with Image */}
@@ -27,30 +75,28 @@ export default function AboutUsPage() {
         </div>
         
         {/* Content overlay */}
-        <div className="relative z-10 h-full flex items-center">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
-            <div className="max-w-3xl">
-              <p className="text-sm font-semibold text-white/80 mb-2">About Us</p>
-            </div>
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full text-center">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">About Us</h1>
           </div>
         </div>
       </section>
 
       {/* Company Background Section */}
-      <section className="py-20 bg-white">
+      <section ref={sectionRef} className="company-background-section py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Image on the left */}
-            <div className="relative w-full max-w-[520px]">
+            <div ref={imageRef} className="relative w-full max-w-[520px] opacity-0">
               <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
                 <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
-                  <Image src="/images/aboutUs/Rectangle 52.png" alt="Company Background" fill className="object-cover" />
+                  <Image src="/images/aboutUs/1 (3).png" alt="Company Background" fill className="object-cover" />
                 </div>
               </div>
             </div>
 
             {/* Content on the right */}
-            <div>
+            <div ref={contentRef} className="opacity-0">
               <p className="text-sm font-semibold text-slate-500">Company Background</p>
               <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
                 The Story Behind Our Passion For Building <span className="text-emerald-700">Efficient</span> Food Spaces
@@ -63,8 +109,21 @@ export default function AboutUsPage() {
               </p>
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 rounded-full border border-emerald-700 px-5 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-700 hover:text-white">
-                  Enquiry Now <span aria-hidden>↗</span>
+                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                  Enquiry Now
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  </svg>
                 </a>
               </div>
             </div>
@@ -86,9 +145,9 @@ export default function AboutUsPage() {
         
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Mission Part */}
-          <div className="mb-20 grid items-center gap-16 md:grid-cols-2">
+          <div ref={missionRef} className="mb-20 grid items-center gap-16 md:grid-cols-[60%_40%] opacity-0">
             {/* Text on the left */}
-            <div>
+            <div className="md:col-span-1">
               <p className="mb-2 text-sm font-semibold text-white/80">Mission</p>
               <h2 className="mb-6 text-3xl font-bold leading-tight md:text-4xl">
                 Delivering efficient, high-quality restaurant setups with precision and speed.
@@ -98,10 +157,10 @@ export default function AboutUsPage() {
               </p>
             </div>
             {/* Image on the right */}
-            <div className="relative w-full max-w-[520px] justify-self-end">
+            <div className="relative w-full max-w-[520px] justify-self-end md:col-span-1">
               <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
                 <Image
-                  src="/images/aboutUs/Rectangle 52.png"
+                  src="/images/aboutUs/Rectangle 54.png"
                   alt="Modern Restaurant Interior"
                   fill
                   className="object-cover"
@@ -111,12 +170,12 @@ export default function AboutUsPage() {
           </div>
 
           {/* Vision Part */}
-          <div className="grid items-center gap-16 md:grid-cols-2">
+          <div ref={visionRef} className="grid items-center gap-16 md:grid-cols-[40%_60%] opacity-0">
             {/* Image on the left */}
-            <div className="relative w-full max-w-[520px]">
+            <div className="relative w-full max-w-[520px] md:col-span-1">
               <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
                 <Image
-                  src="/images/aboutUs/Rectangle 52.png"
+                  src="/images/aboutUs/Rectangle 55.png"
                   alt="Elegant Dining Area"
                   fill
                   className="object-cover"
@@ -124,7 +183,7 @@ export default function AboutUsPage() {
               </div>
             </div>
             {/* Text on the right */}
-            <div>
+            <div className="md:col-span-1">
               <p className="mb-2 text-sm font-semibold text-white/80">Vision</p>
               <h2 className="mb-6 text-3xl font-bold leading-tight md:text-4xl">
                 Empowering food businesses with smarter, faster, future-ready restaurant spaces.
@@ -150,7 +209,7 @@ const teamMembers: TeamMember[] = [
     title: "Senior Designer",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    image: "/images/1.png",
+    image: "/images/aboutUs/Property 1=Default.png",
   },
   {
     id: "2",
@@ -158,7 +217,7 @@ const teamMembers: TeamMember[] = [
     title: "Senior Designer",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    image: "/images/2.png",
+    image: "/images/aboutUs/Property 1=Variant2.png",
   },
   {
     id: "3",
@@ -166,7 +225,7 @@ const teamMembers: TeamMember[] = [
     title: "Senior Designer",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    image: "/images/2 (1).png",
+    image: "/images/aboutUs/Property 1=Variant4.png",
   },
   {
     id: "4",
@@ -330,10 +389,20 @@ function TeamSection() {
 
       {/* CTA Button */}
       <div className="flex justify-center mt-16 relative z-20">
-        <button className="px-8 py-3 border-2 border-green-600 text-green-600 rounded-full font-semibold hover:bg-green-50 transition-colors flex items-center gap-2">
+        <button className="px-8 py-3 border-2 border-green-600 text-green-600 rounded-full font-semibold hover:bg-green-600 hover:text-white hover:border-green-700 hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 group">
           See More
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+          >
+            <path d="M7 17L17 7M17 7H7M17 7V17"/>
           </svg>
         </button>
       </div>

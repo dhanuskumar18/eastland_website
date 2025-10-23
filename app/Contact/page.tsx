@@ -7,7 +7,7 @@ export default function ContactUsPage() {
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
           <Image
-            src="/images/aboutUs/Rectangle 52.png"
+            src="/images/Services/Rectangle 52 (5).png"
             alt="Contact Us"
             fill
             className="object-cover"
@@ -169,11 +169,24 @@ export default function ContactUsPage() {
                     ></textarea>
                   </div>
 
-                  <button 
+                  <button
                     type="submit"
-                    className="bg-emerald-800 text-white py-2 px-5 rounded-md font-semibold hover:bg-emerald-900 transition-colors text-sm"
+                    className="bg-emerald-800 text-white py-2 px-6 rounded-md font-semibold hover:bg-emerald-900 hover:scale-105 transition-all duration-300 text-sm flex items-center gap-3 group"
                   >
                     Send Message
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
                   </button>
                 </form>
 
