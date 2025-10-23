@@ -1,31 +1,21 @@
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Footer() {
   return (
-    <footer className="bg-emerald-900 text-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className=" bg-[#003B27] text-white rounded-t-[35px] ">
+      <div className="mx-auto w-full px-4 py-12 sm:px-6 lg:px-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 justify-items-center" >
           {/* Company Info Column */}
           <div className="space-y-4">
             {/* Logo Section */}
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg border-2 border-emerald-700 bg-white p-2">
-                {/* Compass Rose Icon */}
-                <div className="relative h-8 w-8">
-                  <svg viewBox="0 0 32 32" className="h-8 w-8 text-emerald-900">
-                    <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="2" fill="none"/>
-                    <path d="M16 2 L16 30 M2 16 L30 16" stroke="currentColor" strokeWidth="2"/>
-                    <text x="16" y="12" textAnchor="middle" fontSize="8" fill="currentColor" fontWeight="bold">N</text>
-                    <text x="16" y="28" textAnchor="middle" fontSize="8" fill="currentColor" fontWeight="bold">S</text>
-                    <text x="4" y="20" textAnchor="middle" fontSize="8" fill="currentColor" fontWeight="bold">W</text>
-                    <text x="28" y="20" textAnchor="middle" fontSize="8" fill="currentColor" fontWeight="bold">E</text>
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-emerald-900">Eastland Distributors Ltd.</h3>
-                </div>
-              </div>
+            <div className="">
+                {/* Company Logo */}
+                <Link href="/" >
+            <img src="/images/logo.png" alt="Eastland Logo" className="h-14 w-42" />
+          </Link>
+             
             </div>
             
             {/* Description */}
@@ -108,7 +98,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section with Copyright */}
-        <div className="mt-8 border-t border-gray-700 pt-8">
+        <div className="mt-8 border-t border-white pt-8">
           <div className="text-center">
             <p className="text-sm text-gray-300">© 2025. All Rights Reserved.</p>
           </div>
