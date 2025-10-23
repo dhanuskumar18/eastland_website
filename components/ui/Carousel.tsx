@@ -370,11 +370,21 @@ export default function Carousel({ images, content, autoPlay = true, autoPlayInt
               >
                 <a
                   href={slideContent.buttonLink}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur transition-all hover:bg-white/20 hover:border-white/50"
+                  className="inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:scale-105 group"
                 >
                   {slideContent.buttonText}
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
                 </a>
               </div>
