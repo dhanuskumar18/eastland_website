@@ -14,7 +14,7 @@ export default function AboutUs() {
           </div>
 
           {/* Smaller overlapping image (has its own white border in asset) */}
-          <div className="absolute -bottom-8 right-8 w-[300px] rounded-2xl shadow-2xl">
+          <div className="absolute -bottom-12 -right-20 w-[300px] rounded-2xl shadow-2xl">
             <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
               <Image src="/images/2.png" alt="About secondary" fill className="object-cover" />
             </div>

@@ -12,18 +12,18 @@ export default function WhyChoose() {
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
       <div className="grid items-center gap-16 md:grid-cols-2">
         {/* Collage */}
-        <div className="mx-auto grid w-full max-w-xl grid-cols-2 gap-6 items-start">
-          <div className="rounded-[18px] border border-slate-200 bg-white p-2 shadow-sm">
-            <Image src={collage[0]} alt="Why choose image 1" width={193} height={239} className="w-full h-auto" />
+        <div className="mx-auto grid w-full max-w-xl  grid-cols-2  items-start">
+          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent " >
+            <Image src={collage[0]} alt="Why choose image 1" width={220} height={200} className=" absolute -right-4 -z-10" />
           </div>
-          <div className="rounded-[18px] border border-slate-200 bg-white p-2 shadow-sm">
+          <div className="">
             <Image src={collage[1]} alt="Why choose image 2" width={530} height={540} className="w-full h-auto" />
           </div>
-          <div className="mt-6 rounded-[18px] border border-slate-200 bg-white p-2 shadow-sm">
+          <div className="mt-6">
             <Image src={collage[2]} alt="Why choose image 3" width={287} height={265} className="w-full h-auto" />
           </div>
-          <div className="mt-2 rounded-[18px] border border-slate-200 bg-white p-2 shadow-sm">
-            <Image src={collage[3]} alt="Why choose image 4" width={193} height={239} className="w-full h-auto" />
+          <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent "  >
+            <Image src={collage[3]} alt="Why choose image 1" width={200} height={200} className=" absolute -left-3 -top-4" />
           </div>
         </div>
 

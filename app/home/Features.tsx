@@ -35,10 +35,8 @@ export default function Features() {
 
       <div className="mt-14 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         {items.map(({ title, image, description }, idx) => (
-          <div key={title} className={["relative", idx % 2 === 0 ? "lg:mt-6" : "lg:mt-24"].join(" ") }>
-            {idx % 2 === 0 ? (
-              <div className="absolute -left-6 top-0 hidden h-full w-px bg-slate-200 lg:block" aria-hidden />
-            ) : null}
+          <div key={title} className={["relative", idx % 2 === 0 ? "lg:mt-6" : "lg:mt-32"].join(" ") }>
+            <div className="absolute -left-6 top-0 hidden h-full w-px bg-slate-400 opacity-50                                                            lg:block" aria-hidden />
             <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
             <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
               <div

@@ -19,7 +19,7 @@ export default function Videos() {
         <span
           className={[
             "ml-0.5 inline-block h-0 w-0 border-y-8 border-l-[14px] border-y-transparent",
-            "border-l-emerald-600 group-hover:border-l-white",
+            "border-l-emerald-600",
           ].join(" ")}
         />
       </span>
@@ -46,24 +46,28 @@ export default function Videos() {
           <article
             key={title}
             className={[
-              "group relative rounded-[28px] p-5 text-slate-900",
+              "group relative rounded-[28px]  text-slate-900",
               "bg-[#F3F0E9] transition-colors duration-300 hover:bg-emerald-700 hover:text-white",
               "shadow-sm ring-1 ring-slate-100 hover:ring-emerald-700",
             ].join(" ")}
           >
-            <div className="flex items-center gap-2 text-[11px]">
+            <div className="p-5">
+            <div className="flex items-center gap-2 text-[11px] ">
               <span className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">Cafe</span>
               <span className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">Restaurent</span>
               </div>
             <h3 className="mt-4 text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">{title}</h3>
             <p className="mt-2 text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80">Witness complete transformations as we convert</p>
-
+            </div>
             <div className="mt-5 overflow-hidden rounded-b-2xl">
               <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-2xl">
                 <div
                   className="absolute inset-0 bg-cover bg-center"
                   style={{ backgroundImage: `url("${encodeURI(image ?? "/images/home1.png")}")` }}
                 />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
+                </div>
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                   <PlayButton />
                 </div>
