@@ -188,6 +188,17 @@ export default function ContactUsPage() {
                       <path d="M7 17L17 7M17 7H7M17 7V17"/>
                     </svg>
                   </button>
+                  
+                  {/* Letter Send Image */}
+                  <div className="mt-4 flex justify-center">
+                    <Image
+                      src="/images/letter_send 1.png"
+                      alt="Send Message"
+                      width={32}
+                      height={32}
+                      className="opacity-60"
+                    />
+                  </div>
                 </form>
 
                 {/* Decorative Element */}

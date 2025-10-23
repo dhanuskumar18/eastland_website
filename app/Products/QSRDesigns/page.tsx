@@ -170,15 +170,34 @@ export default function QSRDesignsPage() {
             <div className="grid grid-cols-4 gap-4 h-[300px] mb-4">
               {/* First Row - First 2 columns: 1 large image */}
               <div className="col-span-2 row-span-1">
-                <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
+                <div className="relative h-full rounded-2xl overflow-hidden shadow-lg group">
                   <Image 
                     src="/images/Products/Rectangle 66.png" 
                     alt="Deli and Cafe Design" 
                     fill 
-                    className="object-cover transition-transform duration-300 hover:scale-110" 
+                    className="object-cover transition-transform duration-300 group-hover:scale-110" 
                   />
-                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
-                    <h3 className="font-semibold text-slate-900">Deli and Cafe Design</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 overflow-hidden">
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 group-hover:-translate-y-full">Deli and Cafe Design</h3>
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">Deli and Cafe Design</h3>
+                  </div>
+                  <div className="absolute bottom-4 right-4">
+                    <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -234,15 +253,34 @@ export default function QSRDesignsPage() {
 
               {/* Second Row - Next 2 columns: 1 large image */}
               <div className="col-span-2 row-span-1">
-                <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
+                <div className="relative h-full rounded-2xl overflow-hidden shadow-lg group">
                   <Image 
                     src="/images/Products/Rectangle 68.png" 
                     alt="Setup and Installation" 
                     fill 
-                    className="object-cover transition-transform duration-300 hover:scale-110" 
+                    className="object-cover transition-transform duration-300 group-hover:scale-110" 
                   />
-                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
-                    <h3 className="font-semibold text-slate-900">Setup and Installation</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 overflow-hidden">
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 group-hover:-translate-y-full">Setup and Installation</h3>
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">Setup and Installation</h3>
+                  </div>
+                  <div className="absolute bottom-4 right-4">
+                    <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
