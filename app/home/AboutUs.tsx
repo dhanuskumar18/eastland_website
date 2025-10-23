@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function AboutUs() {
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-28 pt-20 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-[80%] px-4 pb-28 pt-20 sm:px-6 lg:px-8">
       <div className="grid items-center gap-16 md:grid-cols-2">
         {/* Image collage */}
         <div className="relative w-full max-w-[520px]">

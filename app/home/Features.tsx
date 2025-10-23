@@ -27,7 +27,7 @@ export default function Features() {
   ]
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
       <h2 className="text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
         Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
         <br /> <span className="text-emerald-700">With Efficient Workflow</span>

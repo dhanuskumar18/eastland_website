@@ -1,6 +1,6 @@
 'use client'
 
-import { TestimonialCard } from "@/components/testimonial-card"
+// import { TestimonialCard } from "@/components/testimonial-card"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import { Star } from "lucide-react"
@@ -15,7 +15,7 @@ const testimonialsData = [
     rating: 5
   },
   {
-    image: "/images/2.png",
+    image: "/images/1.png",
     quote: "Exceptional service and quality work! The team delivered exactly what we needed for our restaurant. Their attention to detail and professionalism is unmatched.",
     name: "Sarah Johnson",
     title: "Restaurant Manager",
@@ -97,7 +97,7 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="mx-auto w-full px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto w-[80%] px-4 py-20 sm:px-6 lg:px-8">
       <div className="grid items-start gap-8 md:grid-cols-2">
         {/* Left Section - Introduction */}
         <div>
@@ -124,10 +124,15 @@ export default function Testimonials() {
             </div>
 
             {/* Main card container - stays in place */}
-            <div className="relative flex gap-8 items-start bg-white rounded-3xl border border-gray-200 shadow-sm min-w-0 max-w-full">
+            <div className="relative flex gap-8 items-stretch bg-[#F4F4F4] rounded-3xl border border-gray-200 shadow-sm min-w-0 max-w-full min-h-[400px]">
+              {/* Empty div at top left corner */}
+              <div className="absolute -top-5 -left-5 h-[200px] w-[200px] border border-slate-500 rounded-lg"></div>
+              
+              {/* Empty div at bottom right corner */}
+              <div className="absolute -bottom-5 -right-5 h-[200px] w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
               {/* Left side - Profile image with overlay slide effect */}
               <div className="flex-shrink-0">
-                <div className="relative w-[300px] h-[280px] overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
+                <div className="relative w-[350px] h-full overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
                   {/* Base image - always visible */}
                   <div className="absolute inset-0">
                     <Image 
@@ -164,7 +169,7 @@ export default function Testimonials() {
               {/* Right side - Testimonial content with sliding text */}
               <div className="flex-1 flex flex-col min-w-0 max-w-full">
                 {/* Quote mark icon */}
-                <div className="text-gray-300 text-5xl mb-4">"</div>
+                <div className="text-gray-300 text-5xl my-4"><Image src="/images/quote1.svg" alt="Quote left" width={50} height={50} /></div>
 
                 {/* Sliding content container */}
                 <div className="relative flex-1 min-w-0 max-w-full overflow-hidden">
@@ -203,7 +208,7 @@ export default function Testimonials() {
               </div>
 
               {/* Right quote mark */}
-              <div className="absolute bottom-8 right-8 text-gray-300 text-5xl">"</div>
+              <div className="absolute bottom-8 right-8 text-gray-300 text-5xl"><Image src="/images/quote2.svg" alt="Quote right" width={50} height={50} /></div>
             </div>
           </div>
 

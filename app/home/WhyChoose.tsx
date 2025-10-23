@@ -9,7 +9,7 @@ export default function WhyChoose() {
   ]
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-[80%] px-4 py-24 sm:px-6 lg:px-8">
       <div className="grid items-center gap-16 md:grid-cols-2">
         {/* Collage */}
         <div className="mx-auto grid w-full max-w-xl  grid-cols-2  items-start">
@@ -17,7 +17,7 @@ export default function WhyChoose() {
             <Image src={collage[0]} alt="Why choose image 1" width={220} height={200} className=" absolute -right-4 -z-10" />
           </div>
           <div className="">
-            <Image src={collage[1]} alt="Why choose image 2" width={530} height={540} className="w-full h-auto" />
+            <Image src={collage[1]} alt="Why choose image 2" width={530} height={540} className="w-full h-auto relative right-8 " />
           </div>
           <div className="mt-6">
             <Image src={collage[2]} alt="Why choose image 3" width={287} height={265} className="w-full h-auto" />

@@ -40,7 +40,7 @@ export default function Gallery() {
   ]
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
       <p className="text-sm font-semibold text-slate-500">Our Gallery</p>
       
       <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
