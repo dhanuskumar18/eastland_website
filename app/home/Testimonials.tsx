@@ -1,8 +1,103 @@
+'use client'
+
+import { TestimonialCard } from "@/components/testimonial-card"
 import Image from "next/image"
+import { useState, useEffect, useRef } from "react"
+import { Star } from "lucide-react"
+
+// Array of 4 testimonials with content and images
+const testimonialsData = [
+  {
+    image: "/images/1.png",
+    quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown.",
+    name: "Thomas Raj",
+    title: "Cafe Owner",
+    rating: 5
+  },
+  {
+    image: "/images/2.png",
+    quote: "Exceptional service and quality work! The team delivered exactly what we needed for our restaurant. Their attention to detail and professionalism is unmatched.",
+    name: "Sarah Johnson",
+    title: "Restaurant Manager",
+    rating: 5
+  },
+  {
+    image: "/images/2 (1).png",
+    quote: "Working with this team was a game-changer for our business. They understood our vision and brought it to life perfectly. Highly recommended!",
+    name: "Michael Chen",
+    title: "Business Owner",
+    rating: 5
+  },
+  {
+    image: "/images/1.png",
+    quote: "Outstanding results and excellent customer service. The project was completed on time and exceeded our expectations. Will definitely work with them again.",
+    name: "Emily Rodriguez",
+    title: "Marketing Director",
+    rating: 5
+  }
+]
 
 export default function Testimonials() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [nextIndex, setNextIndex] = useState(1)
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Auto-play functionality
+  useEffect(() => {
+    autoPlayRef.current = setInterval(() => {
+      goToNext()
+    }, 5000) // Change slide every 5 seconds
+
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current)
+      }
+    }
+  }, [currentIndex])
+
+  const goToNext = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    const newNextIndex = (currentIndex + 1) % testimonialsData.length
+    setNextIndex(newNextIndex)
+    console.log('Moving to next slide:', newNextIndex, 'Total slides:', testimonialsData.length)
+    
+    // Update current index after animation completes
+    setTimeout(() => {
+      setCurrentIndex(newNextIndex)
+      setIsTransitioning(false)
+    }, 500)
+  }
+
+  const goToPrev = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    const newNextIndex = (currentIndex - 1 + testimonialsData.length) % testimonialsData.length
+    setNextIndex(newNextIndex)
+    
+    // Update current index after animation completes
+    setTimeout(() => {
+      setCurrentIndex(newNextIndex)
+      setIsTransitioning(false)
+    }, 500)
+  }
+
+  const goToSlide = (index: number) => {
+    if (index === currentIndex || isTransitioning) return
+    setIsTransitioning(true)
+    setNextIndex(index)
+    
+    // Update current index after animation completes
+    setTimeout(() => {
+      setCurrentIndex(index)
+      setIsTransitioning(false)
+    }, 500)
+  }
+
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto w-full px-4 py-20 sm:px-6 lg:px-8">
       <div className="grid items-start gap-8 md:grid-cols-2">
         {/* Left Section - Introduction */}
         <div>
@@ -18,63 +113,160 @@ export default function Testimonials() {
           </button>
         </div>
 
-        {/* Right Section - Testimonial Card */}
+        {/* Right Section - Carousel */}
         <div className="relative">
-          <div className="relative rounded-2xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
-            {/* Decorative quotation marks */}
-            <div className="absolute left-4 top-4 text-6xl font-bold text-slate-200">"</div>
-            <div className="absolute bottom-4 right-4 text-6xl font-bold text-slate-200">"</div>
-            
-            <div className="flex gap-6">
-              {/* Client Image - Left side with slanting border effect */}
+          {/* Static Card Container */}
+          <div className="relative w-full max-w-4xl mx-auto">
+            {/* Decorative quote marks background */}
+            <div className="absolute inset-0 pointer-events-none opacity-5 text-6xl font-serif text-gray-400">
+              <div className="absolute top-0 left-0">"</div>
+              <div className="absolute bottom-0 right-0">"</div>
+            </div>
+
+            {/* Main card container - stays in place */}
+            <div className="relative flex gap-8 items-start bg-white rounded-3xl border border-gray-200 shadow-sm min-w-0 max-w-full">
+              {/* Left side - Profile image with overlay slide effect */}
               <div className="flex-shrink-0">
-                <div className="relative h-24 w-24">
-                  {/* Slanting border effect - light brown on top/left, black on bottom/right */}
-                  <div className="absolute inset-0 rounded-lg border-2 border-amber-200" style={{
-                    borderTopColor: '#fbbf24',
-                    borderLeftColor: '#fbbf24',
-                    borderBottomColor: '#000000',
-                    borderRightColor: '#000000',
-                    transform: 'rotate(-2deg)'
-                  }}></div>
-                  <div className="relative h-24 w-24 overflow-hidden rounded-lg">
+                <div className="relative w-[300px] h-[280px] overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
+                  {/* Base image - always visible */}
+                  <div className="absolute inset-0">
                     <Image 
-                      src="/images/Mask group.png" 
-                      alt="Thomas Raj"
-                      fill
-                      className="object-cover"
+                      src={testimonialsData[currentIndex].image} 
+                      alt={testimonialsData[currentIndex].name} 
+                      fill 
+                      className="object-cover" 
+                      priority={true}
                     />
+                  </div>
+                  
+                  {/* Overlay image - slides in from right */}
+                  {isTransitioning && (
+                    <div className="absolute inset-0">
+                      <div 
+                        className="h-full transition-transform duration-500 ease-in-out"
+                        style={{
+                          transform: 'translateX(0%)',
+                          animation: 'slideInFromRight 0.5s ease-in-out forwards'
+                        }}
+                      >
+                        <Image 
+                          src={testimonialsData[nextIndex].image} 
+                          alt={testimonialsData[nextIndex].name} 
+                          fill 
+                          className="object-cover" 
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right side - Testimonial content with sliding text */}
+              <div className="flex-1 flex flex-col min-w-0 max-w-full">
+                {/* Quote mark icon */}
+                <div className="text-gray-300 text-5xl mb-4">"</div>
+
+                {/* Sliding content container */}
+                <div className="relative flex-1 min-w-0 max-w-full overflow-hidden">
+                  <div 
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{
+                      transform: `translateX(-${(isTransitioning ? nextIndex : currentIndex) * (100 / testimonialsData.length)}%)`,
+                      width: `${testimonialsData.length * 100}%`
+                    }}
+                  >
+                    {testimonialsData.map((testimonial, index) => (
+                      <div
+                        key={index}
+                        className="flex-shrink-0 flex flex-col px-4 min-w-0"
+                        style={{ width: `${100 / testimonialsData.length}%` }}
+                      >
+                        {/* Quote text */}
+                        <p className="text-gray-700 text-lg leading-relaxed mb-6 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.quote}</p>
+
+                        {/* Rating stars */}
+                        <div className="flex gap-1 mb-4">
+                          {Array.from({ length: testimonial.rating }).map((_, i) => (
+                            <Star key={i} size={24} className="fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
+
+                        {/* Author info */}
+                        <div className="min-w-0">
+                          <h3 className="text-xl font-bold text-gray-900 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.name}</h3>
+                          <p className="text-gray-600 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.title}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-              
-              {/* Testimonial Content - Right side */}
-              <div className="flex-1">
-                <p className="text-sm leading-relaxed text-slate-700">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsun has been the industry's standard dummy text ever since the 1500s, when an unknown.
-                </p>
-                
-                {/* Rating Stars */}
-                <div className="mt-4 flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className="h-4 w-4 text-yellow-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                
-                {/* Client Name and Title */}
-                <div className="mt-3">
-                  <h4 className="text-sm font-bold text-slate-900">Thomas Raj</h4>
-                  <p className="text-xs text-slate-500">Cafe Owner</p>
-                </div>
-              </div>
+
+              {/* Right quote mark */}
+              <div className="absolute bottom-8 right-8 text-gray-300 text-5xl">"</div>
             </div>
+          </div>
+
+          {/* Navigation Controls */}
+          <div className="flex items-center justify-between mt-6">
+            {/* Previous/Next Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={goToPrev}
+                disabled={isTransitioning}
+                className={`p-2 rounded-full border transition-all duration-200 ${
+                  isTransitioning
+                    ? 'border-gray-300 text-gray-300 cursor-not-allowed'
+                    : 'border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white'
+                }`}
+                aria-label="Previous testimonial"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={goToNext}
+                disabled={isTransitioning}
+                className={`p-2 rounded-full border transition-all duration-200 ${
+                  isTransitioning
+                    ? 'border-gray-300 text-gray-300 cursor-not-allowed'
+                    : 'border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white'
+                }`}
+                aria-label="Next testimonial"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex gap-2">
+              {testimonialsData.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  disabled={isTransitioning}
+                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                    index === currentIndex
+                      ? 'bg-emerald-700'
+                      : 'bg-gray-300 hover:bg-emerald-500'
+                  } ${
+                    isTransitioning ? 'cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Slide Counter */}
+          <div className="mt-4 text-center">
+            <span className="text-sm text-gray-500">
+              {currentIndex + 1} of {testimonialsData.length}
+            </span>
           </div>
         </div>
       </div>

@@ -58,7 +58,7 @@ export default function Gallery() {
         {images.map((image, index) => (
           <div 
             key={index} 
-            className={`${image.gridClass} rounded-xl border border-slate-200 bg-white p-2 shadow-sm overflow-hidden`}
+            className={`${image.gridClass} rounded-xl  bg-white p-2 shadow-sm overflow-hidden`}
           >
             <div className="relative w-full h-full">
               <Image 
