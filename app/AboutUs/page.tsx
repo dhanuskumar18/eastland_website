@@ -168,6 +168,30 @@ const teamMembers: TeamMember[] = [
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
     image: "/images/2 (1).png",
   },
+  {
+    id: "4",
+    name: "dk",
+    title: "Senior Designer",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    image: "/images/2 (1).png",
+  },
+  {
+    id: "5",
+    name: "Sarah",
+    title: "Project Manager",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    image: "/images/1.png",
+  },
+  {
+    id: "6",
+    name: "Alex",
+    title: "Lead Engineer",
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    image: "/images/2.png",
+  },
 ]
 
 function TeamSection() {
@@ -181,7 +205,7 @@ function TeamSection() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % teamMembers.length)
         setIsAnimating(false)
       }, 300)
-    }, 4000)
+    }, 3000) // Reduced to 3 seconds for better timeline feel
 
     return () => clearInterval(interval)
   }, [])
@@ -244,24 +268,24 @@ function TeamSection() {
           </div>
         </div>
 
-        {/* Three Cards Carousel Container - All Visible */}
-        <div className="relative z-20 w-full overflow-visible" style={{ minHeight: '200px', width: '100%' }}>
+        {/* Timeline Carousel Container - Shows 3 at a time */}
+        <div className="relative z-20 w-full overflow-hidden" style={{ minHeight: '200px' }}>
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
-              transform: `translateX(-${currentIndex * 33.333}%)`,
-              width: `${teamMembers.length * 33.333}%`
+              transform: `translateX(-${currentIndex * (100 / 3)}%)`,
+              width: `${(teamMembers.length * 100) / 3}%`
             }}
           >
-            {/* All Three Cards in Carousel - All Visible */}
+            {/* All Cards in Carousel - Only 3 visible at a time */}
             {teamMembers.map((member, index) => (
               <div
                 key={member.id}
                 className="flex-shrink-0"
-                style={{ width: '33.333%', flexBasis: '33.333%' }}
+                style={{ width: `${100 / teamMembers.length}%` }}
               >
                 <div
-                  className={`bg-white rounded-2xl p-4 shadow-lg border-2 transition-all duration-300 cursor-pointer h-full ${
+                  className={`bg-white rounded-2xl p-4 shadow-lg border-2 transition-all duration-300 cursor-pointer h-full mx-2 ${
                     currentIndex === index
                       ? 'ring-2 ring-green-500 ring-opacity-50 transform scale-105 shadow-2xl border-green-500'
                       : 'border-gray-300 hover:shadow-xl hover:scale-105 hover:ring-2 hover:ring-gray-300 hover:border-gray-400'
@@ -286,7 +310,21 @@ function TeamSection() {
               </div>
             ))}
           </div>
+        </div>
 
+        {/* Timeline Navigation Dots */}
+        <div className="flex justify-center mt-8 space-x-2">
+          {teamMembers.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                currentIndex === index
+                  ? 'bg-green-600 scale-125'
+                  : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+            />
+          ))}
         </div>
       </div>
 
