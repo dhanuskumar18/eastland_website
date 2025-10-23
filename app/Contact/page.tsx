@@ -7,7 +7,7 @@ export default function ContactUsPage() {
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
           <Image
-            src="/images/aboutUs/Rectangle 52.png"
+            src="/images/Services/Rectangle 52 (5).png"
             alt="Contact Us"
             fill
             className="object-cover"

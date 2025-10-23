@@ -46,8 +46,20 @@ export default function Features() {
             </div>
             <p className="mt-5 text-sm leading-relaxed text-slate-600">{description}</p>
             <div className="mt-6">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700">
-                ↗
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
               </span>
             </div>
           </div>

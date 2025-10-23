@@ -70,7 +70,7 @@ export default function QSRDesignsPage() {
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
           <Image
-            src="/images/aboutUs/Rectangle 52.png"
+            src="/images/Products/Rectangle 52 (3).png"
             alt="QSR Designs"
             fill
             className="object-cover"

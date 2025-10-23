@@ -47,9 +47,22 @@ export default function WhyChoose() {
           <div className="mt-8">
             <a
               href="#why-choose"
-              className="inline-flex items-center gap-2 rounded-full border border-emerald-700 px-5 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-700 hover:text-white"
+              className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
             >
-              See More <span aria-hidden>↗</span>
+              See More
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
             </a>
           </div>
         </div>
