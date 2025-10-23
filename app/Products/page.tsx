@@ -204,7 +204,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Cafe Design</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (7).png")` }}
                   />
                 </div>
@@ -231,7 +231,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Kitchen Setup</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (8).png")` }}
                   />
                 </div>
@@ -258,7 +258,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Workflow Solutions</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (9).png")` }}
                   />
                 </div>
@@ -285,7 +285,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Deli Counters</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (10).png")` }}
                   />
                 </div>
@@ -312,7 +312,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Quick Installations</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (11).png")` }}
                   />
                 </div>
@@ -339,7 +339,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Restaurant Interiors</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (12).png")` }}
                   />
                 </div>
@@ -366,7 +366,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Equipment Integration</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (13).png")` }}
                   />
                 </div>
@@ -393,7 +393,7 @@ export default function ProductsPage() {
                 <h3 className="text-lg font-semibold text-slate-900">Space Optimization</h3>
                 <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
                   <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
+                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                     style={{ backgroundImage: `url("/images/Products/2 (14).png")` }}
                   />
                 </div>

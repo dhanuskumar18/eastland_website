@@ -73,7 +73,7 @@ export default function QSRDesignsPage() {
             src="/images/Products/Rectangle 52 (3).png"
             alt="QSR Designs"
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-300 hover:scale-110"
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -102,7 +102,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 78.png" 
                     alt="Modern Cafe Interior" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
@@ -114,7 +114,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 79.png" 
                     alt="Refined Dining Space" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
@@ -175,7 +175,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 66.png" 
                     alt="Deli and Cafe Design" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                   <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
                     <h3 className="font-semibold text-slate-900">Deli and Cafe Design</h3>
@@ -190,7 +190,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 67.png" 
                     alt="Coffee Bar Counter" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
@@ -200,7 +200,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 69.png" 
                     alt="Restaurant Interior" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
@@ -217,7 +217,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 70.png" 
                     alt="Modern Dining Space" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 71.png" 
                     alt="Ambient Restaurant" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
@@ -239,7 +239,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 68.png" 
                     alt="Setup and Installation" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                   <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
                     <h3 className="font-semibold text-slate-900">Setup and Installation</h3>
@@ -275,7 +275,7 @@ export default function QSRDesignsPage() {
                     src="/images/Products/Rectangle 76.png" 
                     alt="Modern Restaurant Interior" 
                     fill 
-                    className="object-cover" 
+                    className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
                 </div>
               </div>
