@@ -129,15 +129,15 @@ export default function Testimonials() {
         {/* Right Section - Carousel */}
         <div className="relative">
           {/* Static Card Container */}
-          <div className="relative w-full max-w-4xl mx-auto">
+          <div className="relative w-full max-w-4xl mx-auto ">
             {/* Decorative quote marks background */}
-            <div className="absolute inset-0 pointer-events-none opacity-5 text-6xl font-serif text-gray-400">
+            {/* <div className="absolute inset-0 pointer-events-none opacity-5 text-6xl font-serif text-gray-400">
               <div className="absolute top-0 left-0">"</div>
               <div className="absolute bottom-0 right-0">"</div>
-            </div>
+            </div> */}
 
             {/* Main card container - stays in place */}
-            <div className="relative flex gap-8 items-stretch bg-[#F4F4F4] rounded-3xl border border-gray-200 shadow-sm min-w-0 max-w-full min-h-[400px]">
+            <div className="relative flex gap-8 items-stretch bg-[#F4F4F4] rounded-3xl border border-gray-200 shadow-sm max-w-full ">
               {/* Empty div at top left corner */}
               <div className="absolute -top-5 -left-5 h-[200px] w-[200px] border border-slate-500 rounded-lg"></div>
               
@@ -180,14 +180,14 @@ export default function Testimonials() {
               </div>
 
               {/* Right side - Testimonial content with sliding text */}
-              <div className="flex-1 flex flex-col min-w-0 max-w-full">
+              <div className="flex-1 flex flex-col min-w-0 max-w-full ">
                 {/* Quote mark icon */}
                 <div className="text-gray-300 text-5xl my-4"><Image src="/images/quote1.svg" alt="Quote left" width={50} height={50} /></div>
 
                 {/* Sliding content container */}
                 <div className="relative flex-1 min-w-0 max-w-full overflow-hidden">
                   <div 
-                    className="flex transition-transform duration-500 ease-in-out"
+                    className=" flex transition-transform duration-500 ease-in-out py-2 "
                     style={{
                       transform: `translateX(-${(isTransitioning ? nextIndex : currentIndex) * (100 / testimonialsData.length)}%)`,
                       width: `${testimonialsData.length * 100}%`

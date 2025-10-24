@@ -325,27 +325,29 @@ export default function ServicesPage() {
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px]">
               {/* Main Image */}
-              <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
-                <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+              <div className="rounded-[22px]  bg-white p-3  ">
+                <div className="relative overflow-hidden rounded-[18px] h-[442px] w-[450px] p-3 border-2 border-gray-400">
                   <Image 
-                    src="/images/Services/1 (8).png" 
-                    alt="Modern Commercial Kitchen" 
-                    fill 
-                    className="object-cover" 
+                    src="/images/Services/1 (9).png" 
+                    alt="Elegant Dining Area" 
+                     height={350}
+                     width={350}
+                    className="object-cover h-full w-full" 
                   />
                 </div>
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-8 right-8 w-[300px] rounded-2xl shadow-2xl">
-                <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
+              <div className="absolute -bottom-6 -left-32 rounded-2xl shadow-2xl">
+                <div className="relative  overflow-hidden rounded-2xl h-[400px] w-[280px] p-3 border-2 border-gray-400 ">
                   <Image 
-                    src="/images/Services/1 (9).png" 
-                    alt="Professional Kitchen Equipment" 
-                    fill 
-                    className="object-cover" 
+                    src="/images/Services/1 (8).png" 
+                    alt="Modern Cafe Setting" 
+                    height={300}
+                    width={300}
+                    className="object-cover h-full w-full rounded-2xl" 
                   />
-                </div>
+                </div>  
               </div>
             </div>
 

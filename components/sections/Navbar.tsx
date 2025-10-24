@@ -2,12 +2,14 @@
 
 import Link from "next/link"
 import { Button } from "../ui/Button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 export default function Navbar() {
   const [isProductsOpen, setIsProductsOpen] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const productsDropdownRef = useRef<HTMLDivElement>(null)
+  const servicesDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +19,29 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Handle click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        productsDropdownRef.current &&
+        !productsDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsProductsOpen(false)
+      }
+      if (
+        servicesDropdownRef.current &&
+        !servicesDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsServicesOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [])
 
   return (
@@ -36,7 +61,7 @@ export default function Navbar() {
             <Link href="/AboutUs" className="hover:text-emerald-400 transition-colors">About Us</Link>
             
             {/* Products Dropdown */}
-            <div className="relative" ref={productsRef}>
+            <div className="relative" ref={productsDropdownRef}>
               <button
                 onClick={() => setIsProductsOpen(!isProductsOpen)}
                 className="flex items-center gap-1 hover:text-emerald-400 transition-colors"
@@ -72,7 +97,7 @@ export default function Navbar() {
             </div>
             
             {/* Services Dropdown */}
-            <div className="relative" ref={servicesRef}>
+            <div className="relative" ref={servicesDropdownRef}>
               <button
                 onClick={() => setIsServicesOpen(!isServicesOpen)}
                 className="flex items-center gap-1 hover:text-emerald-400 transition-colors"

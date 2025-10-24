@@ -474,7 +474,7 @@ function TeamSection() {
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold">
-          Our <span className="text-green-600">Team</span>
+          Our <span className="text-[#003B27]">Team</span>
         </h1>
       </div>
 
@@ -593,7 +593,7 @@ function TeamSection() {
                       </div>
                       <div className="flex-1 text-center">
                         <h3 className="font-semibold text-lg text-gray-900 mb-1">{member.name}</h3>
-                        <p className="text-sm text-green-600 font-medium">{member.title}</p>
+                        <p className="text-sm text-[#003B27] font-medium">{member.title}</p>
                       </div>
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed">{member.description}</p>
@@ -612,7 +612,7 @@ function TeamSection() {
               onClick={() => api?.scrollTo(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 currentIndex === index
-                  ? 'bg-green-600 scale-125'
+                  ? 'bg-[#003B27] scale-125'
                   : 'bg-gray-300 hover:bg-gray-400'
               }`}
             />
@@ -622,7 +622,7 @@ function TeamSection() {
 
       {/* CTA Button */}
       <div className="flex justify-center mt-12 relative z-20">
-        <button className="px-8 py-3 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 group">
+        <button className="px-8 py-3 bg-white text-[#003B27] border border-[#003B27] rounded-full font-semibold hover:bg-[#003B27] hover:text-white hover:border-[#003B27] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 group">
           See More
           <svg
             width="18"
@@ -635,7 +635,8 @@ function TeamSection() {
             strokeLinejoin="round"
             className="transition-transform duration-300 group-hover:translate-x-1"
           >
-            <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            <path d="M7 17L17 7M17 7H7M17 7V17" className="group-hover:hidden"/>
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" className="hidden group-hover:block"/>
           </svg>
         </button>
       </div>

@@ -442,8 +442,8 @@ export default function ProductsPage() {
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px]">
               {/* Main Image */}
-              <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow h-[380px] w-[320px] ">
-                <div className="relative overflow-hidden rounded-[18px] ">
+              <div className="rounded-[22px]  bg-white p-3  ">
+                <div className="relative overflow-hidden rounded-[18px] h-[442px] w-[400px] p-3 border-2 border-gray-400">
                   <Image 
                     src="/images/Products/1 (5).png" 
                     alt="Elegant Dining Area" 
@@ -455,18 +455,18 @@ export default function ProductsPage() {
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-8 right-8 w-[300px] rounded-2xl shadow-2xl">
-                <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
+              <div className="absolute -bottom-6 -right-12 rounded-2xl shadow-2xl">
+                <div className="relative  overflow-hidden rounded-2xl h-[400px] w-[250px] p-3 border-2 border-gray-400 ">
                   <Image 
                     src="/images/Products/1 (6).png" 
                     alt="Modern Cafe Setting" 
-                    fill 
-                    className="object-cover" 
+                    height={300}
+                    width={300}
+                    className="object-cover h-full w-full rounded-2xl" 
                   />
-                </div>
+                </div>  
               </div>
             </div>
-
             {/* Right Side - Content */}
             <div>
               <p className="text-sm font-semibold text-slate-500">About Our Products</p>
