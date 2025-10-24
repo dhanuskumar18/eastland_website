@@ -333,7 +333,7 @@ export default function QSRDesignsPage() {
               </p>
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-emerald-800 hover:scale-105 group">
+                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
