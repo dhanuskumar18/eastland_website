@@ -18,7 +18,7 @@ interface CarouselProps {
   autoPlayInterval?: number
 }
 
-export default function Carousel({ images, content, autoPlay = true, autoPlayInterval = 5000 }: CarouselProps) {
+export default function slider({ images, content, autoPlay = true, autoPlayInterval = 5000 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)

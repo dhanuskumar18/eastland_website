@@ -1,4 +1,4 @@
-import Carousel from '@/components/ui/Carousel'
+import Slider from '@/components/ui/slider'
 
 export default function HomeFirstSection() {
   // Array of images for the carousel
@@ -45,7 +45,7 @@ export default function HomeFirstSection() {
     <section className="relative isolate min-h-screen w-full overflow-hidden">
       {/* Carousel Background */}
       <div className="absolute inset-0">
-        <Carousel 
+        <Slider 
           images={carouselImages} 
           content={carouselContent}
           autoPlay={true} 

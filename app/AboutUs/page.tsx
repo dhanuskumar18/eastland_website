@@ -4,6 +4,11 @@ import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel"
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
@@ -293,7 +298,7 @@ const teamMembers: TeamMember[] = [
     title: "Senior Designer",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    image: "/images/2 (1).png",
+    image: "/images/aboutUs/Property 1=Default.png",
   },
   {
     id: "5",
@@ -301,7 +306,7 @@ const teamMembers: TeamMember[] = [
     title: "Project Manager",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    image: "/images/1.png",
+    image: "/images/aboutUs/Property 1=Variant2.png",
   },
   {
     id: "6",
@@ -309,99 +314,122 @@ const teamMembers: TeamMember[] = [
     title: "Lead Engineer",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    image: "/images/2.png",
+    image: "/images/aboutUs/Property 1=Variant4.png",
   },
 ]
 
 function TeamSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const carouselRef = useRef<HTMLDivElement>(null)
-  const featuredImageRef = useRef<HTMLDivElement>(null)
-  const backgroundNameRef = useRef<HTMLHeadingElement>(null)
+  const [api, setApi] = useState<any>(null)
+  const [previousMember, setPreviousMember] = useState<TeamMember | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
-    // Set initial carousel position
-    if (carouselRef.current) {
-      gsap.set(carouselRef.current, { x: 0 })
+    if (!api) {
+      return
+    }
+
+    setCurrentIndex(api.selectedScrollSnap())
+
+    api.on("select", () => {
+      const newIndex = api.selectedScrollSnap()
+      const newMiddleIndex = (newIndex + 1) % teamMembers.length
+      const newMember = teamMembers[newMiddleIndex]
+      
+      // Get current member before updating
+      const currentMiddleIndex = (currentIndex + 1) % teamMembers.length
+      const currentMember = teamMembers[currentMiddleIndex]
+      
+      if (currentMember.name !== newMember.name) {
+        setPreviousMember(currentMember)
+        setIsTransitioning(true)
+        setCurrentIndex(newIndex)
+        
+        // Reset transition state after animation completes
+        setTimeout(() => {
+          setIsTransitioning(false)
+          setPreviousMember(null)
+        }, 3000)
+      } else {
+        setCurrentIndex(newIndex)
+      }
+    })
+  }, [api, currentIndex])
+
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (!api) {
+      return
     }
 
     const interval = setInterval(() => {
-      if (!isAnimating) {
-        setIsAnimating(true)
-
-        // Animate the featured image
-        if (featuredImageRef.current) {
-          gsap.to(featuredImageRef.current, {
-            scale: 0.8,
-            y: 50,
-            opacity: 0.9,
-            duration: 0.3,
-            ease: "power2.inOut"
-          })
-        }
-
-        // Animate the background name
-        if (backgroundNameRef.current) {
-          gsap.to(backgroundNameRef.current, {
-            opacity: 0.1,
-            scale: 0.8,
-            duration: 0.3,
-            ease: "power2.inOut"
-          })
-        }
-
-        // Move carousel to next position
-        if (carouselRef.current) {
-          gsap.to(carouselRef.current, {
-            x: `-=${100 / 3}%`,
-            duration: 0.5,
-            ease: "power2.inOut",
-            onComplete: () => {
-              setCurrentIndex((prev) => {
-                const nextIndex = (prev + 1) % teamMembers.length
-
-                // Reset carousel position for seamless loop
-                if (carouselRef.current) {
-                  gsap.set(carouselRef.current, { x: 0 })
-                }
-
-                // Animate back to normal state
-                const resetTl = gsap.timeline()
-
-                if (featuredImageRef.current) {
-                  resetTl.to(featuredImageRef.current, {
-                    scale: 1,
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: "back.out(1.7)"
-                  })
-                }
-
-                if (backgroundNameRef.current) {
-                  resetTl.to(backgroundNameRef.current, {
-                    opacity: 0.15,
-                    scale: 1,
-                    duration: 0.5,
-                    ease: "power2.out"
-                  })
-                }
-
-                setIsAnimating(false)
-                return nextIndex
-              })
-            }
-          })
-        }
-      }
-    }, 3000)
+      api.scrollNext()
+    }, 5000)
 
     return () => clearInterval(interval)
-  }, [isAnimating])
+  }, [api])
 
-  // Get the current member from the original array
-  const currentMember = teamMembers[currentIndex]
+  // Add CSS keyframes for slide-up animation
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = `
+      @keyframes slideUpIn {
+        0% {
+          transform: translate(-50%, -20%);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%);
+          opacity: 0.3;
+        }
+      }
+      
+      @keyframes slideUpInStatic {
+        0% {
+          transform: translate(-50%, -20%);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%);
+          opacity: 0.3;
+        }
+      }
+      
+      @keyframes slideUpOut {
+        0% {
+          transform: translate(-50%, -50%);
+          opacity: 0.3;
+        }
+        100% {
+          transform: translate(-50%, -80%);
+          opacity: 0;
+        }
+      }
+      
+      .name-enter {
+        animation: slideUpIn 2000ms ease-in-out 1000ms forwards;
+        opacity: 0;
+      }
+      
+      .name-exit {
+        animation: slideUpOut 2000ms ease-in-out forwards;
+      }
+      
+      .name-static {
+        opacity: 0.3;
+      }
+    `
+    document.head.appendChild(style)
+    
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
+
+  // Get the middle member from the current visible carousel items
+  // Since we show 3 items at a time, the middle item is always currentIndex + 1
+  const middleIndex = (currentIndex + 1) % teamMembers.length
+  const currentMember = teamMembers[middleIndex]
 
   return (
     <section className="relative w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
@@ -416,9 +444,30 @@ function TeamSection() {
       <div className="relative w-full mx-auto" style={{ maxWidth: '1800px' }}>
         {/* Large Background Name with Gradient */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          {/* Previous name (exiting) */}
+          {isTransitioning && previousMember && (
+            <h2
+              className="text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-bold text-center whitespace-nowrap name-exit"
+              style={{
+                background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                position: 'absolute',
+                left: '50%',
+                top: '25%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1,
+                opacity: 0.3,
+              }}
+            >
+              {previousMember.name}
+            </h2>
+          )}
+          
+          {/* Current name (entering) */}
           <h2
-            ref={backgroundNameRef}
-            className="text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-bold text-center whitespace-nowrap"
+            className={`text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-bold text-center whitespace-nowrap ${isTransitioning ? 'name-enter' : 'name-static'}`}
             style={{
               background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
               WebkitBackgroundClip: 'text',
@@ -428,7 +477,7 @@ function TeamSection() {
               left: '50%',
               top: '25%',
               transform: 'translate(-50%, -50%)',
-              zIndex: 1,
+              zIndex: 2,
             }}
           >
             {currentMember.name}
@@ -436,16 +485,15 @@ function TeamSection() {
         </div>
 
         {/* Featured Image - Large Center Display */}
-        <div className="relative mb-16 z-10" style={{ height: '500px' }}>
+        <div className="relative mb-16 z-10" style={{ height: '600px' }}>
           <div
-            ref={featuredImageRef}
-            className="absolute rounded-3xl overflow-hidden shadow-2xl w-80 h-96 sm:w-96 sm:h-[28rem]"
+            className="absolute rounded-3xl overflow-hidden w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] xl:w-[800px] xl:h-[800px]"
             style={{
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               transformOrigin: 'center center',
-              zIndex: 10,
+              zIndex: 5,
             }}
           >
             <Image
@@ -457,33 +505,25 @@ function TeamSection() {
           </div>
         </div>
 
-        {/* Team Cards Container - Shows 3 at a time */}
-        <div className="max-w-[70%] mx-auto overflow-hidden">
-          <div className="relative z-20 w-1/2" style={{ minHeight: '380px' }}>
-            <div
-              ref={carouselRef}
-              className="flex carousel-container justify-center"
-              style={{
-                width: `${teamMembers.length * (100 / 3)}%`,
-                transform: 'translateX(0%)'
-              }}
-            >
-              {/* Render all team members - carousel will show 3 at a time */}
+        {/* Team Cards Container - Shows 3 at a time - Overlay on featured image */}
+        <div className="max-w-[80%] mx-auto relative z-20 -mt-32">
+          <Carousel
+            setApi={setApi}
+            opts={{
+              align: "start",
+              loop: true,
+              duration: 60,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
               {teamMembers.map((member, index) => (
-                <div
-                  key={member.id}
-                  className="flex-shrink-0 px-4"
-                  style={{ width: `${100 / 3}%` }}
-                >
+                <CarouselItem key={member.id} className="pl-4 basis-1/3">
                   <div
-                    className={`bg-white rounded-3xl p-6 shadow-lg border transition-all duration-300 cursor-pointer h-full ${
-                      index === currentIndex
-                        ? 'ring-2 ring-green-500 ring-opacity-50 transform scale-105 shadow-2xl border-green-500'
-                        : 'border-gray-200 hover:shadow-xl hover:scale-105 hover:ring-2 hover:ring-gray-300 hover:border-gray-300'
-                    }`}
+                    className={`bg-white rounded-3xl p-6  border transition-all duration-300 cursor-pointer h-full relative`}
                   >
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+                      <div className="absolute -top-2 w-20 h-20 flex-shrink-0 rounded-lg ">
                         <Image
                           src={member.image || "/placeholder.svg"}
                           alt={member.name}
@@ -491,89 +531,25 @@ function TeamSection() {
                           className="object-cover"
                         />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 text-center">
                         <h3 className="font-semibold text-lg text-gray-900 mb-1">{member.name}</h3>
                         <p className="text-sm text-green-600 font-medium">{member.title}</p>
                       </div>
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed">{member.description}</p>
                   </div>
-                </div>
+                </CarouselItem>
               ))}
-            </div>
-          </div>
+            </CarouselContent>
+          </Carousel>
         </div>
+
         {/* Timeline Navigation Dots */}
         <div className="flex justify-center mt-8 space-x-2">
           {teamMembers.map((_, index) => (
             <button
               key={index}
-              onClick={() => {
-                if (!isAnimating && index !== currentIndex) {
-                  setIsAnimating(true)
-
-                  // Animate the featured image
-                  if (featuredImageRef.current) {
-                    gsap.to(featuredImageRef.current, {
-                      scale: 0.8,
-                      y: 50,
-                      opacity: 0.9,
-                      duration: 0.3,
-                      ease: "power2.inOut"
-                    })
-                  }
-
-                  // Animate the background name
-                  if (backgroundNameRef.current) {
-                    gsap.to(backgroundNameRef.current, {
-                      opacity: 0.1,
-                      scale: 0.8,
-                      duration: 0.3,
-                      ease: "power2.inOut"
-                    })
-                  }
-
-                  // Move carousel to selected position
-                  if (carouselRef.current) {
-                    gsap.to(carouselRef.current, {
-                      x: `-${index * (100 / 3)}%`,
-                      duration: 0.5,
-                      ease: "power2.inOut",
-                      onComplete: () => {
-                        // Reset carousel position for seamless loop
-                        if (carouselRef.current) {
-                          gsap.set(carouselRef.current, { x: 0 })
-                        }
-
-                        // Animate back to normal state
-                        const resetTl = gsap.timeline()
-
-                        if (featuredImageRef.current) {
-                          resetTl.to(featuredImageRef.current, {
-                            scale: 1,
-                            y: 0,
-                            opacity: 1,
-                            duration: 0.5,
-                            ease: "back.out(1.7)"
-                          })
-                        }
-
-                        if (backgroundNameRef.current) {
-                          resetTl.to(backgroundNameRef.current, {
-                            opacity: 0.15,
-                            scale: 1,
-                            duration: 0.5,
-                            ease: "power2.out"
-                          })
-                        }
-
-                        setCurrentIndex(index)
-                        setIsAnimating(false)
-                      }
-                    })
-                  }
-                }
-              }}
+              onClick={() => api?.scrollTo(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 currentIndex === index
                   ? 'bg-green-600 scale-125'
