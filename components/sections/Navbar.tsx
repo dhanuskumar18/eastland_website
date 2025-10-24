@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "../ui/Button"
+import { Button } from "../ui/button"
 import { useState, useEffect, useRef } from "react"
 
 export default function Navbar() {
@@ -135,7 +135,13 @@ export default function Navbar() {
           </div>
 
           <div className="ml-4">
-            <Button href="/Contact" variant="light" className="rounded-full">Enquire Now</Button>
+            <Link 
+              href="/Contact" 
+              className="relative rounded-full bg-white p-3 text-black font-medium overflow-hidden group transition-all duration-300 hover:scale-105"
+            >
+              <span className="relative z-10">Enquire Now</span>
+              <div className="absolute inset-0 bg-yellow-400 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 ease-out origin-center"></div>
+            </Link>
           </div>
         </nav>
       </div>
