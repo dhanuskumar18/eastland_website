@@ -173,7 +173,7 @@ export default function ProductsPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
@@ -473,7 +473,7 @@ export default function ProductsPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
