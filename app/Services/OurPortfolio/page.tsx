@@ -28,7 +28,7 @@ export default function OurPortfolioPage() {
 
       {/* Gallery Section */}
       <section className="py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">
               Our Gallery

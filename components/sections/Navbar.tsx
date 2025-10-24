@@ -46,7 +46,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
         <nav className={`mt-6 flex items-center justify-between rounded-full border border-white/20 px-4 py-2 backdrop-blur transition-all duration-300 ${
           isScrolled 
             ? 'bg-black/40 border-black/20' 

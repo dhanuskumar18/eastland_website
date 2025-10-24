@@ -91,7 +91,7 @@ export default function QSRDesignsPage() {
 
       {/* QSR Designs Section */}
       <section ref={firstSectionRef} className="py-20 bg-white opacity-0">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px]">
@@ -158,7 +158,7 @@ export default function QSRDesignsPage() {
 
       {/* Gallery Grid Section */}
       <section ref={middleSectionRef} className="py-20 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">
               Future-Ready Quick Service Installations With Efficient Workflow
@@ -291,7 +291,7 @@ export default function QSRDesignsPage() {
 
       {/* About QSR Designs Section */}
       <section ref={lastSectionRef} className="py-20 bg-white opacity-0">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Image with custom border radius */}
             <div className="relative w-full max-w-[596px]">

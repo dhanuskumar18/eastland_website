@@ -111,7 +111,7 @@ export default function ServicesPage() {
 
       {/* Our Services Section */}
       <section className="py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={firstContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Image with custom border radius */}
             <div className="relative w-full max-w-[543px]">
@@ -186,7 +186,7 @@ export default function ServicesPage() {
 
       {/* Services Cards Section */}
       <section className="py-20 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={middleContentRef} className="text-center mb-16 opacity-0">
             <p className="text-sm font-semibold text-slate-500">Services</p>
             <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
@@ -320,7 +320,7 @@ export default function ServicesPage() {
 
       {/* About Our Services Section */}
       <section className="py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={lastContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px]">

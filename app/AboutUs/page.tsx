@@ -141,7 +141,7 @@ export default function AboutUsPage() {
         
         {/* Content overlay */}
         <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full text-center">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">About Us</h1>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function AboutUsPage() {
 
       {/* Company Background Section */}
       <section ref={sectionRef} className="company-background-section py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Image on the left */}
             <div ref={imageRef} className="relative w-full max-w-[520px]">
@@ -208,7 +208,7 @@ export default function AboutUsPage() {
           />
         </div>
         
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           {/* Mission Part */}
           <div ref={missionRef} className="mb-20 grid items-center gap-16 md:grid-cols-[60%_40%]">
             {/* Text on the left */}

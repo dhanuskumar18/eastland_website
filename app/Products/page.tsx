@@ -124,7 +124,7 @@ export default function ProductsPage() {
         
         {/* Content overlay */}
         <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full text-center">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">Our Products</h1>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function ProductsPage() {
 
       {/* Our Products Section */}
       <section ref={productsSectionRef} className="py-20 bg-white opacity-0">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Image */}
             <div className="relative w-full max-w-[520px]">
@@ -186,7 +186,7 @@ export default function ProductsPage() {
 
       {/* Products Grid Section */}
       <section ref={gridSectionRef} className="bg-slate-50 py-20 opacity-0">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
             Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
             <br /> <span className="text-emerald-700">With Efficient Workflow</span>
@@ -437,7 +437,7 @@ export default function ProductsPage() {
 
       {/* About Our Products Section */}
       <section ref={aboutProductsRef} className="py-20 bg-white opacity-0">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px]">
