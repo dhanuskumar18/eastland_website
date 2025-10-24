@@ -418,6 +418,44 @@ function TeamSection() {
       .name-static {
         opacity: 0.3;
       }
+      
+      @keyframes imageSlideDownOut {
+        0% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 0;
+        }
+      }
+      
+      @keyframes imageSlideUpIn {
+        0% {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+      
+      .image-exit {
+        animation: imageSlideDownOut 2000ms ease-in-out forwards;
+        transform-origin: bottom center;
+      }
+      
+      .image-enter {
+        animation: imageSlideUpIn 2000ms ease-in-out 1000ms forwards;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+        transform-origin: bottom center;
+      }
+      
+      .image-static {
+        opacity: 1;
+      }
     `
     document.head.appendChild(style)
     
@@ -486,13 +524,35 @@ function TeamSection() {
 
         {/* Featured Image - Large Center Display */}
         <div className="relative mb-16 z-10" style={{ height: '600px' }}>
+          {/* Previous image (exiting) */}
+          {isTransitioning && previousMember && (
+            <div
+              className="absolute rounded-3xl overflow-hidden w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] xl:w-[800px] xl:h-[800px] image-exit"
+              style={{
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                transformOrigin: 'bottom center',
+                zIndex: 4,
+              }}
+            >
+              <Image
+                src={previousMember.image || "/placeholder.svg"}
+                alt={previousMember.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+          )}
+          
+          {/* Current image (entering) */}
           <div
-            className="absolute rounded-3xl overflow-hidden w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] xl:w-[800px] xl:h-[800px]"
+            className={`absolute rounded-3xl overflow-hidden w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] xl:w-[800px] xl:h-[800px] ${isTransitioning ? 'image-enter' : 'image-static'}`}
             style={{
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              transformOrigin: 'center center',
+              transformOrigin: 'bottom center',
               zIndex: 5,
             }}
           >
