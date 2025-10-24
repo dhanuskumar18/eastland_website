@@ -2,48 +2,44 @@
 
 import Link from "next/link"
 import { Button } from "../ui/Button"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 
 export default function Navbar() {
   const [isProductsOpen, setIsProductsOpen] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
-  const productsRef = useRef<HTMLDivElement>(null)
-  const servicesRef = useRef<HTMLDivElement>(null)
+  const [isScrolled, setIsScrolled] = useState(false)
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (productsRef.current && !productsRef.current.contains(event.target as Node)) {
-        setIsProductsOpen(false)
-      }
-      if (servicesRef.current && !servicesRef.current.contains(event.target as Node)) {
-        setIsServicesOpen(false)
-      }
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY
+      setIsScrolled(scrollPosition > 100) // Change background after 100px scroll
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-        <nav className="mt-6 flex items-center justify-between rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur supports-[backdrop-filter]:bg-white/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav className={`mt-6 flex items-center justify-between rounded-full border border-white/20 px-4 py-2 backdrop-blur transition-all duration-300 ${
+          isScrolled 
+            ? 'bg-black/40 border-black/20' 
+            : 'bg-white/10 border-white/20'
+        }`}>
           <Link href="/" >
             <img src="/images/logo.png" alt="Eastland Logo" className="h-14 w-42" />
           </Link>
 
-          <div className="hidden md:flex items-center  gap-10 text-sm font-medium text-white drop-shadow-sm">
-            <Link href="/" className="hover:text-emerald-200 transition-colors">Home</Link>
-            <Link href="/AboutUs" className="hover:text-emerald-200 transition-colors">About Us</Link>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white drop-shadow-sm">
+            <Link href="/" className="hover:text-emerald-400 transition-colors">Home</Link>
+            <Link href="/AboutUs" className="hover:text-emerald-400 transition-colors">About Us</Link>
             
             {/* Products Dropdown */}
             <div className="relative" ref={productsRef}>
               <button
                 onClick={() => setIsProductsOpen(!isProductsOpen)}
-                className="flex items-center gap-1 hover:text-emerald-200 transition-colors"
+                className="flex items-center gap-1 hover:text-emerald-400 transition-colors"
               >
                 Products
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,17 +48,21 @@ export default function Navbar() {
               </button>
               
               {isProductsOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/10 backdrop-blur supports-[backdrop-filter]:bg-white/10 rounded-lg shadow-lg border border-white/30 py-2">
+                <div className={`absolute top-full left-0 mt-7 w-48 rounded-lg shadow-lg py-2 backdrop-blur-md transition-all duration-300 ${
+                  isScrolled 
+                    ? 'bg-black/40 border border-black/20' 
+                    : 'bg-white/20 border border-white/30'
+                }`}>
                   <Link 
                     href="/Products" 
-                    className="block px-4 py-2 text-sm text-white  hover:text-emerald-200  transition-colors"
+                    className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsProductsOpen(false)}
                   >
                     Our Products
                   </Link>
                   <Link 
                     href="/Products/QSRDesigns" 
-                    className="block px-4 py-2 text-sm text-white hover:text-emerald-200   transition-colors"
+                    className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsProductsOpen(false)}
                   >
                     QSR Designs
@@ -75,7 +75,7 @@ export default function Navbar() {
             <div className="relative" ref={servicesRef}>
               <button
                 onClick={() => setIsServicesOpen(!isServicesOpen)}
-                className="flex items-center gap-1 hover:text-emerald-200 transition-colors"
+                className="flex items-center gap-1 hover:text-emerald-400 transition-colors"
               >
                 Services
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,17 +84,21 @@ export default function Navbar() {
               </button>
               
               {isServicesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white/10 backdrop-blur-md supports-[backdrop-filter]:bg-white/10 rounded-lg shadow-lg border border-white/30 py-2">
+                <div className={`absolute top-full left-0 mt-7 w-48 rounded-lg shadow-lg py-2 backdrop-blur-md transition-all duration-300 ${
+                  isScrolled 
+                    ? 'bg-black/40 border border-black/20' 
+                    : 'bg-white/20 border border-white/30'
+                }`}>
                   <Link 
                     href="/Services" 
-                    className="block px-4 py-2 text-sm text-white hover:text-emerald-200  transition-colors"
+                    className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsServicesOpen(false)}
                   >
                     Our Services
                   </Link>
                   <Link 
                     href="/Services/OurPortfolio" 
-                    className="block px-4 py-2 text-sm text-white hover:text-emerald-200  transition-colors"
+                    className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsServicesOpen(false)}
                   >
                     Our Portfolio
@@ -102,7 +106,7 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            <Link href="/Contact" className="hover:text-emerald-200 transition-colors">Contact Us</Link>
+            <Link href="/Contact" className="hover:text-emerald-400 transition-colors">Contact Us</Link>
           </div>
 
           <div className="ml-4">

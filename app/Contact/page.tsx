@@ -183,31 +183,22 @@ export default function ContactUsPage() {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                     >
                       <path d="M7 17L17 7M17 7H7M17 7V17"/>
                     </svg>
                   </button>
-                  
-                  {/* Letter Send Image */}
-                  <div className="mt-4 flex justify-center">
-                    <Image
-                      src="/images/letter_send 1.png"
-                      alt="Send Message"
-                      width={32}
-                      height={32}
-                      className="opacity-60"
-                    />
-                  </div>
                 </form>
 
-                {/* Decorative Element */}
+                {/* Letter Send Image */}
                 <div className="mt-8 flex justify-center">
-                  <div className="text-gray-400">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                  </div>
+                  <Image
+                    src="/images/letter_send 1.png"
+                    alt="Send Message"
+                    width={200}
+                    height={100}
+                    className="opacity-100"
+                  />
                 </div>
               </div>
             </div>

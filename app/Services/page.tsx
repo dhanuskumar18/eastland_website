@@ -162,7 +162,7 @@ export default function ServicesPage() {
               </p>
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-emerald-800 hover:scale-105 group">
+                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -173,7 +173,7 @@ export default function ServicesPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
@@ -219,21 +219,8 @@ export default function ServicesPage() {
                     High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
+                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
                 </button>
               </div>
             </div>
@@ -262,21 +249,8 @@ export default function ServicesPage() {
                     Professional ventilation systems and hood equipment for safe and efficient kitchen operations.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
+                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
                 </button>
               </div>
             </div>
@@ -305,21 +279,8 @@ export default function ServicesPage() {
                     High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
+                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
                 </button>
               </div>
             </div>
@@ -348,21 +309,8 @@ export default function ServicesPage() {
                     Professional sanitization solutions and equipment for maintaining hygiene standards.
                   </p>
                 </div>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 group">
+                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
                 </button>
               </div>
             </div>
@@ -423,7 +371,7 @@ export default function ServicesPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>

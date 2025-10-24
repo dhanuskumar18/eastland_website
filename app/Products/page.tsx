@@ -173,7 +173,7 @@ export default function ProductsPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
@@ -210,19 +210,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -237,19 +239,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -264,19 +268,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -291,19 +297,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -318,19 +326,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -345,19 +355,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -372,19 +384,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
 
@@ -399,19 +413,21 @@ export default function ProductsPage() {
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
                 <div className="mt-6">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-transform duration-300 rotate-45 hover:rotate-0 hover:bg-emerald-700 hover:text-white hover:scale-110"
-                  >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                  </svg>
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                  </span>
                 </div>
               </div>
             </div>
@@ -473,7 +489,7 @@ export default function ProductsPage() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>

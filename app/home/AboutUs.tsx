@@ -1,6 +1,40 @@
+"use client"
+
 import Image from "next/image"
+import { useEffect, useRef } from "react"
 
 export default function AboutUs() {
+  const aboutUsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.getAttribute('data-animated')) {
+            entry.target.setAttribute('data-animated', 'true')
+            
+            // Remove opacity-0 class
+            entry.target.classList.remove('opacity-0')
+
+            // Add slide up with bounce animation
+            entry.target.classList.add('animate-slide-up-bounce')
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (aboutUsRef.current) {
+      observer.observe(aboutUsRef.current)
+    }
+
+    return () => {
+      if (aboutUsRef.current) {
+        observer.unobserve(aboutUsRef.current)
+      }
+    }
+  }, [])
+
   return (
     <section className="mx-auto max-w-[80%] px-4 pb-28 pt-20 sm:px-6 lg:px-8">
       <div className="grid items-center gap-16 md:grid-cols-2">
@@ -63,7 +97,7 @@ export default function AboutUs() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="transition-transform duration-300 rotate-45 group-hover:rotate-0"
+                className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
               >
                 <path d="M7 17L17 7M17 7H7M17 7V17"/>
               </svg>
