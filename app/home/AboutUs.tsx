@@ -1,8 +1,42 @@
+"use client"
+
 import Image from "next/image"
+import { useEffect, useRef } from "react"
 
 export default function AboutUs() {
+  const aboutUsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.getAttribute('data-animated')) {
+            entry.target.setAttribute('data-animated', 'true')
+            
+            // Remove opacity-0 class
+            entry.target.classList.remove('opacity-0')
+
+            // Add slide up with bounce animation
+            entry.target.classList.add('animate-slide-up-bounce')
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (aboutUsRef.current) {
+      observer.observe(aboutUsRef.current)
+    }
+
+    return () => {
+      if (aboutUsRef.current) {
+        observer.unobserve(aboutUsRef.current)
+      }
+    }
+  }, [])
+
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-28 pt-20 sm:px-6 lg:px-8">
+    <section ref={aboutUsRef} className="mx-auto max-w-7xl px-4 pb-28 pt-20 sm:px-6 lg:px-8 opacity-0">
       <div className="grid items-center gap-16 md:grid-cols-2">
         {/* Image collage */}
         <div className="relative w-full max-w-[520px]">
