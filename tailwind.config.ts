@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+      },
       animation: {
         'slide-up-bounce': 'slide-up-bounce 0.8s ease-out forwards',
         'slide-up-bounce-delayed': 'slide-up-bounce 0.8s ease-out 0.2s forwards',

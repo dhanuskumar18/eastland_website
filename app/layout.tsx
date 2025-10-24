@@ -2,6 +2,9 @@ import '../styles/globals.css'
 import Navbar from '../components/sections/Navbar'
 import Footer from '../components/sections/Footer'
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Eastland Website',
@@ -15,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-dvh antialiased">
+      <body className={`${inter.className} min-h-dvh antialiased`}>
         <Navbar />
         {children}
         <Footer />
