@@ -14,6 +14,7 @@ const config: Config = {
       animation: {
         'slide-up-bounce': 'slide-up-bounce 0.8s ease-out forwards',
         'slide-up-bounce-delayed': 'slide-up-bounce 0.8s ease-out 0.2s forwards',
+        'slide-up-shake': 'slide-up-shake 2.5s ease-out forwards',
         'slide-left': 'slide-left 0.8s ease-out forwards',
         'slide-right': 'slide-right 0.8s ease-out forwards',
         'slide-down': 'slide-down 0.8s ease-out forwards',
@@ -70,6 +71,33 @@ const config: Config = {
           '60%': {
             opacity: '0.8',
             transform: 'translateY(8px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+        },
+        'slide-up-shake': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(80px)',
+          },
+          '50%': {
+            opacity: '0.8',
+            transform: 'translateY(-8px)',
+          },
+          '60%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
+          '70%': {
+            transform: 'translateY(-8px)',
+          },
+          '80%': {
+            transform: 'translateY(8px)',
+          },
+          '90%': {
+            transform: 'translateY(-4px)',
           },
           '100%': {
             opacity: '1',

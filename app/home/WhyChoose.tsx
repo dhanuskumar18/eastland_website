@@ -1,10 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useRef } from "react"
+import { useScroll } from "@/hooks/useScroll"
 
 export default function WhyChoose() {
-  const whyChooseRef = useRef<HTMLDivElement>(null)
+  const { ref, isInView } = useScroll()
 
   const collage = [
     "/images/Why1.png",
@@ -13,56 +13,28 @@ export default function WhyChoose() {
     "/images/Why4.png",
   ]
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !entry.target.getAttribute('data-animated')) {
-            entry.target.setAttribute('data-animated', 'true')
-            
-            // Remove opacity-0 class
-            entry.target.classList.remove('opacity-0')
-
-            // Add slide up with bounce animation
-            entry.target.classList.add('animate-slide-up-bounce')
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    if (whyChooseRef.current) {
-      observer.observe(whyChooseRef.current)
-    }
-
-    return () => {
-      if (whyChooseRef.current) {
-        observer.unobserve(whyChooseRef.current)
-      }
-    }
-  }, [])
 
   return (
-    <section className="mx-auto max-w-[80%] px-4 py-24 sm:px-6 lg:px-8">
+    <section ref={ref} className="mx-auto max-w-[80%] px-4 py-24 sm:px-6 lg:px-8">
       <div className="grid items-center gap-16 md:grid-cols-2">
         {/* Collage */}
-        <div className="mx-auto grid w-full max-w-xl  grid-cols-2  items-start">
-          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent " >
-            <Image src={collage[0]} alt="Why choose image 1" width={220} height={200} className=" absolute -right-4 -z-10" />
+        <div className={`mx-auto grid w-full max-w-xl grid-cols-2 items-start transition-all duration-1000 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
+          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent" >
+            <Image src={collage[0]} alt="Why choose image 1" width={220} height={200} className="absolute -right-4 -z-10" />
           </div>
           <div className="">
-            <Image src={collage[1]} alt="Why choose image 2" width={530} height={540} className="w-full h-auto relative right-8 " />
+            <Image src={collage[1]} alt="Why choose image 2" width={530} height={540} className="w-full h-auto relative right-8" />
           </div>
           <div className="mt-6">
             <Image src={collage[2]} alt="Why choose image 3" width={287} height={265} className="w-full h-auto" />
           </div>
-          <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent "  >
-            <Image src={collage[3]} alt="Why choose image 1" width={200} height={200} className=" absolute -left-3 -top-4" />
+          <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent">
+            <Image src={collage[3]} alt="Why choose image 4" width={200} height={200} className="absolute -left-3 -top-4" />
           </div>
         </div>
 
         {/* Content */}
-        <div>
+        <div className={`transition-all duration-1000 delay-200 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
           <p className="text-sm font-semibold text-slate-500">Why Choose Us</p>
           <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
             Excellence, Efficiency, &

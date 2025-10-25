@@ -1,4 +1,9 @@
+"use client"
+
+import { useScroll } from '../../hooks/useScroll'
+
 export default function Features() {
+  const { ref, isInView } = useScroll()
   const items: Array<{ title: string; image: string; description: string }> = [
     {
       title: "Cafe Design",
@@ -27,8 +32,9 @@ export default function Features() {
   ]
 
   return (
-    <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <h2 className="text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+    <section ref={ref} className="mx-auto max-w-[100%] px-4 py-20 sm:px-6 lg:px-8 bg-green-50/50">
+      <div className="max-w-[80%] mx-auto">
+      <h2 className={`text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce' : 'opacity-0'}`}>
         Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
         <br /> <span className="text-emerald-700">With Efficient Workflow</span>
       </h2>
@@ -67,7 +73,7 @@ export default function Features() {
       </div>
 
       {/* Green Navigation Buttons */}
-      <div className="mt-12 flex justify-center gap-4">
+      <div className={`mt-12 flex justify-center gap-4 transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce-delayed' : 'opacity-0'}`}>
         <button className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -76,8 +82,9 @@ export default function Features() {
         <button className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
   )

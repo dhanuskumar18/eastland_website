@@ -1,4 +1,17 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { useScroll } from '@/hooks/useScroll'
+
 export default function Videos() {
+  const { ref, isInView } = useScroll()
+  const featuredTextRef = useRef<HTMLParagraphElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const descriptionRef = useRef<HTMLParagraphElement>(null)
+  const cardsRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLDivElement>(null)
+
   const cards: Array<{ title: string; image?: string }> = [
     { title: "Rapid Installation", image: "/images/Rectangle 36.png" },
     // Rectangle 38.png not found in repo; using 39 as provided asset
@@ -6,6 +19,52 @@ export default function Videos() {
     { title: "Seating Arrangement", image: "/images/Rectangle 42.png" },
     { title: "Space Transformation", image: "/images/Rectangle 45.png" },
   ]
+
+  // Set initial styles to prevent flash
+  useEffect(() => {
+    gsap.set([featuredTextRef.current, titleRef.current, descriptionRef.current], {  
+      opacity: 0,
+      y: 50
+    })
+  }, [])
+
+  useEffect(() => {
+    if (isInView) {
+      const tl = gsap.timeline()
+
+      // Animate elements in sequence
+      tl.to(featuredTextRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      })
+      .to(titleRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.2")
+      .to(descriptionRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.4")
+      .to(cardsRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.4")
+      .to(buttonRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      }, "-=0.2")
+    }
+  }, [isInView])
 
   function PlayButton() {
     return (
@@ -27,15 +86,15 @@ export default function Videos() {
   }
 
   return (
-    <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <p className="text-sm font-semibold text-slate-500">Featured Videos</p>
+    <section ref={ref} className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
+      <p ref={featuredTextRef} className="text-sm font-semibold text-slate-500">Featured Videos</p>
 
       <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
-        <h2 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+        <h2 ref={titleRef} className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
           Watch How We Transform <span className="text-emerald-700">Empty Spaces</span>
           <br /> Into Full-Scale Restaurants
         </h2>
-        <p className="text-sm leading-relaxed text-slate-600 md:mt-1">
+        <p ref={descriptionRef} className="text-sm leading-relaxed text-slate-600 md:mt-1">
           Witness complete transformations as we convert blank layouts into fully functional, customer-ready restaurants with
           precision planning, rapid execution, and flawless finishing.
         </p>
