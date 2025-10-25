@@ -42,7 +42,7 @@ export default function OurPortfolioPage() {
             {/* Row 1 */}
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand.png "
+                src="/images/Services/portfolio/p1.png"
                 alt="Project 1"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -56,7 +56,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (1).png "
+                src="/images/Services/portfolio/p2.png"
                 alt="Project 2"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -70,7 +70,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (2).png "
+                src="/images/Services/portfolio/p3.png"
                 alt="Project 3"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -85,7 +85,7 @@ export default function OurPortfolioPage() {
             {/* Row 2 */}
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (3).png "
+                src="/images/Services/portfolio/p4.png"
                 alt="Project 4"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -99,7 +99,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (4).png "
+                src="/images/Services/portfolio/p5.png"
                 alt="Project 5"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -113,7 +113,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (5).png "
+                src="/images/Services/portfolio/p6.png"
                 alt="Project 6"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -128,7 +128,7 @@ export default function OurPortfolioPage() {
             {/* Row 3 */}
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (6).png "
+                src="/images/Services/portfolio/p7.png"
                 alt="Project 7"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -142,7 +142,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (7).png "
+                src="/images/Services/portfolio/p8.png"
                 alt="Project 8"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -156,7 +156,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (8).png "
+                src="/images/Services/portfolio/p9.png"
                 alt="Project 9"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -171,7 +171,7 @@ export default function OurPortfolioPage() {
             {/* Row 4 */}
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (9).png "
+                src="/images/Services/portfolio/p10.png"
                 alt="Project 10"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -185,7 +185,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (10).png "
+                src="/images/Services/portfolio/p11.png"
                 alt="Project 11"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -199,7 +199,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (11).png "
+                src="/images/Services/portfolio/p12.png"
                 alt="Project 12"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -214,7 +214,7 @@ export default function OurPortfolioPage() {
             {/* Row 5 */}
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (12).png "
+                src="/images/Services/portfolio/p13.png"
                 alt="Project 13"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -228,7 +228,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/woman-taking-photo-morning-mist-phu-lang-ka-phayao-thailand (13).png "
+                src="/images/Services/portfolio/p14.png"
                 alt="Project 14"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"
@@ -242,7 +242,7 @@ export default function OurPortfolioPage() {
 
             <div className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
               <Image
-                src="/images/Services/spacious-hall-luxury-restaurant-with-fashionable-modern-designer-furniture-huge-beams 1.png "
+                src="/images/Services/portfolio/p15.png"
                 alt="Project 15"
                 fill
                 className="object-cover transition-transform group-hover:scale-110"

@@ -145,7 +145,7 @@ export default function Testimonials() {
               <div className="absolute -bottom-5 -right-5 h-[200px] w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
               {/* Left side - Profile image with overlay slide effect */}
               <div className="flex-shrink-0">
-                <div className="relative w-[350px] h-full overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
+                <div className="relative w-[250px] h-full overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
                   {/* Base image - always visible */}
                   <div className="absolute inset-0">
                     <Image 

@@ -4,8 +4,8 @@ export default function HomeFirstSection() {
   // Array of images for the carousel
   const carouselImages = [
     '/images/home1.png',
-    '/images/home1.png',
-    '/images/home1.png',
+    '/images/home2.png',
+    '/images/home3.png',
     '/images/home1.png',
   ]
 
