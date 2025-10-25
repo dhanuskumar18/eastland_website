@@ -96,6 +96,16 @@ export default function slider({ images, content, autoPlay = true, autoPlayInter
     // Set transition state
     setIsTransitioning(true)
 
+    // Hide all other slides first to prevent glitches
+    slidesRef.current.forEach((slide, index) => {
+      if (index !== fromIndex && index !== toIndex) {
+        gsap.set(slide, {
+          opacity: 0,
+          zIndex: 1
+        })
+      }
+    })
+
     // Set initial positions for slides - next slide starts off-screen
     gsap.set(toSlide, {
       x: direction === 'next' ? '100%' : '-100%',
@@ -138,9 +148,20 @@ export default function slider({ images, content, autoPlay = true, autoPlayInter
     // Animate both slides and content
     const tl = gsap.timeline({
       onComplete: () => {
-        // Reset z-index after animation
-        gsap.set(fromSlide, { zIndex: 1 })
-        gsap.set(toSlide, { zIndex: 1 })
+        // Hide the previous slide completely
+        gsap.set(fromSlide, { 
+          zIndex: 1,
+          opacity: 0,
+          x: '0%'
+        })
+        
+        // Reset z-index for the new slide
+        gsap.set(toSlide, { 
+          zIndex: 1,
+          opacity: 1,
+          x: '0%'
+        })
+        
         if (fromContent && toContent) {
           // Hide the previous content completely
           gsap.set(fromContent, { 
@@ -244,8 +265,9 @@ export default function slider({ images, content, autoPlay = true, autoPlayInter
       // Set initial positions for all slides
       slidesRef.current.forEach((slide, index) => {
         gsap.set(slide, {
-          x: index === 0 ? '0%' : '100%',
-          opacity: index === 0 ? 1 : 0
+          x: '0%', // All slides start at 0% position
+          opacity: index === 0 ? 1 : 0, // Only first slide is visible
+          zIndex: index === 0 ? 1 : 1 // All slides have same z-index initially
         })
       })
     }
@@ -254,8 +276,9 @@ export default function slider({ images, content, autoPlay = true, autoPlayInter
       // Set initial positions for all content
       contentRefs.current.forEach((content, index) => {
         gsap.set(content, {
-          x: index === 0 ? '0%' : '100%',
-          opacity: index === 0 ? 1 : 0
+          x: '0%', // All content starts at 0% position
+          opacity: index === 0 ? 1 : 0, // Only first content is visible
+          zIndex: index === 0 ? 1 : 1 // All content has same z-index initially
         })
       })
     }

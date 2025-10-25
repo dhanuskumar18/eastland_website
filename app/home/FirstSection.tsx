@@ -5,8 +5,8 @@ export default function HomeFirstSection() {
   const carouselImages = [
     '/images/home1.png',
     '/images/home2.png',
-    '/images/home3.png',
     '/images/home1.png',
+    '/images/home3.png',
   ]
 
   // Content for each slide
