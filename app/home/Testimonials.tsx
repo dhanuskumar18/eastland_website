@@ -43,6 +43,7 @@ export default function Testimonials() {
   const [nextIndex, setNextIndex] = useState(1)
   const carouselRef = useRef<HTMLDivElement>(null)
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   // Auto-play functionality
   useEffect(() => {
@@ -56,6 +57,42 @@ export default function Testimonials() {
       }
     }
   }, [currentIndex])
+
+  // Intersection observer for card animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+            // Mark as animated to prevent re-triggering
+            entry.target.setAttribute('data-animated', 'true')
+            
+            // Remove opacity-0 class and add slide animation
+            entry.target.classList.remove('opacity-0')
+            entry.target.classList.add('animate-slide-right')
+
+            // Stop observing this element to prevent re-triggering
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    )
+
+    // Observe the card
+    if (cardRef.current) {
+      observer.observe(cardRef.current)
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current)
+      }
+    }
+  }, [])
 
   const goToNext = () => {
     if (isTransitioning) return
@@ -130,19 +167,12 @@ export default function Testimonials() {
         <div className="relative">
           {/* Static Card Container */}
           <div className="relative w-full max-w-4xl mx-auto ">
-            {/* Decorative quote marks background */}
-            {/* <div className="absolute inset-0 pointer-events-none opacity-5 text-6xl font-serif text-gray-400">
-              <div className="absolute top-0 left-0">"</div>
-              <div className="absolute bottom-0 right-0">"</div>
-            </div> */}
+            {/* Fixed decorative rectangles - outside of sliding content */}
+            <div className="absolute -top-5 -left-5 h-[200px] w-[200px] border border-slate-500 rounded-lg"></div>
+            <div className="absolute -bottom-5 -right-5 h-[200px] w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
 
-            {/* Main card container - stays in place */}
-            <div className="relative flex gap-8 items-stretch bg-[#F4F4F4] rounded-3xl border border-gray-200 shadow-sm max-w-full ">
-              {/* Empty div at top left corner */}
-              <div className="absolute -top-5 -left-5 h-[200px] w-[200px] border border-slate-500 rounded-lg"></div>
-              
-              {/* Empty div at bottom right corner */}
-              <div className="absolute -bottom-5 -right-5 h-[200px] w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
+            {/* Main card container - slides from right when visible */}
+            <div ref={cardRef} className="relative flex gap-8 items-stretch bg-[#F4F4F4] rounded-3xl border border-gray-200 shadow-sm max-w-full opacity-0">
               {/* Left side - Profile image with overlay slide effect */}
               <div className="flex-shrink-0">
                 <div className="relative w-[250px] h-full overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
