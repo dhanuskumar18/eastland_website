@@ -108,13 +108,13 @@ export default function QSRDesignsPage() {
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-0 right-8 w-[300px] ">
-                <div className="relative aspect-[365/252] overflow-hidden rounded-[50px] left-44 p-[2px]  bg-white w-[300px]">
+              <div className="absolute -bottom-0 right-8 w-[300px] h-[300px] ">
+                <div className="relative aspect-[365/315] overflow-hidden rounded-[50px] left-44 p-[2px]  bg-white w-[350px]">
                   <Image 
                     src="/images/Products/Rectangle 79.png" 
                     alt="Refined Dining Space" 
-                     width={300}
-                     height={300}
+                     width={350}
+                     height={350}
                     className="object transition-transform duration-300 hover:scale-110 " 
                   />
                 </div>
