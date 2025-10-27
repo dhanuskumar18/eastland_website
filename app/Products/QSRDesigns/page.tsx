@@ -67,7 +67,7 @@ export default function QSRDesignsPage() {
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Top Panel with Image */}
-      <section className="relative h-[60vh] min-h-[500px]">
+      <section className="relative h-[60vh] min-h-[500px] ">
         <div className="absolute inset-0">
           <Image
             src="/images/Products/Rectangle 52 (3).png"
@@ -94,10 +94,10 @@ export default function QSRDesignsPage() {
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Left Side - Overlapping Images */}
-            <div className="relative w-full max-w-[520px]">
+            <div className="relative w-full max-w-[400px] h-[500px]  ">
               {/* Main Image */}
-              <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
-                <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+              <div className=" bg-white  ">
+                <div className="relative aspect-[519/650] overflow-hidden rounded-[50px] ">
                   <Image 
                     src="/images/Products/Rectangle 78.png" 
                     alt="Modern Cafe Interior" 
@@ -108,13 +108,14 @@ export default function QSRDesignsPage() {
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-8 right-8 w-[300px] rounded-2xl shadow-2xl">
-                <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
+              <div className="absolute -bottom-0 right-8 w-[300px] ">
+                <div className="relative aspect-[365/252] overflow-hidden rounded-[50px] left-44 p-[2px]  bg-white w-[300px]">
                   <Image 
                     src="/images/Products/Rectangle 79.png" 
                     alt="Refined Dining Space" 
-                    fill 
-                    className="object-cover transition-transform duration-300 hover:scale-110" 
+                     width={300}
+                     height={300}
+                    className="object transition-transform duration-300 hover:scale-110 " 
                   />
                 </div>
               </div>
