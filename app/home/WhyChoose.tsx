@@ -3,7 +3,15 @@
 import Image from "next/image"
 import { useScroll } from "@/hooks/useScroll"
 
-export default function WhyChoose() {
+interface WhyChooseProps {
+  content?: {
+    title?: string
+    description?: string
+    descSubTitle?: string
+  }
+}
+
+export default function WhyChoose({ content }: WhyChooseProps = {}) {
   const { ref, isInView } = useScroll()
 
   const collage = [
@@ -35,19 +43,17 @@ export default function WhyChoose() {
 
         {/* Content */}
         <div className={`transition-all duration-1000 delay-200 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
-          <p className="text-sm font-semibold text-slate-500">Why Choose Us</p>
+          <p className="text-sm font-semibold text-slate-500">{content?.title || "Why Choose Us"}</p>
           <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-            Excellence, Efficiency, &
-            <br /> <span className="text-emerald-700">Innovation In Every Project</span>
+            {content?.descSubTitle || (
+              <>
+                Excellence, Efficiency, &
+                <br /> <span className="text-emerald-700">Innovation In Every Project</span>
+              </>
+            )}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-slate-600">
-            We specialize in designing, setting up, and installing high-performance quick service restaurants, cafés, and
-            delis. Our team combines innovative layouts, efficient workflows, and future-ready installations to ensure your
-            business runs smoothly from day one.
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600">
-            We create efficient, visually stunning, and future-ready quick service restaurant spaces with precision and
-            expertise.
+            {content?.description || "We specialize in designing, setting up, and installing high-performance quick service restaurants, cafés, and delis. Our team combines innovative layouts, efficient workflows, and future-ready installations to ensure your business runs smoothly from day one. We create efficient, visually stunning, and future-ready quick service restaurant spaces with precision and expertise."}
           </p>
 
           <div className="mt-8">

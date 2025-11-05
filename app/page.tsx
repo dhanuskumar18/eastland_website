@@ -1,21 +1,28 @@
-import HomeFirstSection from "./home/FirstSection"
-import WhyChoose from "./home/WhyChoose"
-import Features from "./home/Features"
-import AboutUs from "./home/AboutUs"
-import Videos from "./home/Videos"
-import Gallery from "./home/Gallery"
-import Testimonials from "./home/Testimonials"
-export default function HomePage() {
-  return (
-    <main className="flex min-h-dvh flex-col">
-      {/* First section component within app/home */}
-      <HomeFirstSection />
-      <AboutUs />
-      <Videos />
-      <Features />
-      <WhyChoose />
-      <Gallery />
-      <Testimonials />
-    </main>
-  )
+import { fetchPageBySlug } from '@/lib/api'
+import HomeLayout from './layouts/HomeLayout'
+import { notFound } from 'next/navigation'
+
+export async function generateMetadata() {
+  const pageData = await fetchPageBySlug('home')
+
+  if (!pageData) {
+    return {
+      title: 'Home',
+    }
+  }
+
+  return {
+    title: pageData.meta?.title || pageData.title,
+    description: pageData.meta?.description || pageData.description,
+  }
+}
+
+export default async function HomePage() {
+  const pageData = await fetchPageBySlug('home')
+
+  if (!pageData) {
+    notFound()
+  }
+
+  return <HomeLayout pageData={pageData} />
 }

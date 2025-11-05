@@ -3,7 +3,18 @@
 import Image from "next/image"
 import { useEffect, useRef } from "react"
 
-export default function AboutUs() {
+interface AboutUsProps {
+  content?: {
+    title?: string
+    subTitle1?: string
+    subTitle2?: string
+    descSubTitle?: string
+    description1?: string
+    description2?: string
+  }
+}
+
+export default function AboutUs({ content }: AboutUsProps = {}) {
   const aboutUsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -59,28 +70,30 @@ export default function AboutUs() {
         <div>
           <p className="text-sm font-semibold text-slate-500">About Us</p>
           <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-            Shaping the Future of <span className="text-emerald-700">Quick Service</span>
-            <br className="hidden sm:block" /> <span className="text-emerald-700">Restaurant Design</span>
+            {content?.title || (
+              <>
+                Shaping the Future of <span className="text-emerald-700">Quick Service</span>
+                <br className="hidden sm:block" /> <span className="text-emerald-700">Restaurant Design</span>
+              </>
+            )}
           </h2>
           <p className="mt-4 max-w-[600px] text-sm leading-relaxed text-slate-700">
-            We redefine modern quick service restaurant design with optimized layouts, advanced equipment integration, and
-            future-ready planning—ensuring faster operations, smoother workflows, and unforgettable customer experiences from
-            day one.
+            {content?.descSubTitle || "We redefine modern quick service restaurant design with optimized layouts, advanced equipment integration, and future-ready planning—ensuring faster operations, smoother workflows, and unforgettable customer experiences from day one."}
           </p>
 
           <div className="mt-6 grid grid-cols-2 gap-8">
             <div className="flex items-start gap-3">
               <Image src="/images/fi_18280468.png" alt="Experience icon" width={32} height={32} />
               <div>
-                <div className="text-base font-semibold text-slate-900">20 Years Of Experience</div>
-                <p className="mt-1 text-sm text-slate-600">We have been partnered with top property developers in Nilgiris</p>
+                <div className="text-base font-semibold text-slate-900">{content?.subTitle1 || "20 Years Of Experience"}</div>
+                <p className="mt-1 text-sm text-slate-600">{content?.description1 || "We have been partnered with top property developers in Nilgiris"}</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Image src="/images/Vector.png" alt="Projects icon" width={32} height={32} />
               <div>
-                <div className="text-base font-semibold text-slate-900">100+ Projects</div>
-                <p className="mt-1 text-sm text-slate-600">We have been partnered with top property developers in Nilgiris</p>
+                <div className="text-base font-semibold text-slate-900">{content?.subTitle2 || "100+ Projects"}</div>
+                <p className="mt-1 text-sm text-slate-600">{content?.description2 || "We have been partnered with top property developers in Nilgiris"}</p>
               </div>
             </div>
           </div>

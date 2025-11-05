@@ -4,7 +4,23 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { useScroll } from '@/hooks/useScroll'
 
-export default function Videos() {
+interface VideosProps {
+  content?: {
+    title?: string
+    subTitle1?: string
+    subTitle2?: string
+    description?: string
+    videos?: Array<{
+      tags?: string
+      title?: string
+      video?: string
+      category?: string
+      description?: string
+    }>
+  }
+}
+
+export default function Videos({ content }: VideosProps = {}) {
   const { ref, isInView } = useScroll()
   const featuredTextRef = useRef<HTMLParagraphElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -87,16 +103,19 @@ export default function Videos() {
 
   return (
     <section ref={ref} className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <p ref={featuredTextRef} className="text-sm font-semibold text-slate-500">Featured Videos</p>
+      <p ref={featuredTextRef} className="text-sm font-semibold text-slate-500">{content?.subTitle1 || "Featured Videos"}</p>
 
       <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
         <h2 ref={titleRef} className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-          Watch How We Transform <span className="text-emerald-700">Empty Spaces</span>
-          <br /> Into Full-Scale Restaurants
+          {content?.title || (
+            <>
+              Watch How We Transform <span className="text-emerald-700">Empty Spaces</span>
+              <br /> Into Full-Scale Restaurants
+            </>
+          )}
         </h2>
         <p ref={descriptionRef} className="text-sm leading-relaxed text-slate-600 md:mt-1">
-          Witness complete transformations as we convert blank layouts into fully functional, customer-ready restaurants with
-          precision planning, rapid execution, and flawless finishing.
+          {content?.description || "Witness complete transformations as we convert blank layouts into fully functional, customer-ready restaurants with precision planning, rapid execution, and flawless finishing."}
         </p>
       </div>
 

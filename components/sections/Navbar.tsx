@@ -58,7 +58,7 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white drop-shadow-sm">
             <Link href="/" className="hover:text-emerald-400 transition-colors">Home</Link>
-            <Link href="/AboutUs" className="hover:text-emerald-400 transition-colors">About Us</Link>
+            <Link href="/aboutus" className="hover:text-emerald-400 transition-colors">About Us</Link>
             
             {/* Products Dropdown */}
             <div className="relative" ref={productsDropdownRef}>
@@ -79,7 +79,7 @@ export default function Navbar() {
                     : 'bg-white/20 border border-white/30'
                 }`}>
                   <Link 
-                    href="/Products" 
+                    href="/products" 
                     className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsProductsOpen(false)}
                   >
@@ -115,7 +115,7 @@ export default function Navbar() {
                     : 'bg-white/20 border border-white/30'
                 }`}>
                   <Link 
-                    href="/Services" 
+                    href="/services" 
                     className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsServicesOpen(false)}
                   >
@@ -131,12 +131,12 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            <Link href="/Contact" className="hover:text-emerald-400 transition-colors">Contact Us</Link>
+            <Link href="/contact" className="hover:text-emerald-400 transition-colors">Contact Us</Link>
           </div>
 
           <div className="ml-4">
             <Link 
-              href="/Contact" 
+              href="/contactUs" 
               className="relative rounded-full bg-white p-3 text-black font-medium overflow-hidden group transition-all duration-300 hover:scale-105"
             >
               <span className="relative z-10">Enquire Now</span>

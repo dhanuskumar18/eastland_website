@@ -2,9 +2,18 @@
 
 import { useScroll } from '../../hooks/useScroll'
 
-export default function Features() {
+interface FeaturesProps {
+  content?: {
+    title?: string
+    description?: string
+    items?: Array<{ title?: string; image?: string; description?: string }>
+  }
+}
+
+export default function Features({ content }: FeaturesProps = {}) {
   const { ref, isInView } = useScroll()
-  const items: Array<{ title: string; image: string; description: string }> = [
+  // Static fallback items
+  const defaultItems: Array<{ title: string; image: string; description: string }> = [
     {
       title: "Cafe Design",
       image: "/images/2 (1).png",
@@ -31,12 +40,25 @@ export default function Features() {
     },
   ]
 
+  // Use API items if available, otherwise use default
+  const items = content?.items && content.items.length > 0 
+    ? content.items.map(item => ({
+        title: item.title || "Untitled",
+        image: item.image || "/images/2 (1).png",
+        description: item.description || "No description available"
+      }))
+    : defaultItems
+
   return (
     <section ref={ref} className="mx-auto max-w-[100%] px-4 py-20 sm:px-6 lg:px-8 bg-green-50/50">
       <div className="max-w-[80%] mx-auto">
       <h2 className={`text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce' : 'opacity-0'}`}>
-        Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
-        <br /> <span className="text-emerald-700">With Efficient Workflow</span>
+        {content?.title || (
+          <>
+            Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
+            <br /> <span className="text-emerald-700">With Efficient Workflow</span>
+          </>
+        )}
       </h2>
 
       <div className="mt-14 grid gap-12 md:grid-cols-2 lg:grid-cols-4">

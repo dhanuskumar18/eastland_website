@@ -5,8 +5,12 @@ import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import { Star } from "lucide-react"
 
-// Array of 4 testimonials with content and images
-const testimonialsData = [
+interface TestimonialsProps {
+  content?: Record<string, any>
+}
+
+// Array of 4 testimonials with content and images (fallback)
+const defaultTestimonialsData = [
   {
     image: "/images/1.png",
     quote: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown.",
@@ -37,7 +41,9 @@ const testimonialsData = [
   }
 ]
 
-export default function Testimonials() {
+export default function Testimonials({ content }: TestimonialsProps = {}) {
+  // Use content from API if available, otherwise use default
+  const testimonialsData = content?.testimonials || defaultTestimonialsData
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [nextIndex, setNextIndex] = useState(1)
@@ -223,7 +229,7 @@ export default function Testimonials() {
                       width: `${testimonialsData.length * 100}%`
                     }}
                   >
-                    {testimonialsData.map((testimonial, index) => (
+                    {testimonialsData.map((testimonial: typeof defaultTestimonialsData[0], index: number) => (
                       <div
                         key={index}
                         className="flex-shrink-0 flex flex-col px-4 min-w-0"
@@ -292,7 +298,7 @@ export default function Testimonials() {
 
             {/* Dots Indicator */}
             <div className="flex gap-2">
-              {testimonialsData.map((_, index) => (
+              {testimonialsData.map((_: typeof defaultTestimonialsData[0], index: number) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}

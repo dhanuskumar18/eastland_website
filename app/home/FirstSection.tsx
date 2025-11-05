@@ -1,6 +1,10 @@
 import Slider from '@/components/ui/slider'
 
-export default function HomeFirstSection() {
+interface HomeFirstSectionProps {
+  content?: Record<string, any>
+}
+
+export default function HomeFirstSection({ content }: HomeFirstSectionProps = {}) {
   // Array of images for the carousel
   const carouselImages = [
     '/images/home1.png',

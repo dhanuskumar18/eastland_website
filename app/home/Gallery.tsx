@@ -1,7 +1,20 @@
 import Image from "next/image"
 
-export default function Gallery() {
-  const images = [
+interface GalleryProps {
+  content?: {
+    title?: string
+    description?: string
+    descSubTitle?: string
+    images?: Array<{
+      image?: string
+      title?: string
+    }>
+  }
+}
+
+export default function Gallery({ content }: GalleryProps = {}) {
+  // Static fallback images
+  const defaultImages = [
     {
       src: "/images/Mask group.png",
       alt: "Modern restaurant interior with wooden bar counter",
@@ -39,17 +52,30 @@ export default function Gallery() {
     }
   ]
 
+  // Use API images if available, otherwise use default images
+  const images = content?.images && content.images.length > 0 && content.images.some(img => img.image)
+    ? content.images.map((img, idx) => ({
+        src: img.image || defaultImages[idx % defaultImages.length]?.src || "/images/Mask group.png",
+        alt: img.title || defaultImages[idx % defaultImages.length]?.alt || "Gallery image",
+        gridClass: defaultImages[idx % defaultImages.length]?.gridClass || "row-span-2"
+      }))
+    : defaultImages
+
   return (
     <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <p className="text-sm font-semibold text-slate-500">Our Gallery</p>
+      <p className="text-sm font-semibold text-slate-500">{content?.title || "Our Gallery"}</p>
       
       <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
         <h2 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-          Explore Cafes and Quick Service
-          <br /> <span className="text-emerald-700">Spaces We've Built</span>
+          {content?.descSubTitle || (
+            <>
+              Explore Cafes and Quick Service
+              <br /> <span className="text-emerald-700">Spaces We've Built</span>
+            </>
+          )}
         </h2>
         <p className="text-sm leading-relaxed text-slate-600 md:mt-1">
-          Discover how we transform ordinary spaces into high-performance cafés and quick service setups, designed for efficiency, aesthetics, and smooth customer flow.
+          {content?.description || "Discover how we transform ordinary spaces into high-performance cafés and quick service setups, designed for efficiency, aesthetics, and smooth customer flow."}
         </p>
       </div>
 
