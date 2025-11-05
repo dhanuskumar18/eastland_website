@@ -3,15 +3,15 @@ import { fetchPageBySlug } from '@/lib/api'
 import { PageData } from '@/types/page'
 
 // Import layout components
-import HomeLayout from '@/app/layouts/HomeLayout'
-import AboutLayout from '@/app/layouts/AboutLayout'
-import ProductsLayout from '@/app/layouts/ProductsLayout'
-import ServicesLayout from '@/app/layouts/ServicesLayout'
-import ContactLayout from '@/app/layouts/ContactLayout'
-import LandingLayout from '@/app/layouts/LandingLayout'
-import QSRDesignsLayout from '@/app/layouts/QSRDesignsLayout'
-import OurPortfolioLayout from '@/app/layouts/OurPortfolioLayout'
-import DefaultLayout from '@/app/layouts/DefaultLayout'
+import HomeLayout from '@/components/layouts/HomeLayout'
+import AboutLayout from '@/components/layouts/AboutLayout'
+import ProductsLayout from '@/components/layouts/ProductsLayout'
+import ServicesLayout from '@/components/layouts/ServicesLayout'
+import ContactLayout from '@/components/layouts/ContactLayout'
+import LandingLayout from '@/components/layouts/LandingLayout'
+import QSRDesignsLayout from '@/components/layouts/QSRDesignsLayout'
+import OurPortfolioLayout from '@/components/layouts/OurPortfolioLayout'
+import DefaultLayout from '@/components/layouts/DefaultLayout'
 
 // Layout component mapping
 const layouts = {

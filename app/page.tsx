@@ -1,5 +1,5 @@
 import { fetchPageBySlug } from '@/lib/api'
-import HomeLayout from './layouts/HomeLayout'
+import HomeLayout from '../components/layouts/HomeLayout'
 import { notFound } from 'next/navigation'
 
 export async function generateMetadata() {

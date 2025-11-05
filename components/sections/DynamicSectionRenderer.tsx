@@ -1,13 +1,13 @@
 "use client"
 
 import { PageSection } from '@/types/page'
-import HomeFirstSection from '@/app/home/FirstSection'
-import AboutUs from '@/app/home/AboutUs'
-import Videos from '@/app/home/Videos'
-import Features from '@/app/home/Features'
-import WhyChoose from '@/app/home/WhyChoose'
-import Gallery from '@/app/home/Gallery'
-import Testimonials from '@/app/home/Testimonials'
+import HomeFirstSection from '@/components/pages/home/FirstSection'
+import AboutUs from '@/components/pages/home/AboutUs'
+import Videos from '@/components/pages/home/Videos'
+import Features from '@/components/pages/home/Features'
+import WhyChoose from '@/components/pages/home/WhyChoose'
+import Gallery from '@/components/pages/home/Gallery'
+import Testimonials from '@/components/pages/home/Testimonials'
 
 interface DynamicSectionRendererProps {
   section: PageSection

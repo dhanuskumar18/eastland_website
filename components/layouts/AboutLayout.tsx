@@ -1,7 +1,7 @@
 "use client"
 
 import { PageData } from '@/types/page'
-import AboutUsPageContent from '@/app/components/pages/AboutUsPageContent'
+import AboutUsPageContent from '@/components/pages/AboutUsPageContent'
 
 interface AboutLayoutProps {
   pageData: PageData

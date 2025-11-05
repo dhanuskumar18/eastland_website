@@ -1,5 +1,5 @@
 import { PageData } from '@/types/page'
-import ContactPageContent from '../components/pages/ContactPageContent'
+import ContactPageContent from '../pages/ContactPageContent'
 
 interface ContactLayoutProps {
   pageData: PageData

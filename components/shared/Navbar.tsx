@@ -86,7 +86,7 @@ export default function Navbar() {
                     Our Products
                   </Link>
                   <Link 
-                    href="/Products/QSRDesigns" 
+                    href="qsrdesigns" 
                     className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsProductsOpen(false)}
                   >
@@ -122,7 +122,7 @@ export default function Navbar() {
                     Our Services
                   </Link>
                   <Link 
-                    href="/Services/OurPortfolio" 
+                    href="/portfolio" 
                     className="block px-4 py-2 text-sm text-white hover:text-emerald-400 transition-colors"
                     onClick={() => setIsServicesOpen(false)}
                   >
@@ -131,12 +131,12 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            <Link href="/contact" className="hover:text-emerald-400 transition-colors">Contact Us</Link>
+            <Link href="/contact-us" className="hover:text-emerald-400 transition-colors">Contact Us</Link>
           </div>
 
           <div className="ml-4">
             <Link 
-              href="/contactUs" 
+              href="/contact-us" 
               className="relative rounded-full bg-white p-3 text-black font-medium overflow-hidden group transition-all duration-300 hover:scale-105"
             >
               <span className="relative z-10">Enquire Now</span>

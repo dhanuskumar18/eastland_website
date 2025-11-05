@@ -1,5 +1,5 @@
 import { PageData } from '@/types/page'
-import DynamicSectionRenderer from '@/app/components/sections/DynamicSectionRenderer'
+import DynamicSectionRenderer from '@/components/sections/DynamicSectionRenderer'
 
 interface HomeLayoutProps {
   pageData: PageData

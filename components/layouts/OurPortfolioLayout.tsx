@@ -1,6 +1,6 @@
 "use client"
 
-import OurPortfolioPageContent from "@/app/components/pages/OurPortfolioPageContent"
+import OurPortfolioPageContent from "@/components/pages/OurPortfolioPageContent"
 import { PageData } from "@/types/page"
 
 interface OurPortfolioLayoutProps {
