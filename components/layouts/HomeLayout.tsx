@@ -9,9 +9,9 @@ interface HomeLayoutProps {
 const HOME_SECTION_ORDER: Record<string, number> = {
   'banner': 1,
   'about': 2,
-  'why_choose_us': 3,
-  'products': 4,
-  'video': 5,
+  'products': 3,
+  'video': 4,
+  'why_choose_us': 5,
   'gallery': 6,
   'testimonial': 7,
 }
