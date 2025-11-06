@@ -116,3 +116,56 @@ export async function getAllPageSlugs(): Promise<string[]> {
     return []
   }
 }
+
+/**
+ * Fetch a global by name (e.g., Footer)
+ * Example: GET /globals/name/Footer
+ */
+export async function fetchGlobalByName<T = any>(name: string): Promise<{
+  id: number
+  name: string
+  content: T | null
+} | null> {
+  try {
+    const url = `${API_BASE_URL}globals/name/${encodeURIComponent(name)}`
+
+    const cacheOption = process.env.NODE_ENV === 'production'
+      ? { next: { revalidate: 120 } }
+      : { cache: 'no-store' as const }
+
+    const response = await fetch(url, {
+      ...cacheOption,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      console.error(`Failed to fetch global ${name}: ${response.status}`)
+      return null
+    }
+
+    const data = await response.json() as {
+      id: number
+      name: string
+      translations?: Array<{
+        id: number
+        globalsId: number
+        locale: string
+        content: any
+      }>
+    }
+
+    const translations = data.translations || []
+    const en = translations.find(t => t.locale === 'en') || translations[0]
+
+    return {
+      id: data.id,
+      name: data.name,
+      content: en ? en.content : null,
+    }
+  } catch (error) {
+    console.error('Error fetching global by name:', error)
+    return null
+  }
+}
