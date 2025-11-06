@@ -2,13 +2,33 @@
 
 import Image from "next/image"
 import { useEffect, useRef } from "react"
+import { PageData } from '@/types/page'
 
-export default function QSRDesignsPageContent() {
+interface QSRDesignsPageContentProps {
+  pageData?: PageData
+}
+
+export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageContentProps) {
   const firstSectionRef = useRef<HTMLElement>(null)
   const middleSectionRef = useRef<HTMLElement>(null)
   const firstRowRef = useRef<HTMLDivElement>(null)
   const secondRowRef = useRef<HTMLDivElement>(null)
   const lastSectionRef = useRef<HTMLElement>(null)
+
+  // Extract content from API sections
+  const bannerSection = pageData?.sections?.find(s => s.type === 'qsr_banner' || s.type === 'banner')
+  const qsrDesignsSection = pageData?.sections?.find(s => s.type === 'qsr_designs')
+  const gallerySection = pageData?.sections?.find(s => s.type === 'qsr_gallery' || s.type === 'gallery')
+  const aboutQSRSection = pageData?.sections?.find(s => s.type === 'about_qsr_designs')
+
+  // Get content from sections (with fallback to empty object)
+  const bannerContent = bannerSection?.content || {}
+  const qsrDesignsContent = qsrDesignsSection?.content || {}
+  const galleryContent = gallerySection?.content || {}
+  const aboutQSRContent = aboutQSRSection?.content || {}
+
+  // Extract arrays
+  const galleryItems = (galleryContent.items as Array<any>) || []
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,8 +81,8 @@ export default function QSRDesignsPageContent() {
       <section className="relative h-[60vh] min-h-[500px] ">
         <div className="absolute inset-0">
           <Image
-            src="/images/Products/Rectangle 52 (3).png"
-            alt="QSR Designs"
+            src={bannerContent.image || "/images/Products/Rectangle 52 (3).png"}
+            alt={bannerContent.title || "QSR Designs"}
             fill
             className="object-cover transition-transform duration-300 hover:scale-110"
           />
@@ -71,11 +91,18 @@ export default function QSRDesignsPageContent() {
         <div className="relative z-10 flex h-full items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold sm:text-5xl lg:text-6xl">
-              QSR Designs
+              {bannerContent.title || "QSR Designs"}
             </h1>
-            <p className="mt-4 text-lg sm:text-xl">
-              Quick Service Restaurant Design Solutions
-            </p>
+            {bannerContent.subTitle && (
+              <p className="mt-4 text-lg sm:text-xl">
+                {bannerContent.subTitle}
+              </p>
+            )}
+            {!bannerContent.subTitle && (
+              <p className="mt-4 text-lg sm:text-xl">
+                Quick Service Restaurant Design Solutions
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -90,8 +117,8 @@ export default function QSRDesignsPageContent() {
               <div className=" bg-white  ">
                 <div className="relative aspect-[519/650] overflow-hidden rounded-[50px] ">
                   <Image 
-                    src="/images/Products/Rectangle 78.png" 
-                    alt="Modern Cafe Interior" 
+                    src={qsrDesignsContent.image || "/images/Products/Rectangle 78.png"} 
+                    alt={qsrDesignsContent.imageAlt || "Modern Cafe Interior"} 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
@@ -102,8 +129,8 @@ export default function QSRDesignsPageContent() {
               <div className="absolute -bottom-0 right-8 w-[300px] h-[300px] ">
                 <div className="relative aspect-[365/315] overflow-hidden rounded-[50px] left-44 p-[2px]  bg-white w-[350px]">
                   <Image 
-                    src="/images/Products/Rectangle 79.png" 
-                    alt="Refined Dining Space" 
+                    src={qsrDesignsContent.image2 || "/images/Products/Rectangle 79.png"} 
+                    alt={qsrDesignsContent.image2Alt || "Refined Dining Space"} 
                      width={350}
                      height={350}
                     className="object transition-transform duration-300 hover:scale-110 " 
@@ -114,16 +141,37 @@ export default function QSRDesignsPageContent() {
 
             {/* Right Side - Content */}
             <div>
-              <p className="text-sm font-semibold text-slate-500">QSR Designs</p>
+              <p className="text-sm font-semibold text-slate-500">{qsrDesignsContent.label || "QSR Designs"}</p>
               <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-                Innovative Fast-Food Spaces Crafted for <span className="text-emerald-700">Modern Experiences</span>
+                {qsrDesignsContent.title ? (
+                  <>
+                    {qsrDesignsContent.title}
+                    {qsrDesignsContent.subTitle && (
+                      <> <span className="text-emerald-700">{qsrDesignsContent.subTitle}</span></>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    Innovative Fast-Food Spaces Crafted for <span className="text-emerald-700">Modern Experiences</span>
+                  </>
+                )}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
-                Expert Kitchen Services with Essential Equipment and Sanitization Product Support
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
-                We provide end-to-end commercial kitchen solutions, including design, installation, maintenance, and deep cleaning services. Alongside our expertise, we offer essential kitchen equipment, smallwares, and professional sanitization products to ensure safety, efficiency, and compliance across all food service operations. Our support is tailored to hotels, restaurants, cafeterias, bakeries, and industrial facilities.
-              </p>
+              {qsrDesignsContent.description ? (
+                (qsrDesignsContent.description as string).split('\n').filter((part: string) => part.trim()).map((part: string, index: number) => (
+                  <p key={index} className="mt-4 text-sm leading-relaxed text-slate-700">
+                    {part.trim()}
+                  </p>
+                ))
+              ) : (
+                <>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                    Expert Kitchen Services with Essential Equipment and Sanitization Product Support
+                  </p>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                    We provide end-to-end commercial kitchen solutions, including design, installation, maintenance, and deep cleaning services. Alongside our expertise, we offer essential kitchen equipment, smallwares, and professional sanitization products to ensure safety, efficiency, and compliance across all food service operations. Our support is tailored to hotels, restaurants, cafeterias, bakeries, and industrial facilities.
+                  </p>
+                </>
+              )}
 
               <div className="mt-10">
                 <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
@@ -153,7 +201,18 @@ export default function QSRDesignsPageContent() {
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">
-              Future-Ready Quick Service Installations With Efficient Workflow
+              {galleryContent.title ? (
+                <>
+                  {galleryContent.title}
+                  {galleryContent.subTitle && (
+                    <> <span className="text-emerald-700">{galleryContent.subTitle}</span></>
+                  )}
+                </>
+              ) : (
+                <>
+                  Future-Ready Quick Service Installations With Efficient Workflow
+                </>
+              )}
             </h2>
           </div>
           
@@ -302,8 +361,8 @@ export default function QSRDesignsPageContent() {
               >
                 <div className="relative w-full h-full overflow-hidden rounded-[148px] rounded-br-[148px] rounded-tr-none rounded-bl-none">
                   <Image 
-                    src="/images/Products/Rectangle 76.png" 
-                    alt="Modern Restaurant Interior" 
+                    src={aboutQSRContent.image || "/images/Products/Rectangle 76.png"} 
+                    alt={aboutQSRContent.imageAlt || "Modern Restaurant Interior"} 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
@@ -313,16 +372,37 @@ export default function QSRDesignsPageContent() {
 
             {/* Right Side - Content */}
             <div>
-              <p className="text-sm font-semibold text-slate-500">About QSR Designs</p>
+              <p className="text-sm font-semibold text-slate-500">{aboutQSRContent.label || "About QSR Designs"}</p>
               <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-                Transforming Quick-Service Restaurants with <span className="text-emerald-700">Creative Design Solutions</span>
+                {aboutQSRContent.title ? (
+                  <>
+                    {aboutQSRContent.title}
+                    {aboutQSRContent.subTitle && (
+                      <> <span className="text-emerald-700">{aboutQSRContent.subTitle}</span></>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    Transforming Quick-Service Restaurants with <span className="text-emerald-700">Creative Design Solutions</span>
+                  </>
+                )}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
-                QSR Designs specializes in designing and installing high-performance spaces for quick-service restaurants, cafés, and delis. We offer full-scale solutions from layout planning to end-to-end installation, ensuring your space is optimized for efficiency, customer experience, and operational success.
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
-                Our team combines creative vision with practical expertise to deliver spaces that not only look stunning but also function seamlessly for your business needs. From concept to completion, we handle every aspect of your project with precision and care.
-              </p>
+              {aboutQSRContent.description ? (
+                (aboutQSRContent.description as string).split('\n').filter((part: string) => part.trim()).map((part: string, index: number) => (
+                  <p key={index} className="mt-4 text-sm leading-relaxed text-slate-700">
+                    {part.trim()}
+                  </p>
+                ))
+              ) : (
+                <>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                    QSR Designs specializes in designing and installing high-performance spaces for quick-service restaurants, cafés, and delis. We offer full-scale solutions from layout planning to end-to-end installation, ensuring your space is optimized for efficiency, customer experience, and operational success.
+                  </p>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                    Our team combines creative vision with practical expertise to deliver spaces that not only look stunning but also function seamlessly for your business needs. From concept to completion, we handle every aspect of your project with precision and care.
+                  </p>
+                </>
+              )}
 
               <div className="mt-10">
                 <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">

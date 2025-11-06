@@ -8,8 +8,7 @@ interface QSRDesignsLayoutProps {
 }
 
 export default function QSRDesignsLayout({ pageData }: QSRDesignsLayoutProps) {
-  // pageData reserved for future dynamic data integration
-  return <QSRDesignsPageContent />
+  return <QSRDesignsPageContent pageData={pageData} />
 }
 
 
