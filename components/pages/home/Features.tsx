@@ -1,17 +1,26 @@
 "use client"
 
+import { useState } from 'react'
 import { useScroll } from '../../../hooks/useScroll'
 
 interface FeaturesProps {
   content?: {
     title?: string
-    description?: string
-    items?: Array<{ title?: string; image?: string; description?: string }>
+    subTitle?: string
+    cards?: Array<{
+      image?: string
+      title?: string
+      description?: string
+      productId?: number
+    }>
   }
 }
 
 export default function Features({ content }: FeaturesProps = {}) {
   const { ref, isInView } = useScroll()
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const itemsPerPage = 4
+
   // Static fallback items
   const defaultItems: Array<{ title: string; image: string; description: string }> = [
     {
@@ -40,14 +49,32 @@ export default function Features({ content }: FeaturesProps = {}) {
     },
   ]
 
-  // Use API items if available, otherwise use default
-  const items = content?.items && content.items.length > 0 
-    ? content.items.map(item => ({
-        title: item.title || "Untitled",
-        image: item.image || "/images/2 (1).png",
-        description: item.description || "No description available"
+  // Use API cards if available, otherwise use default
+  const items = content?.cards && content.cards.length > 0 
+    ? content.cards.map(card => ({
+        title: card.title || "Untitled",
+        image: card.image || "/images/2 (1).png",
+        description: card.description || "No description available"
       }))
     : defaultItems
+
+  // Calculate visible items based on current index
+  const totalPages = Math.ceil(items.length / itemsPerPage)
+  const startIndex = currentIndex * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const visibleItems = items.slice(startIndex, endIndex)
+
+  // Navigation functions
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % totalPages)
+  }
+
+  const goToPrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + totalPages) % totalPages)
+  }
+
+  // Only show navigation if there are more than 4 items
+  const showNavigation = items.length > itemsPerPage
 
   return (
     <section ref={ref} className="mx-auto max-w-[100%] px-4 py-20 sm:px-6 lg:px-8 bg-green-50/50">
@@ -62,8 +89,8 @@ export default function Features({ content }: FeaturesProps = {}) {
       </h2>
 
       <div className="mt-14 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-        {items.map(({ title, image, description }, idx) => (
-          <div key={title} className={["relative", idx % 2 === 0 ? "lg:mt-6" : "lg:mt-32"].join(" ") }>
+        {visibleItems.map(({ title, image, description }, idx) => (
+          <div key={`${title}-${startIndex + idx}`} className={["relative", idx % 2 === 0 ? "lg:mt-6" : "lg:mt-32"].join(" ") }>
             <div className="absolute -left-6 top-0 hidden h-full w-px bg-slate-400 opacity-50                                                            lg:block" aria-hidden />
             <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
             <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
@@ -94,19 +121,29 @@ export default function Features({ content }: FeaturesProps = {}) {
         ))}
       </div>
 
-      {/* Green Navigation Buttons */}
-      <div className={`mt-12 flex justify-center gap-4 transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce-delayed' : 'opacity-0'}`}>
-        <button className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+      {/* Green Navigation Buttons - Only show if there are more than 4 items */}
+      {showNavigation && (
+        <div className={`mt-12 flex justify-center gap-4 transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce-delayed' : 'opacity-0'}`}>
+          <button 
+            onClick={goToPrev}
+            className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg hover:scale-110 active:scale-95"
+            aria-label="Previous items"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button 
+            onClick={goToNext}
+            className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg hover:scale-110 active:scale-95"
+            aria-label="Next items"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>
+      )}
       </div>
     </section>
   )

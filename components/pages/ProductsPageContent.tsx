@@ -37,6 +37,24 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
   // Extract arrays and objects
   const cards = (quickInstallationsContent.cards as Array<any>) || []
 
+  // Default fallback cards if API doesn't provide data
+  const defaultCards = [
+    { title: "Cafe Design", image: "/images/Products/2 (7).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Kitchen Setup", image: "/images/Products/2 (8).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Workflow Solutions", image: "/images/Products/2 (9).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Deli Counters", image: "/images/Products/2 (10).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Quick Installations", image: "/images/Products/2 (11).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Restaurant Interiors", image: "/images/Products/2 (12).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Equipment Integration", image: "/images/Products/2 (13).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+    { title: "Space Optimization", image: "/images/Products/2 (14).png", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been." },
+  ]
+
+  // Use API cards if available, otherwise use defaults
+  const displayCards = cards.length > 0 ? cards.filter((card: any) => card.image && card.image.trim() !== '') : defaultCards
+
+  // Row refs array for dynamic assignment
+  const rowRefs = [row1Ref, row2Ref, row3Ref, row4Ref, row5Ref, row6Ref, row7Ref, row8Ref]
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -259,237 +277,45 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             <div className="absolute left-3/4 top-0 hidden h-full w-px bg-slate-200 lg:block" aria-hidden />
             
             <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-              {/* Row 1 - Quick Installations */}
-              <div ref={row1Ref} className="relative lg:mt-6 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Cafe Design</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (7).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
+              {displayCards.map((card: any, index: number) => {
+                // Determine row ref based on index
+                const rowRef = rowRefs[index] || null
+                // Determine margin-top class based on column position (alternating pattern)
+                // Columns: 0,2,4,6 = mt-6 (top), 1,3,5,7 = mt-24 (bottom)
+                const marginClass = index % 2 === 0 ? 'lg:mt-6' : 'lg:mt-24'
 
-                {/* Row 2 - Restaurant Interiors */}
-                <div ref={row2Ref} className="relative lg:mt-24 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Kitchen Setup</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (8).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-                {/* Row 3 - Equipment Integration */}
-                <div ref={row3Ref} className="relative lg:mt-6 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Workflow Solutions</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (9).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-                {/* Row 4 - Space Optimization */}
-                <div ref={row4Ref} className="relative lg:mt-24 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Deli Counters</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (10).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              {/* Row 5 - Quick Installations - Second Row */}
-              <div ref={row5Ref} className="relative lg:mt-6 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Quick Installations</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (11).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              {/* Row 6 - Restaurant Interiors - Second Row */}
-              <div ref={row6Ref} className="relative lg:mt-24 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Restaurant Interiors</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (12).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              {/* Row 7 - Equipment Integration - Second Row */}
-              <div ref={row7Ref} className="relative lg:mt-6 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Equipment Integration</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (13).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              {/* Row 8 - Space Optimization - Second Row */}
-              <div ref={row8Ref} className="relative lg:mt-24 opacity-0">
-                <h3 className="text-lg font-semibold text-slate-900">Space Optimization</h3>
-                <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
-                    style={{ backgroundImage: `url("/images/Products/2 (14).png")` }}
-                  />
-                </div>
-                <p className="mt-5 text-sm leading-relaxed text-slate-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
-                <div className="mt-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
-                  </span>
-                </div>
-              </div>
+                return (
+                  <div key={index} ref={rowRef} className={`relative ${marginClass} opacity-0`}>
+                    <h3 className="text-lg font-semibold text-slate-900">{card.title || "Untitled"}</h3>
+                    <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
+                      <div
+                        className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
+                        style={{ backgroundImage: `url("${encodeURI(card.image || '/images/Products/2 (7).png')}")` }}
+                      />
+                    </div>
+                    <p className="mt-5 text-sm leading-relaxed text-slate-600">
+                      {card.description || "No description available"}
+                    </p>
+                    <div className="mt-6">
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                        >
+                          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
