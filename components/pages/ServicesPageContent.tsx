@@ -23,7 +23,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
   const ourServicesSection = pageData?.sections?.find(s => s.type === 'our_services')
   const kitchenInstallationsSection = pageData?.sections?.find(s => s.type === 'kitchen_installations')
   const aboutOurServicesSection = pageData?.sections?.find(s => s.type === 'about_our_services')
-  const bannerSection = pageData?.sections?.find(s => s.type === 'services_banner' || s.type === 'banner')
+  const bannerSection = pageData?.sections?.find(s => s.type === 'our_services_banner' || s.type === 'services_banner' || s.type === 'banner')
 
   // Get content from sections (with fallback to empty object)
   const ourServicesContent = ourServicesSection?.content || {}
@@ -33,6 +33,43 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
 
   // Extract arrays
   const services = (kitchenInstallationsContent.services as Array<any>) || []
+  const cards = (kitchenInstallationsContent.cards as Array<{
+    image?: string
+    title?: string
+    subTitle?: string
+    description?: string
+  }>) || []
+  
+  // Default fallback cards
+  const defaultCards = [
+    {
+      image: "/images/Services/Rectangle 35.png",
+      title: "SERVICES",
+      subTitle: "Food Service Equipment High-performance",
+      description: "commercial appliances and machinery built to handle large-scale cooking, preparation."
+    },
+    {
+      image: "/images/Services/Rectangle 35 (1).png",
+      title: "SERVICES",
+      subTitle: "Kitchen Hood Equipments Professional ventilation",
+      description: "systems and hood equipment for safe and efficient kitchen operations."
+    },
+    {
+      image: "/images/Services/Rectangle 35 (2).png",
+      title: "SERVICES",
+      subTitle: "Smallwares High-performance",
+      description: "commercial appliances and machinery built to handle large-scale cooking, preparation."
+    },
+    {
+      image: "/images/Services/Rectangle 35 (3).png",
+      title: "SERVICES",
+      subTitle: "Hand Sanitization Equipment Professional sanitization",
+      description: "solutions and equipment for maintaining hygiene standards."
+    }
+  ]
+  
+  // Use API cards if available, otherwise use defaults
+  const displayCards = cards.length > 0 ? cards : defaultCards
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -248,28 +285,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
           </div>
 
           <div className="flex justify-center" style={{ gap: '35px' }}>
-              {/* Card 1: Food Service Equipment */}
+              {/* Card 1 */}
               <div ref={card1Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/Services/Rectangle 35.png"
-                  alt="Food Service Equipment"
+                  src={displayCards[0]?.image || defaultCards[0].image}
+                  alt={displayCards[0]?.subTitle || defaultCards[0].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">Food Service Equipment</h3>
+                  <h3 className="text-white font-bold text-lg">{displayCards[0]?.subTitle || defaultCards[0].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
               <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
-                  <h3 className="text-white font-bold text-xl mb-4">Food Service Equipment</h3>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[0]?.title || defaultCards[0].title}</p>
+                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[0]?.subTitle || defaultCards[0].subTitle}</h3>
                   <p className="text-emerald-100 text-sm leading-relaxed">
-                    High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
+                    {displayCards[0]?.description || defaultCards[0].description}
                   </p>
                 </div>
                 <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
@@ -278,28 +315,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               </div>
             </div>
 
-              {/* Card 2: Kitchen Hood Equipments */}
+              {/* Card 2 */}
               <div ref={card2Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/Services/Rectangle 35 (1).png"
-                  alt="Kitchen Hood Equipments"
+                  src={displayCards[1]?.image || defaultCards[1].image}
+                  alt={displayCards[1]?.subTitle || defaultCards[1].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">Kitchen Hood Equipments</h3>
+                  <h3 className="text-white font-bold text-lg">{displayCards[1]?.subTitle || defaultCards[1].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
               <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
-                  <h3 className="text-white font-bold text-xl mb-4">Kitchen Hood Equipments</h3>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[1]?.title || defaultCards[1].title}</p>
+                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[1]?.subTitle || defaultCards[1].subTitle}</h3>
                   <p className="text-emerald-100 text-sm leading-relaxed">
-                    Professional ventilation systems and hood equipment for safe and efficient kitchen operations.
+                    {displayCards[1]?.description || defaultCards[1].description}
                   </p>
                 </div>
                 <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
@@ -308,28 +345,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               </div>
             </div>
 
-              {/* Card 3: Smallwares */}
+              {/* Card 3 */}
               <div ref={card3Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/Services/Rectangle 35 (2).png"
-                  alt="Smallwares"
+                  src={displayCards[2]?.image || defaultCards[2].image}
+                  alt={displayCards[2]?.subTitle || defaultCards[2].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">Smallwares</h3>
+                  <h3 className="text-white font-bold text-lg">{displayCards[2]?.subTitle || defaultCards[2].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
               <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
-                  <h3 className="text-white font-bold text-xl mb-4">Smallwares</h3>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[2]?.title || defaultCards[2].title}</p>
+                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[2]?.subTitle || defaultCards[2].subTitle}</h3>
                   <p className="text-emerald-100 text-sm leading-relaxed">
-                    High-performance commercial appliances and machinery built to handle large-scale cooking, preparation.
+                    {displayCards[2]?.description || defaultCards[2].description}
                   </p>
                 </div>
                 <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
@@ -338,28 +375,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               </div>
             </div>
 
-              {/* Card 4: Hand Sanitization Equipment */}
+              {/* Card 4 */}
               <div ref={card4Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
                 <Image
-                  src="/images/Services/Rectangle 35 (3).png"
-                  alt="Hand Sanitization Equipment"
+                  src={displayCards[3]?.image || defaultCards[3].image}
+                  alt={displayCards[3]?.subTitle || defaultCards[3].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">Hand Sanitization Equipment</h3>
+                  <h3 className="text-white font-bold text-lg">{displayCards[3]?.subTitle || defaultCards[3].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
               <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">SERVICES</p>
-                  <h3 className="text-white font-bold text-xl mb-4">Hand Sanitization Equipment</h3>
+                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[3]?.title || defaultCards[3].title}</p>
+                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[3]?.subTitle || defaultCards[3].subTitle}</h3>
                   <p className="text-emerald-100 text-sm leading-relaxed">
-                    Professional sanitization solutions and equipment for maintaining hygiene standards.
+                    {displayCards[3]?.description || defaultCards[3].description}
                   </p>
                 </div>
                 <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">

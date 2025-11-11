@@ -16,7 +16,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
   const lastSectionRef = useRef<HTMLElement>(null)
 
   // Extract content from API sections
-  const bannerSection = pageData?.sections?.find(s => s.type === 'qsr_banner' || s.type === 'banner')
+  const bannerSection = pageData?.sections?.find(s => s.type === 'qsr_designs_banner' || s.type === 'qsr_banner' || s.type === 'banner')
   const qsrDesignsSection = pageData?.sections?.find(s => s.type === 'qsr_designs')
   const gallerySection = pageData?.sections?.find(s => s.type === 'qsr_gallery' || s.type === 'gallery')
   const aboutQSRSection = pageData?.sections?.find(s => s.type === 'about_qsr_designs')
@@ -27,8 +27,26 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
   const galleryContent = gallerySection?.content || {}
   const aboutQSRContent = aboutQSRSection?.content || {}
 
-  // Extract arrays
+  // Extract arrays from gallery content
   const galleryItems = (galleryContent.items as Array<any>) || []
+  const galleryImages = (galleryContent.images as string[]) || []
+  const featuredItems = (galleryContent.featured as Array<{ image?: string; title?: string }>) || []
+  
+  // Default fallback images
+  const defaultFeatured = [
+    { image: "/images/Products/Rectangle 66.png", title: "Deli and Cafe Design" },
+    { image: "/images/Products/Rectangle 68.png", title: "Setup and Installation" }
+  ]
+  const defaultImages = [
+    "/images/Products/Rectangle 67.png",
+    "/images/Products/Rectangle 69.png",
+    "/images/Products/Rectangle 70.png",
+    "/images/Products/Rectangle 71.png"
+  ]
+  
+  // Use API data if available, otherwise use defaults
+  const featured = featuredItems.length > 0 ? featuredItems : defaultFeatured
+  const images = galleryImages.length > 0 ? galleryImages : defaultImages
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -117,7 +135,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className=" bg-white  ">
                 <div className="relative aspect-[519/650] overflow-hidden rounded-[50px] ">
                   <Image 
-                    src={qsrDesignsContent.image || "/images/Products/Rectangle 78.png"} 
+                    src={qsrDesignsContent.image1 || qsrDesignsContent.image || "/images/Products/Rectangle 78.png"} 
                     alt={qsrDesignsContent.imageAlt || "Modern Cafe Interior"} 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
@@ -223,15 +241,15 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className="col-span-2 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg group">
                   <Image 
-                    src="/images/Products/Rectangle 66.png" 
-                    alt="Deli and Cafe Design" 
+                    src={featured[0]?.image || defaultFeatured[0].image} 
+                    alt={featured[0]?.title || defaultFeatured[0].title} 
                     fill 
                     className="object-cover transition-transform duration-300 group-hover:scale-110" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                   <div className="absolute bottom-4 left-4 overflow-hidden">
-                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 group-hover:-translate-y-full">Deli and Cafe Design</h3>
-                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">Deli and Cafe Design</h3>
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 group-hover:-translate-y-full">{featured[0]?.title || defaultFeatured[0].title}</h3>
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">{featured[0]?.title || defaultFeatured[0].title}</h3>
                   </div>
                   <div className="absolute bottom-4 right-4">
                     <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
@@ -257,8 +275,8 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
                   <Image 
-                    src="/images/Products/Rectangle 67.png" 
-                    alt="Coffee Bar Counter" 
+                    src={images[0] || defaultImages[0]} 
+                    alt="Gallery image 1" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
@@ -267,8 +285,8 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
                   <Image 
-                    src="/images/Products/Rectangle 69.png" 
-                    alt="Restaurant Interior" 
+                    src={images[1] || defaultImages[1]} 
+                    alt="Gallery image 2" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
@@ -284,8 +302,8 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
                   <Image 
-                    src="/images/Products/Rectangle 70.png" 
-                    alt="Modern Dining Space" 
+                    src={images[2] || defaultImages[2]} 
+                    alt="Gallery image 3" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
@@ -294,8 +312,8 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
                   <Image 
-                    src="/images/Products/Rectangle 71.png" 
-                    alt="Ambient Restaurant" 
+                    src={images[3] || defaultImages[3]} 
+                    alt="Gallery image 4" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
                   />
@@ -306,15 +324,15 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               <div className="col-span-2 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg group">
                   <Image 
-                    src="/images/Products/Rectangle 68.png" 
-                    alt="Setup and Installation" 
+                    src={featured[1]?.image || defaultFeatured[1].image} 
+                    alt={featured[1]?.title || defaultFeatured[1].title} 
                     fill 
                     className="object-cover transition-transform duration-300 group-hover:scale-110" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                   <div className="absolute bottom-4 left-4 overflow-hidden">
-                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 group-hover:-translate-y-full">Setup and Installation</h3>
-                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">Setup and Installation</h3>
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 group-hover:-translate-y-full">{featured[1]?.title || defaultFeatured[1].title}</h3>
+                    <h3 className="font-semibold text-white drop-shadow-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">{featured[1]?.title || defaultFeatured[1].title}</h3>
                   </div>
                   <div className="absolute bottom-4 right-4">
                     <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">

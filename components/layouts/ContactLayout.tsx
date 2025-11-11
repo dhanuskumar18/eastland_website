@@ -2,7 +2,7 @@ import { PageData } from '@/types/page'
 import ContactPageContent from '../pages/ContactPageContent'
 
 interface ContactLayoutProps {
-  pageData: PageData
+  pageData?: PageData
 }
 
 export default function ContactLayout({ pageData }: ContactLayoutProps) {

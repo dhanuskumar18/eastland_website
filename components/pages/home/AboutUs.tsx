@@ -11,6 +11,8 @@ interface AboutUsProps {
     descSubTitle?: string
     description1?: string
     description2?: string
+    image1?: string
+    image2?: string
   }
 }
 
@@ -54,14 +56,24 @@ export default function AboutUs({ content }: AboutUsProps = {}) {
           {/* Outer framed image with rounded corners and fixed aspect */}
           <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
             <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
-              <Image src="/images/1.png" alt="About primary" fill className="object-cover" />
+              <Image 
+                src={content?.image1 || "/images/1.png"} 
+                alt="About primary" 
+                fill 
+                className="object-cover" 
+              />
             </div>
           </div>
 
           {/* Smaller overlapping image (has its own white border in asset) */}
           <div className="absolute -bottom-12 -right-20 w-[300px] rounded-2xl shadow-2xl">
             <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
-              <Image src="/images/2.png" alt="About secondary" fill className="object-cover" />
+              <Image 
+                src={content?.image2 || "/images/2.png"} 
+                alt="About secondary" 
+                fill 
+                className="object-cover" 
+              />
             </div>
           </div>
         </div>

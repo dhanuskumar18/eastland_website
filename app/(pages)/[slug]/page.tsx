@@ -50,7 +50,13 @@ export default async function Page({ params }: PageProps) {
   const { slug } = await params
   const pageData = await fetchPageBySlug(slug)
 
+  // For contact page, allow rendering even if API returns 404
+  // This handles cases where the page might not exist in the CMS yet
   if (!pageData) {
+    // Special handling for contact page - render with empty data
+    if (slug.toLowerCase() === 'contact') {
+      return <ContactLayout />
+    }
     notFound()
   }
 

@@ -8,18 +8,25 @@ interface WhyChooseProps {
     title?: string
     description?: string
     descSubTitle?: string
+    images?: string[]
   }
 }
 
 export default function WhyChoose({ content }: WhyChooseProps = {}) {
   const { ref, isInView } = useScroll()
 
-  const collage = [
+  // Default fallback images
+  const defaultCollage = [
     "/images/Why1.png",
     "/images/Why2.png",
     "/images/Why3.png",
     "/images/Why4.png",
   ]
+
+  // Use API images if available, otherwise use defaults
+  const collage = content?.images && content.images.length > 0
+    ? content.images
+    : defaultCollage
 
 
   return (
@@ -28,16 +35,40 @@ export default function WhyChoose({ content }: WhyChooseProps = {}) {
         {/* Collage */}
         <div className={`mx-auto grid w-full max-w-xl grid-cols-2 items-start transition-all duration-1000 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
           <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent" >
-            <Image src={collage[0]} alt="Why choose image 1" width={220} height={200} className="absolute -right-4 -z-10" />
+            <Image 
+              src={collage[0] || defaultCollage[0]} 
+              alt="Why choose image 1" 
+              width={220} 
+              height={200} 
+              className="absolute -right-4 -z-10" 
+            />
           </div>
           <div className="">
-            <Image src={collage[1]} alt="Why choose image 2" width={530} height={540} className="w-full h-auto relative right-8" />
+            <Image 
+              src={collage[1] || defaultCollage[1]} 
+              alt="Why choose image 2" 
+              width={530} 
+              height={540} 
+              className="w-full h-auto relative right-8" 
+            />
           </div>
           <div className="mt-6">
-            <Image src={collage[2]} alt="Why choose image 3" width={287} height={265} className="w-full h-auto" />
+            <Image 
+              src={collage[2] || defaultCollage[2]} 
+              alt="Why choose image 3" 
+              width={287} 
+              height={265} 
+              className="w-full h-auto" 
+            />
           </div>
           <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent">
-            <Image src={collage[3]} alt="Why choose image 4" width={200} height={200} className="absolute -left-3 -top-4" />
+            <Image 
+              src={collage[3] || defaultCollage[3]} 
+              alt="Why choose image 4" 
+              width={200} 
+              height={200} 
+              className="absolute -left-3 -top-4" 
+            />
           </div>
         </div>
 
