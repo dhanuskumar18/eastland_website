@@ -1,20 +1,202 @@
-import Image from "next/image"
+"use client"
 
+import Image from "next/image"
+import { useState } from "react"
 import { PageData } from '@/types/page'
+import { submitContactForm } from '@/lib/api'
 
 interface ContactPageContentProps {
   pageData?: PageData
 }
 
+type CustomField = {
+  id: number
+  name: string
+  label: string
+  type: 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'select' | 'checkbox' | 'radio'
+  placeholder?: string
+  required: boolean
+  options?: string[]
+  order: number
+}
+
 export default function ContactPageContent({ pageData }: ContactPageContentProps) {
   // Extract content from API sections
-  const contactInfoSection = pageData?.sections?.find(s => s.type === 'contact_info')
-  const contactFormSection = pageData?.sections?.find(s => s.type === 'contact_form')
-  const bannerSection = pageData?.sections?.find(s => s.type === 'contact_banner' || s.type === 'banner')
+  // Debug: Log all sections to see what we're getting
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.log('Page Data:', pageData)
+    console.log('All Sections:', pageData?.sections)
+    if (pageData?.sections) {
+      pageData.sections.forEach((s, idx) => {
+        console.log(`Section ${idx}:`, {
+          type: s.type,
+          id: s.id,
+          contentKeys: Object.keys(s.content || {}),
+          hasCustomFields: !!(s.content as any)?.customFields,
+        })
+      })
+    }
+  }
+  
+  const contactInfoSection = pageData?.sections?.find(s => {
+    const type = s.type?.toLowerCase() || ''
+    return type === 'contact_info' || type.includes('contact_info') || type.includes('contact info')
+  })
+  const contactFormSection = pageData?.sections?.find(s => {
+    const type = s.type?.toLowerCase() || ''
+    return type === 'contact_form' || type.includes('contact_form') || type.includes('contact form')
+  })
+  const bannerSection = pageData?.sections?.find(s => {
+    const type = s.type?.toLowerCase() || ''
+    return type === 'contact_banner' || type === 'banner' || type.includes('banner')
+  })
+  
+  // Debug: Log found sections
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.log('Contact Form Section Found:', contactFormSection)
+    console.log('Contact Form Content:', contactFormSection?.content)
+    if (!contactFormSection) {
+      console.warn('⚠️ Contact Form Section NOT FOUND!')
+      console.warn('Available section types:', pageData?.sections?.map(s => s.type))
+    }
+  }
 
   // Get content from sections (with fallback to empty object)
   const contactInfoContent = contactInfoSection?.content || {}
+  const contactFormContent = contactFormSection?.content || {}
   const bannerContent = bannerSection?.content || {}
+  
+  // Debug: Log the extracted content
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.log('Contact Form Content Extracted:', contactFormContent)
+    console.log('Has customFields:', !!contactFormContent.customFields)
+    console.log('Custom Fields:', contactFormContent.customFields)
+    console.log('Has subjects:', !!contactFormContent.subjects)
+    console.log('Subjects:', contactFormContent.subjects)
+    console.log('All content keys:', Object.keys(contactFormContent))
+  }
+
+  // Get form configuration
+  const enableFirstName = contactFormContent.enableFirstName !== false
+  const enableLastName = contactFormContent.enableLastName !== false
+  const enableEmail = contactFormContent.enableEmail !== false
+  const enablePhone = contactFormContent.enablePhone !== false
+  const enableSubject = contactFormContent.enableSubject !== false
+  const enableMessage = contactFormContent.enableMessage !== false
+  
+  const firstNameLabel = contactFormContent.firstNameLabel || 'First Name'
+  const lastNameLabel = contactFormContent.lastNameLabel || 'Last Name'
+  const emailLabel = contactFormContent.emailLabel || 'Email'
+  const phoneLabel = contactFormContent.phoneLabel || 'Phone Number'
+  const subjectLabel = contactFormContent.subjectLabel || 'Select Subject?'
+  const messageLabel = contactFormContent.messageLabel || 'Message'
+  
+  const firstNamePlaceholder = contactFormContent.firstNamePlaceholder || ''
+  const lastNamePlaceholder = contactFormContent.lastNamePlaceholder || ''
+  const emailPlaceholder = contactFormContent.emailPlaceholder || ''
+  const phonePlaceholder = contactFormContent.phonePlaceholder || ''
+  const messagePlaceholder = contactFormContent.messagePlaceholder || 'Write your message..'
+  
+  const firstNameRequired = contactFormContent.firstNameRequired !== false
+  const lastNameRequired = contactFormContent.lastNameRequired !== false
+  const emailRequired = contactFormContent.emailRequired !== false
+  const phoneRequired = contactFormContent.phoneRequired === true
+  const messageRequired = contactFormContent.messageRequired !== false
+  
+  const subjects = (contactFormContent.subjects as Array<{ label: string; value: string }>) || []
+  const customFields = (contactFormContent.customFields as CustomField[]) || []
+  const buttonLabel = contactFormContent.buttonLabel || 'Send Message'
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    subject: subjects.length > 0 ? subjects[0].value : 'general',
+    message: '',
+    customFields: {} as Record<string, any>,
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleCustomFieldChange = (fieldName: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      customFields: {
+        ...prev.customFields,
+        [fieldName]: value,
+      },
+    }))
+  }
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, subject: e.target.value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: '' })
+
+    try {
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim()
+      
+      // Validate required fields
+      if (enableFirstName && firstNameRequired && !formData.firstName) {
+        setSubmitStatus({ type: 'error', message: `${firstNameLabel} is required.` })
+        setIsSubmitting(false)
+        return
+      }
+      if (enableLastName && lastNameRequired && !formData.lastName) {
+        setSubmitStatus({ type: 'error', message: `${lastNameLabel} is required.` })
+        setIsSubmitting(false)
+        return
+      }
+      if (enableEmail && emailRequired && !formData.email) {
+        setSubmitStatus({ type: 'error', message: `${emailLabel} is required.` })
+        setIsSubmitting(false)
+        return
+      }
+      if (enableMessage && messageRequired && !formData.message) {
+        setSubmitStatus({ type: 'error', message: `${messageLabel} is required.` })
+        setIsSubmitting(false)
+        return
+      }
+
+      await submitContactForm({
+        name: fullName,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: enableSubject ? (formData.subject || undefined) : undefined,
+        message: formData.message,
+        customFields: Object.keys(formData.customFields).length > 0 ? formData.customFields : undefined,
+      })
+
+      setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        subject: subjects.length > 0 ? subjects[0].value : 'general',
+        message: '',
+        customFields: {},
+      })
+    } catch (error: any) {
+      setSubmitStatus({ 
+        type: 'error', 
+        message: error.message || 'Failed to send message. Please try again later.' 
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   // Extract contact info fields
   const intro = contactInfoContent.intro as string
@@ -22,6 +204,87 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
   const emails = (contactInfoContent.emails as Array<{ value: string }>) || []
   const address = contactInfoContent.address as string
   const socials = (contactInfoContent.socials as Array<any>) || []
+
+  // Render custom field input
+  const renderCustomField = (field: CustomField) => {
+    const fieldName = field.name
+    const value = formData.customFields[fieldName] || ''
+
+    switch (field.type) {
+      case 'textarea':
+        return (
+          <textarea
+            name={fieldName}
+            value={value}
+            onChange={(e) => handleCustomFieldChange(fieldName, e.target.value)}
+            placeholder={field.placeholder || ''}
+            required={field.required}
+            rows={3}
+            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+          />
+        )
+      case 'select':
+        return (
+          <select
+            name={fieldName}
+            value={value}
+            onChange={(e) => handleCustomFieldChange(fieldName, e.target.value)}
+            required={field.required}
+            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+          >
+            <option value="">Select {field.label}</option>
+            {field.options?.map((option, idx) => (
+              <option key={idx} value={option}>{option}</option>
+            ))}
+          </select>
+        )
+      case 'radio':
+        return (
+          <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
+            {field.options?.map((option, idx) => (
+              <label key={idx} className="flex items-center">
+                <input
+                  type="radio"
+                  name={fieldName}
+                  value={option}
+                  checked={value === option}
+                  onChange={(e) => handleCustomFieldChange(fieldName, e.target.value)}
+                  required={field.required}
+                  className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                />
+                <span className="ml-2 text-gray-700">{option}</span>
+              </label>
+            ))}
+          </div>
+        )
+      case 'checkbox':
+        return (
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name={fieldName}
+              checked={!!value}
+              onChange={(e) => handleCustomFieldChange(fieldName, e.target.checked)}
+              required={field.required}
+              className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+            />
+            <span className="ml-2 text-gray-700">{field.label}</span>
+          </label>
+        )
+      default:
+        return (
+          <input
+            type={field.type}
+            name={fieldName}
+            value={value}
+            onChange={(e) => handleCustomFieldChange(fieldName, e.target.value)}
+            placeholder={field.placeholder || ''}
+            required={field.required}
+            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+          />
+        )
+    }
+  }
 
   return (
     <main className="flex min-h-dvh flex-col">
@@ -52,10 +315,10 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
       <section className="py-20 bg-gray-50">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="bg-transparent rounded-3xl shadow-2xl overflow-hidden border border-emerald-200">
-            <div className="grid grid-cols-1 md:grid-cols-[45%_55%]">
+            <div className="grid grid-cols-1 md:grid-cols-[45%_55%] md:items-stretch">
               {/* Left Side - Contact Information */}
-              <div className="p-[10px] relative leading-7">
-                <div className="relative z-10 rounded-xl border border-emerald-500/40 p-[35px] bg-emerald-700 text-white">
+              <div className="p-[10px] relative leading-7 md:h-full flex">
+                <div className="relative z-10 rounded-xl border border-emerald-500/40 p-[35px] bg-emerald-700 text-white w-full flex flex-col">
                   <div className="absolute bottom-0 right-0 w-32 h-32 opacity-10">
                     <div className="w-full h-full rounded-full bg-emerald-300"></div>
                   </div>
@@ -131,7 +394,7 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
 
                   {/* Social Media Icons */}
                   {socials.length > 0 ? (
-                    <div className="flex space-x-4">
+                    <div className="flex space-x-4 mt-auto">
                       {socials.map((social: any, index: number) => (
                         <a
                           key={index}
@@ -159,7 +422,7 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
                       ))}
                     </div>
                   ) : (
-                    <div className="flex space-x-4">
+                    <div className="flex space-x-4 mt-auto">
                       <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
@@ -181,95 +444,173 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="p-[40px] bg-transparent">
-                <form className="space-y-6 text-sm">
-                  <div className="grid grid-cols-2 gap-8">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">First Name</label>
-                      <input 
-                        type="text" 
-                        defaultValue="Jhon"
-                        className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">Last Name</label>
-                      <input 
-                        type="text" 
-                        defaultValue="Doe"
-                        className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
-                      />
-                    </div>
+              <div className="p-[40px] bg-transparent md:h-full flex flex-col">
+                {!contactFormSection && process.env.NODE_ENV === 'development' && (
+                  <div className="mb-4 p-3 rounded-md text-sm bg-yellow-50 text-yellow-800 border border-yellow-200">
+                    ⚠️ Contact Form Section not found. Using default form. Check console for details.
                   </div>
+                )}
+                {submitStatus.type && (
+                  <div className={`mb-4 p-3 rounded-md text-sm ${
+                    submitStatus.type === 'success' 
+                      ? 'bg-green-50 text-green-800 border border-green-200' 
+                      : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}>
+                    {submitStatus.message}
+                  </div>
+                )}
+                <form onSubmit={handleSubmit} className="space-y-6 text-sm flex-1">
+                  {/* First Name and Last Name */}
+                  {(enableFirstName || enableLastName) && (
+                    <div className="grid grid-cols-2 gap-8">
+                      {enableFirstName && (
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-2">
+                            {firstNameLabel} {firstNameRequired && '*'}
+                          </label>
+                          <input 
+                            type="text" 
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            required={firstNameRequired}
+                            placeholder={firstNamePlaceholder}
+                            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+                          />
+                        </div>
+                      )}
+                      {enableLastName && (
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-2">
+                            {lastNameLabel} {lastNameRequired && '*'}
+                          </label>
+                          <input 
+                            type="text" 
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            required={lastNameRequired}
+                            placeholder={lastNamePlaceholder}
+                            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                  <div className="grid grid-cols-2 gap-8">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">Email</label>
-                      <input 
-                        type="email" 
-                        defaultValue="jhondoe@gmail.com"
-                        className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
-                      />
+                  {/* Email and Phone */}
+                  {(enableEmail || enablePhone) && (
+                    <div className="grid grid-cols-2 gap-8">
+                      {enableEmail && (
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-2">
+                            {emailLabel} {emailRequired && '*'}
+                          </label>
+                          <input 
+                            type="email" 
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required={emailRequired}
+                            placeholder={emailPlaceholder}
+                            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+                          />
+                        </div>
+                      )}
+                      {enablePhone && (
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-2">
+                            {phoneLabel} {phoneRequired && '*'}
+                          </label>
+                          <input 
+                            type="tel" 
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            required={phoneRequired}
+                            placeholder={phonePlaceholder}
+                            className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+                          />
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-2">Phone Number</label>
-                      <input 
-                        type="tel" 
-                        defaultValue="+1 012 3456 789"
-                        className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
-                      />
-                    </div>
-                  </div>
+                  )}
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-2">Select Subject?</label>
-                    <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
-                      <label className="flex items-center">
-                        <input type="radio" name="subject" value="general" defaultChecked className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" />
-                        <span className="ml-2 text-gray-700">General Inquiry</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="radio" name="subject" value="support" className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" />
-                        <span className="ml-2 text-gray-700">General Inquiry</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="radio" name="subject" value="project" className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" />
-                        <span className="ml-2 text-gray-700">General Inquiry</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input type="radio" name="subject" value="other" className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" />
-                        <span className="ml-2 text-gray-700">General Inquiry</span>
-                      </label>
+                  {/* Subject */}
+                  {enableSubject && subjects.length > 0 && (
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">{subjectLabel}</label>
+                      <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
+                        {subjects.map((subj, idx) => (
+                          <label key={idx} className="flex items-center">
+                            <input 
+                              type="radio" 
+                              name="subject" 
+                              value={subj.value || subj.label} 
+                              checked={formData.subject === (subj.value || subj.label)}
+                              onChange={handleRadioChange}
+                              className="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" 
+                            />
+                            <span className="ml-2 text-gray-700">{subj.label}</span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-2">Message</label>
-                    <textarea 
-                      rows={3}
-                      placeholder="Write your message.."
-                      className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
-                    ></textarea>
-                  </div>
+                  {/* Message */}
+                  {enableMessage && (
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        {messageLabel} {messageRequired && '*'}
+                      </label>
+                      <textarea 
+                        rows={3}
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        required={messageRequired}
+                        placeholder={messagePlaceholder}
+                        className="w-full bg-transparent px-0 py-2 border-b border-gray-300 focus:outline-none focus:border-emerald-600 text-sm"
+                      ></textarea>
+                    </div>
+                  )}
+
+                  {/* Custom Fields */}
+                  {customFields
+                    .sort((a, b) => a.order - b.order)
+                    .map((field) => (
+                      <div key={field.id}>
+                        {field.type !== 'checkbox' && (
+                          <label className="block text-xs font-medium text-gray-700 mb-2">
+                            {field.label} {field.required && '*'}
+                          </label>
+                        )}
+                        {renderCustomField(field)}
+                      </div>
+                    ))}
 
                   <button
                     type="submit"
-                    className="bg-emerald-800 text-white py-2 px-6 rounded-md font-semibold hover:bg-emerald-900 hover:scale-105 transition-all duration-300 text-sm flex items-center gap-3 group"
+                    disabled={isSubmitting}
+                    className="bg-emerald-800 text-white py-2 px-6 rounded-md font-semibold hover:bg-emerald-900 hover:scale-105 transition-all duration-300 text-sm flex items-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Message
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                    </svg>
+                    {isSubmitting ? 'Sending...' : buttonLabel}
+                    {!isSubmitting && (
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                      </svg>
+                    )}
                   </button>
                 </form>
 

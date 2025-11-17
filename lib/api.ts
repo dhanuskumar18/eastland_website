@@ -45,6 +45,17 @@ function transformApiResponse(apiData: ApiPageResponse): PageData {
     // Get English translation or first available translation
     const translation = apiSection.translations?.find(t => t.locale === 'en') || apiSection.translations?.[0]
     
+    // Debug logging in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Section ${index}:`, {
+        id: apiSection.id,
+        name: apiSection.name,
+        hasTranslation: !!translation,
+        locale: translation?.locale,
+        contentKeys: translation?.content ? Object.keys(translation.content) : [],
+      })
+    }
+    
     return {
       id: String(apiSection.id),
       type: apiSection.name,
@@ -68,26 +79,46 @@ function transformApiResponse(apiData: ApiPageResponse): PageData {
  */
 export async function fetchPageBySlug(slug: string): Promise<PageData | null> {
   try {
-    const url = `${API_BASE_URL}pages/slug/${slug}`
+    // Normalize contact page slugs to 'contact' (backend uses 'contact')
+    const normalizedSlug = slug.toLowerCase() === 'contact-us' || slug.toLowerCase() === 'contactus' 
+      ? 'contact' 
+      : slug
     
-    // Use no-store in development, or short revalidate in production
-    // This ensures admin changes appear immediately
-    const cacheOption = process.env.NODE_ENV === 'production' 
-      ? { next: { revalidate: 60 } } // Revalidate every minute in production
-      : { cache: 'no-store' as const } // No cache in development
-    
+    const url = `${API_BASE_URL}pages/slug/${normalizedSlug}`
     const response = await fetch(url, {
-      ...cacheOption,
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
       },
     })
+    
     if (!response.ok) {
-      console.error(`API returned ${response.status} for slug: ${slug}`)
+      console.error(`API returned ${response.status} for slug: ${normalizedSlug} (original: ${slug})`)
       return null
     }
     
     const apiData: ApiPageResponse = await response.json()
+    
+    // Debug: Log raw API response in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Raw API Response for slug:', slug, apiData)
+      console.log('Sections data:', apiData?.sections?.data)
+      if (apiData?.sections?.data) {
+        apiData.sections.data.forEach((section, idx) => {
+          console.log(`Section ${idx}:`, {
+            id: section.id,
+            name: section.name,
+            translations: section.translations?.map(t => ({
+              locale: t.locale,
+              contentKeys: Object.keys(t.content || {}),
+              hasCustomFields: !!(t.content as any)?.customFields,
+            })),
+          })
+        })
+      }
+    }
     
     // Validate API response structure before transforming
     if (!apiData || !apiData.sections || !apiData.sections.data) {
@@ -95,7 +126,19 @@ export async function fetchPageBySlug(slug: string): Promise<PageData | null> {
       return null
     }
     
-    return transformApiResponse(apiData)
+    const transformed = transformApiResponse(apiData)
+    
+    // Debug: Log transformed data
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Transformed Page Data:', transformed)
+      const contactFormSection = transformed.sections?.find(s => 
+        s.type?.toLowerCase().includes('contact_form') || s.type?.toLowerCase().includes('contact form')
+      )
+      console.log('Contact Form Section in Transformed Data:', contactFormSection)
+      console.log('Contact Form Content Keys:', contactFormSection?.content ? Object.keys(contactFormSection.content) : 'N/A')
+    }
+    
+    return transformed
   } catch (error) {
     console.error('Error fetching page:', error)
     return null
@@ -238,5 +281,45 @@ export async function fetchGlobalByName<T = any>(name: string): Promise<{
   } catch (error) {
     console.error('Error fetching global by name:', error)
     return null
+  }
+}
+
+/**
+ * Submit contact form
+ * Example: POST /contact-submissions
+ */
+export async function submitContactForm(data: {
+  name: string
+  email: string
+  phone?: string
+  subject?: string
+  message: string
+  customFields?: Record<string, any>
+}): Promise<{
+  status: boolean
+  code: number
+  message: string
+  data?: any
+} | null> {
+  try {
+    const url = `${API_BASE_URL}contact-submissions`
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.message || 'Failed to submit contact form')
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error submitting contact form:', error)
+    throw error
   }
 }
