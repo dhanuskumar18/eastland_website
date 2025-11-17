@@ -118,6 +118,71 @@ export async function getAllPageSlugs(): Promise<string[]> {
 }
 
 /**
+ * Fetch YouTube video by ID to get brand information
+ * Example: GET /youtube-videos/{id}
+ * Note: This function is designed to be called from client components
+ */
+export async function fetchYouTubeVideoById(id: number): Promise<{
+  id: number
+  brand?: { id: number; name: string } | null
+  brandId?: number
+  brandName?: string
+} | null> {
+  try {
+    const url = `${API_BASE_URL}youtube-videos/${id}`
+
+    // Use standard fetch for client-side calls (no Next.js cache options)
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Client-side fetch doesn't support Next.js cache options
+      cache: 'default',
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    const result = await response.json()
+    const video = result?.data || result
+    
+    // Debug: Log the video object to see its structure
+    if (process.env.NODE_ENV === 'development') {
+      console.log('YouTube Video API Response:', video)
+      console.log('Brand object:', video.brand)
+      console.log('BrandId:', video.brandId)
+    }
+    
+    // Extract brand information - brand can be an object with name property
+    let brandName = ""
+    if (video.brand && typeof video.brand === 'object' && video.brand.name) {
+      brandName = video.brand.name
+    } else if (typeof video.brand === 'string') {
+      brandName = video.brand
+    } else if (video.brandName) {
+      brandName = video.brandName
+    }
+    
+    // Debug: Log extracted brand name
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Extracted brandName:', brandName)
+    }
+    
+    return {
+      id: video.id,
+      brand: video.brand,
+      brandId: video.brandId,
+      brandName: brandName,
+    }
+  } catch (error) {
+    console.error('Error fetching YouTube video:', error)
+    return null
+  }
+}
+
+/**
  * Fetch a global by name (e.g., Footer)
  * Example: GET /globals/name/Footer
  */
