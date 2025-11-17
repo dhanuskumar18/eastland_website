@@ -153,29 +153,37 @@ export default function Videos({ content }: VideosProps = {}) {
         brandName: video.brandName,
       })
       
-      if (typeof video.brand === 'string' && video.brand.trim()) {
+      // Extract brand - check all possible sources
+      if (typeof video.brand === 'string' && video.brand.trim().length > 0) {
         brandValue = video.brand.trim()
         console.log('Using brand (string):', brandValue)
       } else if (video.brand && typeof video.brand === 'object' && video.brand.name) {
-        brandValue = video.brand.name
+        brandValue = String(video.brand.name).trim()
         console.log('Using brand (object.name):', brandValue)
-      } else if (video.brandName && video.brandName.trim()) {
-        brandValue = video.brandName.trim()
+      } else if (video.brandName && String(video.brandName).trim().length > 0) {
+        brandValue = String(video.brandName).trim()
         console.log('Using brandName:', brandValue)
       } else if (video.youtubeVideoId && videoBrands[video.youtubeVideoId]) {
         // Use fetched brand if available
-        brandValue = videoBrands[video.youtubeVideoId]
+        brandValue = String(videoBrands[video.youtubeVideoId]).trim()
         console.log('Using fetched brand:', brandValue)
       } else {
-        console.log('No brand found for video:', video.youtubeVideoId)
+        console.log('No brand found for video:', video.youtubeVideoId, {
+          brand: video.brand,
+          brandName: video.brandName,
+          brandType: typeof video.brand
+        })
       }
+      
+      // Ensure brandValue is always a string (even if empty)
+      const finalBrand = brandValue ? String(brandValue).trim() : ''
       
       const processedVideo = {
         id: video.youtubeVideoId || video.video,
         title: video.title || "Untitled Video",
         description: video.description || "",
         category: video.category || "",
-        brand: brandValue,
+        brand: finalBrand,
         tags: video.tags || "",
         videoUrl: video.video || "",
         videoId: videoId,
@@ -187,6 +195,9 @@ export default function Videos({ content }: VideosProps = {}) {
         id: processedVideo.id,
         title: processedVideo.title,
         brand: processedVideo.brand,
+        brandType: typeof processedVideo.brand,
+        brandLength: processedVideo.brand?.length,
+        hasBrand: !!processedVideo.brand && processedVideo.brand.length > 0
       })
       
       return processedVideo
@@ -357,11 +368,15 @@ export default function Videos({ content }: VideosProps = {}) {
             const badges: string[] = []
             
             // Add brand first (highest priority)
-            if (item.brand && item.brand.trim()) {
-              const brandTrimmed = item.brand.trim()
-              if (!badges.includes(brandTrimmed)) {
-                badges.push(brandTrimmed)
+            // Check brand more explicitly - handle string, number, or any truthy value
+            if (item.brand !== undefined && item.brand !== null && item.brand !== '') {
+              const brandStr = String(item.brand).trim()
+              if (brandStr.length > 0 && !badges.includes(brandStr)) {
+                badges.push(brandStr)
+                console.log('Brand added to badges:', brandStr)
               }
+            } else {
+              console.log('Brand not found in item:', { brand: item.brand, itemId: item.id })
             }
             
             // Add category if available and not already in badges

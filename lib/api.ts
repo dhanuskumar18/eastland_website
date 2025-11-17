@@ -88,7 +88,13 @@ export async function fetchPageBySlug(slug: string): Promise<PageData | null> {
     }
     
     const apiData: ApiPageResponse = await response.json()
-    console.log('Response from API for slug:', apiData.sections.data[4].translations[0].content.videos[0])
+    
+    // Validate API response structure before transforming
+    if (!apiData || !apiData.sections || !apiData.sections.data) {
+      console.error('Invalid API response structure for slug:', slug)
+      return null
+    }
+    
     return transformApiResponse(apiData)
   } catch (error) {
     console.error('Error fetching page:', error)

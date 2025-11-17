@@ -53,8 +53,9 @@ export default async function Page({ params }: PageProps) {
   // For contact page, allow rendering even if API returns 404
   // This handles cases where the page might not exist in the CMS yet
   if (!pageData) {
-    // Special handling for contact page - render with empty data
-    if (slug.toLowerCase() === 'contact') {
+    // Special handling for contact page variations - render with empty data
+    const slugLower = slug.toLowerCase()
+    if (slugLower === 'contact' || slugLower === 'contact-us' || slugLower === 'contactus') {
       return <ContactLayout />
     }
     notFound()
