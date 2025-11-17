@@ -82,13 +82,13 @@ export async function fetchPageBySlug(slug: string): Promise<PageData | null> {
         'Content-Type': 'application/json',
       },
     })
-
     if (!response.ok) {
       console.error(`API returned ${response.status} for slug: ${slug}`)
       return null
     }
-
+    
     const apiData: ApiPageResponse = await response.json()
+    console.log('Response from API for slug:', apiData.sections.data[4].translations[0].content.videos[0])
     return transformApiResponse(apiData)
   } catch (error) {
     console.error('Error fetching page:', error)

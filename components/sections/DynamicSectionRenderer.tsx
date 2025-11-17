@@ -15,6 +15,7 @@ interface DynamicSectionRendererProps {
 
 export default function DynamicSectionRenderer({ section }: DynamicSectionRendererProps) {
   const sectionType = section.type.toLowerCase()
+console.log("section 11111111111111111111111111", section.content);
 
   // Map section types to components with content
   switch (sectionType) {

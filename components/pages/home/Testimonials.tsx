@@ -6,16 +6,7 @@ import { useState, useEffect, useRef } from "react"
 import { Star } from "lucide-react"
 
 interface TestimonialsProps {
-  content?: {
-    reviews?: Array<{
-      id?: number
-      name?: string
-      image?: string
-      review?: string
-      profession?: string
-      rating?: number
-    }>
-  }
+  content?: Record<string, any>
 }
 
 // Array of 4 testimonials with content and images (fallback)
@@ -51,36 +42,8 @@ const defaultTestimonialsData = [
 ]
 
 export default function Testimonials({ content }: TestimonialsProps = {}) {
-  // Transform API data to component format
-  const transformTestimonials = (reviews?: Array<{
-    id?: number
-    name?: string
-    image?: string
-    review?: string
-    profession?: string
-    rating?: number
-  }>) => {
-    if (!reviews || reviews.length === 0) return null
-    
-    return reviews.map(review => ({
-      image: review.image || "/images/1.png",
-      quote: review.review || "",
-      name: review.name || "Anonymous",
-      title: review.profession || "",
-      rating: review.rating || 5
-    }))
-  }
-
   // Use content from API if available, otherwise use default
-  const testimonialsData = transformTestimonials(content?.reviews) || defaultTestimonialsData
-  
-  // Debug logging
-  useEffect(() => {
-    console.log('Testimonials component - Content:', content)
-    console.log('Testimonials component - Reviews:', content?.reviews)
-    console.log('Testimonials component - Transformed data:', testimonialsData)
-  }, [content, testimonialsData])
-  
+  const testimonialsData = content?.testimonials || defaultTestimonialsData
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [nextIndex, setNextIndex] = useState(1)
