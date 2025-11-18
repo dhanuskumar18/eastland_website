@@ -42,14 +42,47 @@ const defaultTestimonialsData = [
 ]
 
 export default function Testimonials({ content }: TestimonialsProps = {}) {
-  // Use content from API if available, otherwise use default
-  const testimonialsData = content?.testimonials || defaultTestimonialsData
+  // Transform API data to component format
+  const transformTestimonials = (reviews: any[]) => {
+    if (!Array.isArray(reviews)) return []
+    return reviews.map((review) => ({
+      image: review.image || review.imageUrl || '/images/1.png',
+      quote: review.review || review.quote || '',
+      name: review.name || review.clientName || 'Anonymous',
+      title: review.profession || review.title || '',
+      rating: review.rating || 5
+    }))
+  }
+
+  // Get testimonials from content.reviews (API format) or content.testimonials (fallback)
+  const rawReviews = content?.reviews || content?.testimonials || []
+  const transformedTestimonials = transformTestimonials(rawReviews)
+  
+  // Use transformed data if available, otherwise use default
+  const testimonialsData = transformedTestimonials.length > 0 
+    ? transformedTestimonials 
+    : defaultTestimonialsData
+
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [nextIndex, setNextIndex] = useState(1)
   const carouselRef = useRef<HTMLDivElement>(null)
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
+
+  // Update current index when testimonials data changes
+  useEffect(() => {
+    if (testimonialsData.length > 0 && currentIndex >= testimonialsData.length) {
+      setCurrentIndex(0)
+    }
+  }, [testimonialsData.length, currentIndex])
+
+  // Reset carousel when content changes
+  useEffect(() => {
+    setCurrentIndex(0)
+    setNextIndex(1)
+    setIsTransitioning(false)
+  }, [rawReviews])
 
   // Auto-play functionality
   useEffect(() => {
