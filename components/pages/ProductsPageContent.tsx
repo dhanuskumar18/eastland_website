@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 
 import { PageData } from '@/types/page'
@@ -50,7 +51,13 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
   ]
 
   // Use API cards if available, otherwise use defaults
-  const displayCards = cards.length > 0 ? cards.filter((card: any) => card.image && card.image.trim() !== '') : defaultCards
+  const allCards = cards.length > 0 ? cards.filter((card: any) => card.image && card.image.trim() !== '') : defaultCards
+  
+  // Limit to only 8 products for display on main page
+  const displayCards = allCards.slice(0, 8)
+  
+  // Check if there are more than 8 products to show "See More" button
+  const hasMoreProducts = allCards.length > 8
 
   // Row refs array for dynamic assignment
   const rowRefs = [row1Ref, row2Ref, row3Ref, row4Ref, row5Ref, row6Ref, row7Ref, row8Ref]
@@ -120,31 +127,25 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
       }
     )
 
-    // Observe all sections and rows
+    // Observe all sections and rows (only observe refs for items that exist)
     if (productsSectionRef.current) observer.observe(productsSectionRef.current)
     if (gridSectionRef.current) observer.observe(gridSectionRef.current)
     if (aboutProductsRef.current) observer.observe(aboutProductsRef.current)
-    if (row1Ref.current) observer.observe(row1Ref.current)
-    if (row2Ref.current) observer.observe(row2Ref.current)
-    if (row3Ref.current) observer.observe(row3Ref.current)
-    if (row4Ref.current) observer.observe(row4Ref.current)
-    if (row5Ref.current) observer.observe(row5Ref.current)
-    if (row6Ref.current) observer.observe(row6Ref.current)
-    if (row7Ref.current) observer.observe(row7Ref.current)
-    if (row8Ref.current) observer.observe(row8Ref.current)
+    
+    // Only observe row refs for items that actually exist in displayCards (max 8)
+    const rowRefsToObserve = rowRefs.slice(0, displayCards.length)
+    rowRefsToObserve.forEach((ref) => {
+      if (ref.current) observer.observe(ref.current)
+    })
 
     return () => {
       if (productsSectionRef.current) observer.unobserve(productsSectionRef.current)
       if (gridSectionRef.current) observer.unobserve(gridSectionRef.current)
       if (aboutProductsRef.current) observer.unobserve(aboutProductsRef.current)
-      if (row1Ref.current) observer.unobserve(row1Ref.current)
-      if (row2Ref.current) observer.unobserve(row2Ref.current)
-      if (row3Ref.current) observer.unobserve(row3Ref.current)
-      if (row4Ref.current) observer.unobserve(row4Ref.current)
-      if (row5Ref.current) observer.unobserve(row5Ref.current)
-      if (row6Ref.current) observer.unobserve(row6Ref.current)
-      if (row7Ref.current) observer.unobserve(row7Ref.current)
-      if (row8Ref.current) observer.unobserve(row8Ref.current)
+      
+      rowRefsToObserve.forEach((ref) => {
+        if (ref.current) observer.unobserve(ref.current)
+      })
     }
   }, [])
   return (
@@ -278,8 +279,8 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             
             <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
               {displayCards.map((card: any, index: number) => {
-                // Determine row ref based on index
-                const rowRef = rowRefs[index] || null
+                // Determine row ref based on index (only assign refs for first 8 items)
+                const rowRef = index < 8 ? rowRefs[index] || null : null
                 // Determine margin-top class based on column position (alternating pattern)
                 // Columns: 0,2,4,6 = mt-6 (top), 1,3,5,7 = mt-24 (bottom)
                 const marginClass = index % 2 === 0 ? 'lg:mt-6' : 'lg:mt-24'
@@ -320,6 +321,35 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
           </div>
         </div>
       </section>
+
+      {/* See More Button Section - Only show if there are more than 8 products */}
+      {hasMoreProducts && (
+        <section className="py-12 bg-slate-50">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center">
+              <Link 
+                href="/products/all"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-700 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
+              >
+                See More
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* About Our Products Section */}
       <section ref={aboutProductsRef} className="py-20 bg-white opacity-0">
