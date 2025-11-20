@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useMemo } from 'react'
+import Link from 'next/link'
 import { gsap } from 'gsap'
 import { useScroll } from '@/hooks/useScroll'
 import { fetchYouTubeVideoById } from '@/lib/api'
@@ -212,7 +213,7 @@ export default function Videos({ content }: VideosProps = {}) {
     { title: "Space Transformation", image: "/images/Rectangle 45.png", description: "Witness complete transformations as we convert" },
   ]
 
-  const displayItems = videos.length > 0 
+  const allDisplayItems = videos.length > 0 
     ? videos 
     : fallbackCards.map((card, idx) => ({
         id: `fallback-${idx}`,
@@ -226,6 +227,12 @@ export default function Videos({ content }: VideosProps = {}) {
         thumbnail: card.image || "/images/Rectangle 36.png",
         embedUrl: null,
       }))
+  
+  // Limit to only 4 videos for display on home page
+  const displayItems = allDisplayItems.slice(0, 4)
+  
+  // Check if there are more than 4 videos to show "See More" button
+  const hasMoreVideos = allDisplayItems.length > 4
 
   // Set initial styles to prevent flash
   useEffect(() => {
@@ -233,6 +240,12 @@ export default function Videos({ content }: VideosProps = {}) {
       opacity: 0,
       y: 50
     })
+    if (buttonRef.current) {
+      gsap.set(buttonRef.current, {
+        opacity: 0,
+        y: 50
+      })
+    }
   }, [])
 
   useEffect(() => {
@@ -264,14 +277,16 @@ export default function Videos({ content }: VideosProps = {}) {
         duration: 0.8,
         ease: "power2.out"
       }, "-=0.4")
-      .to(buttonRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.2")
+      if (buttonRef.current && hasMoreVideos) {
+        tl.to(buttonRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out"
+        }, "-=0.2")
+      }
     }
-  }, [isInView])
+  }, [isInView, hasMoreVideos])
 
   function PlayButton() {
     return (
@@ -462,27 +477,32 @@ export default function Videos({ content }: VideosProps = {}) {
           })}
         </div>
 
-        <div ref={buttonRef} className="mt-12 text-center">
-          <a
-            href="#more-videos"
-            className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
-          >
-            See More
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+        {/* See More Button - Only show if there are more than 4 videos */}
+        {hasMoreVideos ? (
+          <div ref={buttonRef} className="mt-12 text-center">
+            <Link
+              href="/videos/all"
+              className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
             >
-              <path d="M7 17L17 7M17 7H7M17 7V17"/>
-            </svg>
-          </a>
-        </div>
+              See More
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
+            </Link>
+          </div>
+        ) : (
+          <div ref={buttonRef} className="mt-12"></div>
+        )}
       </section>
 
       {/* Video Modal */}
