@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -405,7 +406,10 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
     image: member.image || "/images/aboutUs/Property 1=Default.png",
   })) || []
   
-  const membersToUse = dynamicMembers.length > 0 ? dynamicMembers : teamMembers
+  const allMembers = dynamicMembers.length > 0 ? dynamicMembers : teamMembers
+  
+  // Limit to only 4 members for display on about us page
+  const membersToUse = allMembers.slice(0, 4)
 
   useEffect(() => {
     if (!api) {
@@ -719,7 +723,10 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
 
       {/* CTA Button */}
       <div className="flex justify-center mt-12 relative z-20">
-        <button className="px-8 py-3 bg-white text-[#003B27] border border-[#003B27] rounded-full font-semibold hover:bg-[#003B27] hover:text-white hover:border-[#003B27] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 group">
+        <Link 
+          href="/team/all"
+          className="px-8 py-3 bg-white text-[#003B27] border border-[#003B27] rounded-full font-semibold hover:bg-[#003B27] hover:text-white hover:border-[#003B27] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 group"
+        >
           See More
           <svg
             width="18"
@@ -735,7 +742,7 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
             <path d="M7 17L17 7M17 7H7M17 7V17" className="group-hover:hidden"/>
             <path d="M5 12H19M19 12L12 5M19 12L12 19" className="hidden group-hover:block"/>
           </svg>
-        </button>
+        </Link>
       </div>
     </section>
   )
