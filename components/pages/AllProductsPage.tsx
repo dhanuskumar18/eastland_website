@@ -38,6 +38,12 @@ export default function AllProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedTag, setSelectedTag] = useState<string>('')
   const [selectedBrand, setSelectedBrand] = useState<string>('')
+    
+  // Product detail modal states
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [productDetails, setProductDetails] = useState<any>(null)
+  const [loadingDetails, setLoadingDetails] = useState(false)
 
   useEffect(() => {
     async function fetchAllProducts() {
@@ -238,6 +244,54 @@ export default function AllProductsPage() {
   }
 
   const hasActiveFilters = searchQuery || selectedCategory || selectedTag || selectedBrand
+
+  // Fetch product details when a product is selected
+  useEffect(() => {
+    async function fetchProductDetails() {
+      if (!selectedProduct) return
+
+      setLoadingDetails(true)
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+        const response = await fetch(`${API_BASE_URL}products/${selectedProduct.id}`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch product details')
+        }
+
+        const data = await response.json()
+        // Handle different response structures
+        const details = data.data || data
+        setProductDetails(details)
+      } catch (err) {
+        console.error('Error fetching product details:', err)
+        // Use the product data we already have if API fails
+        setProductDetails(selectedProduct)
+      } finally {
+        setLoadingDetails(false)
+      }
+    }
+
+    if (selectedProduct && isModalOpen) {
+      fetchProductDetails()
+    }
+  }, [selectedProduct, isModalOpen])
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedProduct(null)
+    setProductDetails(null)
+  }
 
   useEffect(() => {
     if (!gridRef.current || filteredProducts.length === 0) return
@@ -485,7 +539,11 @@ export default function AllProductsPage() {
                         </div>
                       )}
                       <div className="mt-6">
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                        <button
+                          onClick={() => handleProductClick(product)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
+                          aria-label="View product details"
+                        >
                           <svg
                             width="16"
                             height="16"
@@ -499,7 +557,7 @@ export default function AllProductsPage() {
                           >
                             <path d="M7 17L17 7M17 7H7M17 7V17"/>
                           </svg>
-                        </span>
+                        </button>
                       </div>
                     </div>
                   )
@@ -510,6 +568,177 @@ export default function AllProductsPage() {
           )}
         </div>
       </section>
+
+      {/* Product Detail Modal */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          onClick={closeModal}
+        >
+          <div 
+            className="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white shadow-lg hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 hover:scale-110 border border-slate-200"
+              aria-label="Close modal"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+
+            {loadingDetails ? (
+              <div className="flex items-center justify-center py-32">
+                <div className="text-center">
+                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent mb-4"></div>
+                  <p className="text-slate-600 font-medium">Loading product details...</p>
+                </div>
+              </div>
+            ) : productDetails ? (
+              <div className="flex flex-col lg:flex-row h-full overflow-y-auto">
+                {/* Left Side - Images */}
+                <div className="lg:w-1/2 bg-slate-50 p-6 lg:p-8">
+                  {productDetails.images && productDetails.images.length > 0 ? (
+                    <div className="space-y-4">
+                      {/* Main Image */}
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-slate-200 shadow-lg bg-white">
+                        <img
+                          src={productDetails.images[0].url}
+                          alt={getProductName(productDetails)}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                      {/* Thumbnail Grid */}
+                      {productDetails.images.length > 1 && (
+                        <div className="grid grid-cols-4 gap-3">
+                          {productDetails.images.slice(1, 5).map((image: any, index: number) => (
+                            <div 
+                              key={index + 1} 
+                              className="relative aspect-square overflow-hidden rounded-lg border border-slate-200 bg-white cursor-pointer hover:border-emerald-500 transition-all duration-200 hover:shadow-md"
+                            >
+                              <img
+                                src={image.url}
+                                alt={`${getProductName(productDetails)} - Image ${index + 2}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-slate-200 bg-slate-100 flex items-center justify-center">
+                      <svg className="w-24 h-24 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right Side - Details */}
+                <div className="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+                  {/* Product Name */}
+                  <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
+                    {getProductName(productDetails)}
+                  </h2>
+
+                  {/* Brand */}
+                  {productDetails.brand && (
+                    <div className="mb-6 pb-6 border-b border-slate-200">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200">
+                        <svg className="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        <span className="text-sm font-semibold text-emerald-700">{productDetails.brand.name}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Description */}
+                  {getProductDescription(productDetails) && getProductDescription(productDetails) !== "No description available" && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span className="w-1 h-6 bg-emerald-700 rounded-full"></span>
+                        Description
+                      </h3>
+                      <p className="text-slate-700 leading-relaxed whitespace-pre-line text-base">
+                        {getProductDescription(productDetails)}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Categories */}
+                  {productDetails.categories && productDetails.categories.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span className="w-1 h-6 bg-emerald-700 rounded-full"></span>
+                        Categories
+                      </h3>
+                      <div className="flex flex-wrap gap-2.5">
+                        {productDetails.categories.map((category: any, idx: number) => (
+                          <span
+                            key={idx}
+                            className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                          >
+                            {category.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tags */}
+                  {productDetails.tags && productDetails.tags.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span className="w-1 h-6 bg-emerald-700 rounded-full"></span>
+                        Tags
+                      </h3>
+                      <div className="flex flex-wrap gap-2.5">
+                        {productDetails.tags.map((tag: any, idx: number) => (
+                          <span
+                            key={idx}
+                            className="px-4 py-2 text-sm font-medium bg-slate-100 text-slate-700 rounded-lg border border-slate-200 hover:bg-slate-200 hover:border-slate-300 transition-colors duration-200"
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="p-12 text-center">
+                <div className="mb-4">
+                  <svg className="w-16 h-16 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-slate-600 text-lg mb-6">Failed to load product details.</p>
+                <button
+                  onClick={closeModal}
+                  className="px-6 py-3 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium shadow-lg hover:shadow-xl"
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   )
 }
