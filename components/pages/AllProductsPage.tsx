@@ -32,6 +32,12 @@ export default function AllProductsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+  
+  // Filter and search states
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedTag, setSelectedTag] = useState<string>('')
+  const [selectedBrand, setSelectedBrand] = useState<string>('')
 
   useEffect(() => {
     async function fetchAllProducts() {
@@ -146,8 +152,95 @@ export default function AllProductsPage() {
     fetchAllProducts()
   }, [])
 
+  // Helper functions
+  const getProductName = (product: Product) => {
+    const translation = product.translations?.find(t => t.locale === 'en') || product.translations?.[0]
+    return translation?.name || `Product ${product.sku}`
+  }
+
+  const getProductDescription = (product: Product) => {
+    const translation = product.translations?.find(t => t.locale === 'en') || product.translations?.[0]
+    return translation?.description || "No description available"
+  }
+
+  const getProductImage = (product: Product) => {
+    if (product.images && product.images.length > 0) {
+      return product.images[0].url
+    }
+    return "/images/Products/2 (7).png" // Fallback image
+  }
+
+  // Extract unique filter options from products
+  const getUniqueCategories = () => {
+    const categories = new Set<string>()
+    products.forEach(product => {
+      product.categories?.forEach(cat => {
+        if (cat.name) categories.add(cat.name)
+      })
+    })
+    return Array.from(categories).sort()
+  }
+
+  const getUniqueTags = () => {
+    const tags = new Set<string>()
+    products.forEach(product => {
+      product.tags?.forEach(tag => {
+        if (tag.name) tags.add(tag.name)
+      })
+    })
+    return Array.from(tags).sort()
+  }
+
+  const getUniqueBrands = () => {
+    const brands = new Set<string>()
+    products.forEach(product => {
+      if (product.brand?.name) brands.add(product.brand.name)
+    })
+    return Array.from(brands).sort()
+  }
+
+  // Filter products based on search and filters
+  const filteredProducts = products.filter(product => {
+    const productName = getProductName(product).toLowerCase()
+    const productDescription = getProductDescription(product).toLowerCase()
+    const searchLower = searchQuery.toLowerCase()
+
+    // Search filter
+    const matchesSearch = !searchQuery || 
+      productName.includes(searchLower) || 
+      productDescription.includes(searchLower) ||
+      product.sku.toLowerCase().includes(searchLower)
+
+    // Category filter
+    const matchesCategory = !selectedCategory || 
+      product.categories?.some(cat => cat.name === selectedCategory)
+
+    // Tag filter
+    const matchesTag = !selectedTag || 
+      product.tags?.some(tag => tag.name === selectedTag)
+
+    // Brand filter
+    const matchesBrand = !selectedBrand || 
+      product.brand?.name === selectedBrand
+
+    return matchesSearch && matchesCategory && matchesTag && matchesBrand
+  })
+
+  const categories = getUniqueCategories()
+  const tags = getUniqueTags()
+  const brands = getUniqueBrands()
+
+  const clearFilters = () => {
+    setSearchQuery('')
+    setSelectedCategory('')
+    setSelectedTag('')
+    setSelectedBrand('')
+  }
+
+  const hasActiveFilters = searchQuery || selectedCategory || selectedTag || selectedBrand
+
   useEffect(() => {
-    if (!gridRef.current || products.length === 0) return
+    if (!gridRef.current || filteredProducts.length === 0) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -166,30 +259,18 @@ export default function AllProductsPage() {
       }
     )
 
+    // Reset all cards to be observed again when filters change
     const cards = gridRef.current.querySelectorAll('.product-card')
-    cards.forEach((card) => observer.observe(card))
+    cards.forEach((card) => {
+      card.removeAttribute('data-animated')
+      card.classList.add('opacity-0')
+      observer.observe(card)
+    })
 
     return () => {
       cards.forEach((card) => observer.unobserve(card))
     }
-  }, [products])
-
-  const getProductName = (product: Product) => {
-    const translation = product.translations?.find(t => t.locale === 'en') || product.translations?.[0]
-    return translation?.name || `Product ${product.sku}`
-  }
-
-  const getProductDescription = (product: Product) => {
-    const translation = product.translations?.find(t => t.locale === 'en') || product.translations?.[0]
-    return translation?.description || "No description available"
-  }
-
-  const getProductImage = (product: Product) => {
-    if (product.images && product.images.length > 0) {
-      return product.images[0].url
-    }
-    return "/images/Products/2 (7).png" // Fallback image
-  }
+  }, [filteredProducts])
 
   if (loading) {
     return (
@@ -244,13 +325,129 @@ export default function AllProductsPage() {
             </div>
           ) : (
             <>
-              <div className="mb-8 text-center">
+              {/* Search and Filters Section */}
+              <div className="mb-8 space-y-4">
+                {/* Search Bar */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-3 pl-12 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
+                  />
+                  <svg
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+
+                {/* Filters Row */}
+                <div className="flex flex-wrap gap-4 items-end">
+                  {/* Category Filter */}
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Category
+                    </label>
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                    >
+                      <option value="">All Categories</option>
+                      {categories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Tag Filter */}
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Tag
+                    </label>
+                    <select
+                      value={selectedTag}
+                      onChange={(e) => setSelectedTag(e.target.value)}
+                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                    >
+                      <option value="">All Tags</option>
+                      {tags.map((tag) => (
+                        <option key={tag} value={tag}>
+                          {tag}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Brand Filter */}
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Brand
+                    </label>
+                    <select
+                      value={selectedBrand}
+                      onChange={(e) => setSelectedBrand(e.target.value)}
+                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                    >
+                      <option value="">All Brands</option>
+                      {brands.map((brand) => (
+                        <option key={brand} value={brand}>
+                          {brand}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Clear Filters Button */}
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                    >
+                      Clear Filters
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Results Count */}
+              <div className="mb-6">
                 <p className="text-slate-600">
-                  Showing {products.length} {products.length === 1 ? 'product' : 'products'}
+                  {hasActiveFilters ? (
+                    <>
+                      Showing {filteredProducts.length} of {products.length} {products.length === 1 ? 'product' : 'products'}
+                    </>
+                  ) : (
+                    <>
+                      Showing {products.length} {products.length === 1 ? 'product' : 'products'}
+                    </>
+                  )}
                 </p>
               </div>
-              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {products.map((product, index) => {
+
+              {/* Products Grid */}
+              {filteredProducts.length === 0 ? (
+                <div className="text-center py-20">
+                  <p className="text-slate-600 text-lg">No products match your filters.</p>
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="mt-4 inline-block text-emerald-700 hover:underline"
+                    >
+                      Clear all filters
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {filteredProducts.map((product, index) => {
                   const productName = getProductName(product)
                   const productDescription = getProductDescription(product)
                   const productImage = getProductImage(product)
@@ -307,7 +504,8 @@ export default function AllProductsPage() {
                     </div>
                   )
                 })}
-              </div>
+                </div>
+              )}
             </>
           )}
         </div>
