@@ -2,6 +2,7 @@
 
 // import { TestimonialCard } from "@/components/testimonial-card"
 import Image from "next/image"
+import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { Star } from "lucide-react"
 
@@ -59,9 +60,15 @@ export default function Testimonials({ content }: TestimonialsProps = {}) {
   const transformedTestimonials = transformTestimonials(rawReviews)
   
   // Use transformed data if available, otherwise use default
-  const testimonialsData = transformedTestimonials.length > 0 
+  const allTestimonials = transformedTestimonials.length > 0 
     ? transformedTestimonials 
     : defaultTestimonialsData
+  
+  // Limit to only 4 testimonials for display on home page
+  const testimonialsData = allTestimonials.slice(0, 4)
+  
+  // Always show "See More" button - it will fetch all testimonials from API
+  const hasMoreTestimonials = true
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -184,22 +191,28 @@ export default function Testimonials({ content }: TestimonialsProps = {}) {
           <p className="mt-4 text-sm leading-relaxed text-slate-600">
             Discover what our valued clients have to say about their experience with us. Each testimonial reflects our dedication to quality, trust, and long-lasting.
           </p>
-          <button className="mt-6 inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
-            See More
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+          {/* See More Button - Only show if there are more than 4 testimonials */}
+          {hasMoreTestimonials && (
+            <Link 
+              href="/testimonials/all"
+              className="mt-6 inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
             >
-              <path d="M7 17L17 7M17 7H7M17 7V17"/>
-            </svg>
-          </button>
+              See More
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+              </svg>
+            </Link>
+          )}
         </div>
 
         {/* Right Section - Carousel */}
