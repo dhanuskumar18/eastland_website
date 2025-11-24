@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 
 import { PageData } from '@/types/page'
@@ -21,6 +22,13 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
   const row6Ref = useRef<HTMLDivElement>(null)
   const row7Ref = useRef<HTMLDivElement>(null)
   const row8Ref = useRef<HTMLDivElement>(null)
+
+  // Product detail modal states
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [productDetails, setProductDetails] = useState<any>(null)
+  const [loadingDetails, setLoadingDetails] = useState(false)
+  const [allProducts, setAllProducts] = useState<any[]>([])
 
   // Extract content from API sections
   const ourProductsSection = pageData?.sections?.find(s => s.type === 'our_products')
@@ -50,10 +58,138 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
   ]
 
   // Use API cards if available, otherwise use defaults
-  const displayCards = cards.length > 0 ? cards.filter((card: any) => card.image && card.image.trim() !== '') : defaultCards
+  const allCards = cards.length > 0 ? cards.filter((card: any) => card.image && card.image.trim() !== '') : defaultCards
+  
+  // Limit to only 8 products for display on main page
+  const displayCards = allCards.slice(0, 8)
+  
+  // Check if there are more than 8 products to show "See More" button
+  const hasMoreProducts = allCards.length > 8
 
   // Row refs array for dynamic assignment
   const rowRefs = [row1Ref, row2Ref, row3Ref, row4Ref, row5Ref, row6Ref, row7Ref, row8Ref]
+
+  // Fetch all products to match with cards
+  useEffect(() => {
+    async function fetchAllProducts() {
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+        const response = await fetch(`${API_BASE_URL}products`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          const productsList = Array.isArray(data) ? data : (data.data || [])
+          setAllProducts(productsList)
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err)
+      }
+    }
+
+    fetchAllProducts()
+  }, [])
+
+  // Function to find product by card title or productId
+  const findProductByCard = (card: any) => {
+    // First try to find by productId if it exists
+    if (card.productId) {
+      return allProducts.find((p: any) => p.id === card.productId || p.id === Number(card.productId))
+    }
+    
+    // Otherwise, try to match by title
+    if (card.title) {
+      return allProducts.find((product: any) => {
+        const translation = product.translations?.find((t: any) => t.locale === 'en') || product.translations?.[0]
+        const productName = translation?.name || product.name || ''
+        return productName.toLowerCase().trim() === card.title.toLowerCase().trim()
+      })
+    }
+    
+    return null
+  }
+
+  // Fetch product details when a product is selected
+  useEffect(() => {
+    async function fetchProductDetails() {
+      if (!selectedProductId) {
+        // If productDetails is already set (from card data), don't fetch
+        if (productDetails && !selectedProductId) {
+          setLoadingDetails(false)
+          return
+        }
+        return
+      }
+
+      setLoadingDetails(true)
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+        const response = await fetch(`${API_BASE_URL}products/${selectedProductId}`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch product details')
+        }
+
+        const data = await response.json()
+        const details = data.data || data
+        setProductDetails(details)
+      } catch (err) {
+        console.error('Error fetching product details:', err)
+        setProductDetails(null)
+      } finally {
+        setLoadingDetails(false)
+      }
+    }
+
+    if (selectedProductId && isModalOpen) {
+      fetchProductDetails()
+    }
+  }, [selectedProductId, isModalOpen])
+
+  const handleProductClick = (card: any) => {
+    const product = findProductByCard(card)
+    if (product) {
+      setSelectedProductId(product.id)
+      setIsModalOpen(true)
+    } else {
+      // If no product found, show card details in modal
+      setProductDetails({
+        title: card.title,
+        description: card.description,
+        image: card.image,
+        images: card.image ? [{ url: card.image }] : []
+      })
+      setIsModalOpen(true)
+      setSelectedProductId(null)
+    }
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedProductId(null)
+    setProductDetails(null)
+  }
+
+  const getProductName = (product: any) => {
+    if (product?.title) return product.title
+    const translation = product?.translations?.find((t: any) => t.locale === 'en') || product?.translations?.[0]
+    return translation?.name || product?.name || 'Product'
+  }
+
+  const getProductDescription = (product: any) => {
+    if (product?.description) return product.description
+    const translation = product?.translations?.find((t: any) => t.locale === 'en') || product?.translations?.[0]
+    return translation?.description || product?.description || "No description available"
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -120,31 +256,25 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
       }
     )
 
-    // Observe all sections and rows
+    // Observe all sections and rows (only observe refs for items that exist)
     if (productsSectionRef.current) observer.observe(productsSectionRef.current)
     if (gridSectionRef.current) observer.observe(gridSectionRef.current)
     if (aboutProductsRef.current) observer.observe(aboutProductsRef.current)
-    if (row1Ref.current) observer.observe(row1Ref.current)
-    if (row2Ref.current) observer.observe(row2Ref.current)
-    if (row3Ref.current) observer.observe(row3Ref.current)
-    if (row4Ref.current) observer.observe(row4Ref.current)
-    if (row5Ref.current) observer.observe(row5Ref.current)
-    if (row6Ref.current) observer.observe(row6Ref.current)
-    if (row7Ref.current) observer.observe(row7Ref.current)
-    if (row8Ref.current) observer.observe(row8Ref.current)
+    
+    // Only observe row refs for items that actually exist in displayCards (max 8)
+    const rowRefsToObserve = rowRefs.slice(0, displayCards.length)
+    rowRefsToObserve.forEach((ref) => {
+      if (ref.current) observer.observe(ref.current)
+    })
 
     return () => {
       if (productsSectionRef.current) observer.unobserve(productsSectionRef.current)
       if (gridSectionRef.current) observer.unobserve(gridSectionRef.current)
       if (aboutProductsRef.current) observer.unobserve(aboutProductsRef.current)
-      if (row1Ref.current) observer.unobserve(row1Ref.current)
-      if (row2Ref.current) observer.unobserve(row2Ref.current)
-      if (row3Ref.current) observer.unobserve(row3Ref.current)
-      if (row4Ref.current) observer.unobserve(row4Ref.current)
-      if (row5Ref.current) observer.unobserve(row5Ref.current)
-      if (row6Ref.current) observer.unobserve(row6Ref.current)
-      if (row7Ref.current) observer.unobserve(row7Ref.current)
-      if (row8Ref.current) observer.unobserve(row8Ref.current)
+      
+      rowRefsToObserve.forEach((ref) => {
+        if (ref.current) observer.unobserve(ref.current)
+      })
     }
   }, [])
   return (
@@ -227,7 +357,7 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
               )}
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                <Link href="/contact" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -242,7 +372,7 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -278,8 +408,8 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             
             <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
               {displayCards.map((card: any, index: number) => {
-                // Determine row ref based on index
-                const rowRef = rowRefs[index] || null
+                // Determine row ref based on index (only assign refs for first 8 items)
+                const rowRef = index < 8 ? rowRefs[index] || null : null
                 // Determine margin-top class based on column position (alternating pattern)
                 // Columns: 0,2,4,6 = mt-6 (top), 1,3,5,7 = mt-24 (bottom)
                 const marginClass = index % 2 === 0 ? 'lg:mt-6' : 'lg:mt-24'
@@ -297,7 +427,11 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                       {card.description || "No description available"}
                     </p>
                     <div className="mt-6">
-                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+                      <button
+                        onClick={() => handleProductClick(card)}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
+                        aria-label="View product details"
+                      >
                         <svg
                           width="16"
                           height="16"
@@ -311,7 +445,7 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                         >
                           <path d="M7 17L17 7M17 7H7M17 7V17"/>
                         </svg>
-                      </span>
+                      </button>
                     </div>
                   </div>
                 )
@@ -320,6 +454,35 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
           </div>
         </div>
       </section>
+
+      {/* See More Button Section - Only show if there are more than 8 products */}
+      {hasMoreProducts && (
+        <section className="py-12 bg-slate-50">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center">
+              <Link 
+                href="/products/all"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-700 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
+              >
+                See More
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* About Our Products Section */}
       <section ref={aboutProductsRef} className="py-20 bg-white opacity-0">
@@ -375,7 +538,7 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
               </p>
 
               <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                <Link href="/contact" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -390,12 +553,183 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Product Detail Modal */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          onClick={closeModal}
+        >
+          <div 
+            className="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white shadow-lg hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 hover:scale-110 border border-slate-200"
+              aria-label="Close modal"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+
+            {loadingDetails ? (
+              <div className="flex items-center justify-center py-32">
+                <div className="text-center">
+                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent mb-4"></div>
+                  <p className="text-slate-600 font-medium">Loading product details...</p>
+                </div>
+              </div>
+            ) : productDetails ? (
+              <div className="flex flex-col lg:flex-row h-full overflow-y-auto">
+                {/* Left Side - Images */}
+                <div className="lg:w-1/2 bg-slate-50 p-6 lg:p-8">
+                  {productDetails.images && productDetails.images.length > 0 ? (
+                    <div className="space-y-4">
+                      {/* Main Image */}
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-slate-200 shadow-lg bg-white">
+                        <img
+                          src={productDetails.images[0].url}
+                          alt={getProductName(productDetails)}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                      {/* Thumbnail Grid */}
+                      {productDetails.images.length > 1 && (
+                        <div className="grid grid-cols-4 gap-3">
+                          {productDetails.images.slice(1, 5).map((image: any, index: number) => (
+                            <div 
+                              key={index + 1} 
+                              className="relative aspect-square overflow-hidden rounded-lg border border-slate-200 bg-white cursor-pointer hover:border-emerald-500 transition-all duration-200 hover:shadow-md"
+                            >
+                              <img
+                                src={image.url}
+                                alt={`${getProductName(productDetails)} - Image ${index + 2}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-slate-200 bg-slate-100 flex items-center justify-center">
+                      <svg className="w-24 h-24 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right Side - Details */}
+                <div className="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+                  {/* Product Name */}
+                  <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
+                    {getProductName(productDetails)}
+                  </h2>
+
+                  {/* Brand */}
+                  {productDetails.brand && (
+                    <div className="mb-6 pb-6 border-b border-slate-200">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200">
+                        <svg className="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        <span className="text-sm font-semibold text-emerald-700">{productDetails.brand.name}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Description */}
+                  {getProductDescription(productDetails) && getProductDescription(productDetails) !== "No description available" && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span className="w-1 h-6 bg-emerald-700 rounded-full"></span>
+                        Description
+                      </h3>
+                      <p className="text-slate-700 leading-relaxed whitespace-pre-line text-base">
+                        {getProductDescription(productDetails)}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Categories */}
+                  {productDetails.categories && productDetails.categories.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span className="w-1 h-6 bg-emerald-700 rounded-full"></span>
+                        Categories
+                      </h3>
+                      <div className="flex flex-wrap gap-2.5">
+                        {productDetails.categories.map((category: any, idx: number) => (
+                          <span
+                            key={idx}
+                            className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                          >
+                            {category.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tags */}
+                  {productDetails.tags && productDetails.tags.length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span className="w-1 h-6 bg-emerald-700 rounded-full"></span>
+                        Tags
+                      </h3>
+                      <div className="flex flex-wrap gap-2.5">
+                        {productDetails.tags.map((tag: any, idx: number) => (
+                          <span
+                            key={idx}
+                            className="px-4 py-2 text-sm font-medium bg-slate-100 text-slate-700 rounded-lg border border-slate-200 hover:bg-slate-200 hover:border-slate-300 transition-colors duration-200"
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="p-12 text-center">
+                <div className="mb-4">
+                  <svg className="w-16 h-16 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-slate-600 text-lg mb-6">Failed to load product details.</p>
+                <button
+                  onClick={closeModal}
+                  className="px-6 py-3 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium shadow-lg hover:shadow-xl"
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   )
 }
