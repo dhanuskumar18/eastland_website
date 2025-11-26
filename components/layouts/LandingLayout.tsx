@@ -1,4 +1,5 @@
 import { PageData } from '@/types/page'
+import DynamicSectionRenderer from '@/components/sections/DynamicSectionRenderer'
 
 interface LandingLayoutProps {
   pageData: PageData
@@ -27,10 +28,7 @@ export default function LandingLayout({ pageData }: LandingLayoutProps) {
 
       {/* Dynamic Sections */}
       {pageData.sections.map((section) => (
-        <section key={section.id} className="py-20">
-          {/* No-op renderer for unknown sections in Landing layout */}
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8" />
-        </section>
+        <DynamicSectionRenderer key={section.id} section={section} />
       ))}
     </main>
   )

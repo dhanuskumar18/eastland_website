@@ -4,6 +4,8 @@ import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Star } from "lucide-react"
+import { fetchPageBySlug } from '@/lib/api'
+import Banner from '@/components/sections/Banner'
 
 interface Testimonial {
   id: number
@@ -20,12 +22,71 @@ export default function AllTestimonialsPage() {
   const [error, setError] = useState<string | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   
+  // Page data and banner
+  const [pageData, setPageData] = useState<any>(null)
+  const [bannerContent, setBannerContent] = useState<any>(null)
+  
   // Filter and search states
   const [searchQuery, setSearchQuery] = useState('')
   
   // Testimonial detail modal states
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Fetch page data for banner
+  useEffect(() => {
+    async function fetchPageData() {
+      try {
+        // Try slugs based on admin panel: testimonials/all, testimonials, client-testimonials
+        const slugs = ['testimonials/all', 'testimonials', 'client-testimonials', 'clienttestimonials', 'all-testimonials']
+        let page = null
+        
+        for (const slug of slugs) {
+          try {
+            page = await fetchPageBySlug(slug)
+            if (page) {
+              console.log(`Found page with slug: ${slug}`)
+              break
+            }
+          } catch (err) {
+            // Continue to next slug if this one fails
+            console.log(`Slug ${slug} not found, trying next...`)
+            continue
+          }
+        }
+        
+        if (page) {
+          setPageData(page)
+          // Find banner section - check for banner in section name or type
+          // Also check for see_more sections that have banner-like content (title, subTitle, image)
+          const bannerSection = page.sections?.find((s: any) => {
+            const type = (s.type || s.name || '').toLowerCase()
+            const hasBannerName = type.includes('banner') || type === 'testimonials_banner' || type === 'testimonial_banner'
+            
+            // Check if it's a see_more section with banner content
+            const isSeeMore = type.includes('see_more') || type.includes('see more')
+            const content = s.content || {}
+            const hasBannerContent = content.title || content.subTitle || content.image
+            
+            return hasBannerName || (isSeeMore && hasBannerContent)
+          })
+          if (bannerSection) {
+            console.log('Found banner section:', bannerSection)
+            setBannerContent(bannerSection.content)
+          } else {
+            console.log('No banner section found. Available sections:', page.sections?.map((s: any) => s.type || s.name))
+          }
+        } else {
+          console.log('No page found for testimonials. Will use default banner.')
+        }
+      } catch (err) {
+        console.error('Error fetching page data:', err)
+        // Silently fail - will use default banner
+      }
+    }
+    
+    fetchPageData()
+  }, [])
 
   useEffect(() => {
     async function fetchAllTestimonials() {
@@ -181,20 +242,13 @@ export default function AllTestimonialsPage() {
 
   return (
     <main className="flex min-h-dvh flex-col">
-      {/* Header Section */}
-      <section className="relative h-[40vh] min-h-[300px] bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900"></div>
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-              Client Testimonials
-            </h1>
-            <p className="mt-4 text-xl text-slate-300">
-              What our valued clients say about us
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Dynamic Banner Section */}
+      <Banner 
+        content={bannerContent}
+        defaultTitle="Client Testimonials"
+        defaultSubTitle="What our valued clients say about us"
+        defaultImage="/images/default-banner.jpg"
+      />
 
       {/* Testimonials Grid Section */}
       <section className="py-20 bg-slate-50">

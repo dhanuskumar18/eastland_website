@@ -3,6 +3,8 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { fetchPageBySlug } from '@/lib/api'
+import Banner from '@/components/sections/Banner'
 
 interface TeamMember {
   id: string
@@ -18,6 +20,10 @@ export default function AllTeamPage() {
   const [error, setError] = useState<string | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   
+  // Page data and banner
+  const [pageData, setPageData] = useState<any>(null)
+  const [bannerContent, setBannerContent] = useState<any>(null)
+  
   // Filter and search states
   const [searchQuery, setSearchQuery] = useState('')
   
@@ -25,84 +31,96 @@ export default function AllTeamPage() {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  // Fetch page data for banner
+  useEffect(() => {
+    async function fetchPageData() {
+      try {
+        // Add a small delay to avoid rate limiting when multiple requests happen
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Try slugs based on admin panel: team/all, team, about-team
+        const slugs = ['team/all', 'team', 'about-team', 'aboutteam', 'all-team']
+        let page = null
+        
+        for (const slug of slugs) {
+          try {
+            page = await fetchPageBySlug(slug)
+            if (page) {
+              console.log(`Found page with slug: ${slug}`)
+              break
+            }
+          } catch (err) {
+            // Continue to next slug if this one fails
+            console.log(`Slug ${slug} not found, trying next...`)
+            continue
+          }
+        }
+        
+        if (page) {
+          setPageData(page)
+          // Find banner section - check for banner in section name or type
+          // Also check for see_more sections that have banner-like content (title, subTitle, image)
+          const bannerSection = page.sections?.find((s: any) => {
+            const type = (s.type || s.name || '').toLowerCase()
+            const hasBannerName = type.includes('banner') || type === 'team_banner' || type === 'about_banner'
+            
+            // Check if it's a see_more section with banner content
+            const isSeeMore = type.includes('see_more') || type.includes('see more')
+            const content = s.content || {}
+            const hasBannerContent = content.title || content.subTitle || content.image
+            
+            return hasBannerName || (isSeeMore && hasBannerContent)
+          })
+          if (bannerSection) {
+            console.log('Found banner section:', bannerSection)
+            setBannerContent(bannerSection.content)
+          } else {
+            console.log('No banner section found. Available sections:', page.sections?.map((s: any) => s.type || s.name))
+          }
+        } else {
+          console.log('No page found for team. Will use default banner.')
+        }
+      } catch (err) {
+        console.error('Error fetching page data:', err)
+        // Silently fail - will use default banner
+      }
+    }
+    
+    fetchPageData()
+  }, [])
+
   useEffect(() => {
     async function fetchAllTeamMembers() {
       try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+        // Add a delay to avoid rate limiting when banner request is also happening
+        await new Promise(resolve => setTimeout(resolve, 300))
+        
         let allMembers: TeamMember[] = []
         
-        // Fetch the About Us page - use correct slug
-        let data = null
-        let response = null
+        // Fetch the About Us page using fetchPageBySlug which has retry logic
         const slug = 'aboutus' // Correct slug based on API response
+        const pageData = await fetchPageBySlug(slug)
         
-        try {
-          response = await fetch(`${API_BASE_URL}pages/slug/${slug}`, {
-            cache: 'no-store',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-
-          if (response.ok) {
-            data = await response.json()
-            console.log(`Successfully fetched with slug: ${slug}`, data)
-          } else if (response.status === 429) {
-            // Rate limited - wait and show user-friendly message
-            throw new Error('Too many requests. Please wait a moment and refresh the page.')
-          } else {
-            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`)
-          }
-        } catch (err) {
-          console.error('Error fetching team members:', err)
-          if (err instanceof Error && err.message.includes('Too many requests')) {
-            throw err
-          }
+        if (!pageData) {
           throw new Error('Failed to load team members. Please try again later.')
         }
-
-        if (!response || !response.ok || !data) {
-          if (response?.status === 429) {
-            throw new Error('Too many requests. Please wait a moment and refresh the page.')
-          }
-          throw new Error(`Failed to fetch team members: ${response?.status || 'Unknown'} ${response?.statusText || 'Unknown error'}`)
-        }
         
-        console.log('About Us Page API Response:', data)
+        console.log('About Us Page Data:', pageData)
         
-        // Extract team section from page data - handle different response structures
-        let teamSection = null
-        let sections = null
-        
-        // Handle response structure: data.sections.data (array of sections)
-        if (data.sections) {
-          if (Array.isArray(data.sections)) {
-            sections = data.sections
-          } else if (data.sections.data && Array.isArray(data.sections.data)) {
-            sections = data.sections.data
-          }
-        } else if (data.data && data.data.sections) {
-          if (Array.isArray(data.data.sections)) {
-            sections = data.data.sections
-          } else if (data.data.sections.data && Array.isArray(data.data.sections.data)) {
-            sections = data.data.sections.data
-          }
-        }
-        
+        // Extract team section from page data
+        // pageData.sections is already an array of PageSection objects
+        const sections = pageData.sections || []
         console.log('Extracted sections:', sections)
         
-        if (sections && Array.isArray(sections)) {
-          teamSection = sections.find((s: any) => {
-            const sectionName = s.name?.toLowerCase() || s.type?.toLowerCase() || ''
-            return sectionName === 'team'
-          })
-          console.log('Found team section:', teamSection)
-        }
+        const teamSection = sections.find((s: any) => {
+          const sectionName = (s.type || s.name || '').toLowerCase()
+          return sectionName === 'team'
+        })
+        console.log('Found team section:', teamSection)
         
-        // Extract members from translations[0].content.members
-        if (teamSection && teamSection.translations && Array.isArray(teamSection.translations) && teamSection.translations.length > 0) {
-          const translation = teamSection.translations.find((t: any) => t.locale === 'en') || teamSection.translations[0]
-          const content = translation?.content || {}
+        // Extract members from section content
+        if (teamSection && teamSection.content) {
+          const content = teamSection.content
           
           if (content.members && Array.isArray(content.members)) {
             const members: TeamMember[] = content.members.map((member: any, index: number) => ({
@@ -119,7 +137,7 @@ export default function AllTeamPage() {
             allMembers = []
           }
         } else {
-          console.warn('No team section or translations found in API response')
+          console.warn('No team section found in page data')
           allMembers = []
         }
         
@@ -243,20 +261,13 @@ export default function AllTeamPage() {
 
   return (
     <main className="flex min-h-dvh flex-col">
-      {/* Header Section */}
-      <section className="relative h-[40vh] min-h-[300px] bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900"></div>
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-              Our <span className="text-emerald-400">Team</span>
-            </h1>
-            <p className="mt-4 text-xl text-slate-300">
-              Meet the talented individuals who make it all possible
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Dynamic Banner Section */}
+      <Banner 
+        content={bannerContent}
+        defaultTitle="Our Team"
+        defaultSubTitle="Meet the talented individuals who make it all possible"
+        defaultImage="/images/default-banner.jpg"
+      />
 
       {/* Team Members Grid Section */}
       <section className="py-20 bg-slate-50">
