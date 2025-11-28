@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { useSearchParams, useRouter } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 
@@ -30,6 +31,8 @@ interface Product {
 }
 
 export default function AllProductsPage() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -39,11 +42,11 @@ export default function AllProductsPage() {
   const [pageData, setPageData] = useState<any>(null)
   const [bannerContent, setBannerContent] = useState<any>(null)
   
-  // Filter and search states
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [selectedTag, setSelectedTag] = useState<string>('')
-  const [selectedBrand, setSelectedBrand] = useState<string>('')
+  // Filter and search states - initialize from URL params
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || '')
+  const [selectedTag, setSelectedTag] = useState<string>(searchParams.get('tag') || '')
+  const [selectedBrand, setSelectedBrand] = useState<string>(searchParams.get('brand') || '')
     
   // Product detail modal states
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
@@ -107,117 +110,62 @@ export default function AllProductsPage() {
   }, [])
 
   useEffect(() => {
-    async function fetchAllProducts() {
-      try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
-        let allProducts: Product[] = []
-        
-        // First, try to fetch without pagination (should return all products)
-        let response = await fetch(`${API_BASE_URL}products`, {
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`)
-        }
-
-        let data = await response.json()
-        
-        // Debug logging
-        console.log('API Response:', data)
-        console.log('Response type:', Array.isArray(data) ? 'Array' : typeof data)
-        
-        // Handle different response structures
-        if (Array.isArray(data)) {
-          // Direct array response (all products when no pagination)
-          allProducts = data
-          console.log('Fetched all products directly, count:', allProducts.length)
-        } else if (data.data && Array.isArray(data.data)) {
-          // Check if this is a paginated response
-          if (data.meta && data.meta.total) {
-            const total = data.meta.total
-            const currentCount = data.data.length
-            
-            console.log(`Paginated response: ${currentCount} of ${total} products`)
-            
-            // If we got fewer products than total, fetch all pages
-            if (currentCount < total) {
-              console.log('Fetching all pages to get complete product list...')
-              const limit = data.meta.limit || 100 // Use a high limit
-              const totalPages = Math.ceil(total / limit)
-              
-              // Fetch all pages
-              const pagePromises = []
-              for (let page = 1; page <= totalPages; page++) {
-                pagePromises.push(
-                  fetch(`${API_BASE_URL}products?page=${page}&limit=${limit}`, {
-                    cache: 'no-store',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                  }).then(res => res.json())
-                )
-              }
-              
-              const pageResults = await Promise.all(pagePromises)
-              allProducts = []
-              
-              pageResults.forEach((pageData: any) => {
-                if (pageData.data && Array.isArray(pageData.data)) {
-                  allProducts.push(...pageData.data)
-                } else if (Array.isArray(pageData)) {
-                  allProducts.push(...pageData)
-                }
-              })
-              
-              console.log('Fetched all pages, total products:', allProducts.length)
-            } else {
-              allProducts = data.data
-            }
-          } else {
-            // Not paginated, just use the data array
-            allProducts = data.data
-          }
-        } else if (data.items && Array.isArray(data.items)) {
-          allProducts = data.items
-        } else if (Array.isArray(data.products)) {
-          allProducts = data.products
-        } else {
-          console.warn('Unexpected response structure:', data)
-          // Try fetching with a very high limit as fallback
-          console.log('Attempting to fetch with high limit...')
-          response = await fetch(`${API_BASE_URL}products?limit=1000`, {
+    // Debounce filter changes to reduce API calls
+    const timeoutId = setTimeout(() => {
+      async function fetchAllProducts() {
+        try {
+          setLoading(true)
+          const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+          
+          // Build query parameters
+          const params = new URLSearchParams()
+          if (searchQuery) params.append('search', searchQuery)
+          if (selectedCategory) params.append('category', selectedCategory)
+          if (selectedTag) params.append('tag', selectedTag)
+          if (selectedBrand) params.append('brand', selectedBrand)
+          
+          const queryString = params.toString()
+          const url = `${API_BASE_URL}products${queryString ? `?${queryString}` : ''}`
+          
+          const response = await fetch(url, {
             cache: 'no-store',
             headers: {
               'Content-Type': 'application/json',
             },
           })
-          
-          if (response.ok) {
-            const fallbackData = await response.json()
-            if (Array.isArray(fallbackData)) {
-              allProducts = fallbackData
-            } else if (fallbackData.data && Array.isArray(fallbackData.data)) {
-              allProducts = fallbackData.data
-            }
-          }
-        }
-        
-        console.log('Final products list length:', allProducts.length)
-        setProducts(allProducts)
-      } catch (err) {
-        console.error('Error fetching products:', err)
-        setError(err instanceof Error ? err.message : 'Failed to load products')
-      } finally {
-        setLoading(false)
-      }
-    }
 
-    fetchAllProducts()
-  }, [])
+          if (!response.ok) {
+            throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`)
+          }
+
+          const data = await response.json()
+          
+          // Handle different response structures
+          let allProducts: Product[] = []
+          if (Array.isArray(data)) {
+            allProducts = data
+          } else if (data.data && Array.isArray(data.data)) {
+            allProducts = data.data
+          } else if (data.items && Array.isArray(data.items)) {
+            allProducts = data.items
+          } else if (Array.isArray(data.products)) {
+            allProducts = data.products
+          }
+          
+          setProducts(allProducts)
+        } catch (err) {
+          console.error('Error fetching products:', err)
+          setError(err instanceof Error ? err.message : 'Failed to load products')
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      fetchAllProducts()
+    }, searchQuery ? 500 : 300) // Longer debounce for search, shorter for filters
+
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery, selectedCategory, selectedTag, selectedBrand])
 
   // Helper functions
   const getProductName = (product: Product) => {
@@ -237,65 +185,83 @@ export default function AllProductsPage() {
     return "/images/Products/2 (7).png" // Fallback image
   }
 
-  // Extract unique filter options from products
-  const getUniqueCategories = () => {
-    const categories = new Set<string>()
-    products.forEach(product => {
-      product.categories?.forEach(cat => {
-        if (cat.name) categories.add(cat.name)
-      })
-    })
-    return Array.from(categories).sort()
-  }
+  // Fetch filter options from backend (categories, tags, brands) - only once
+  const [filterOptions, setFilterOptions] = useState<{
+    categories: string[]
+    tags: string[]
+    brands: string[]
+  }>({ categories: [], tags: [], brands: [] })
+  const [filterOptionsLoaded, setFilterOptionsLoaded] = useState(false)
 
-  const getUniqueTags = () => {
-    const tags = new Set<string>()
-    products.forEach(product => {
-      product.tags?.forEach(tag => {
-        if (tag.name) tags.add(tag.name)
-      })
-    })
-    return Array.from(tags).sort()
-  }
+  useEffect(() => {
+    // Only fetch filter options once
+    if (filterOptionsLoaded) return
 
-  const getUniqueBrands = () => {
-    const brands = new Set<string>()
-    products.forEach(product => {
-      if (product.brand?.name) brands.add(product.brand.name)
-    })
-    return Array.from(brands).sort()
-  }
+    async function fetchFilterOptions() {
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+        
+        // Fetch all products without filters to get unique filter options
+        const response = await fetch(`${API_BASE_URL}products`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
-  // Filter products based on search and filters
-  const filteredProducts = products.filter(product => {
-    const productName = getProductName(product).toLowerCase()
-    const productDescription = getProductDescription(product).toLowerCase()
-    const searchLower = searchQuery.toLowerCase()
+        if (!response.ok) return
 
-    // Search filter
-    const matchesSearch = !searchQuery || 
-      productName.includes(searchLower) || 
-      productDescription.includes(searchLower) ||
-      product.sku.toLowerCase().includes(searchLower)
+        const data = await response.json()
+        const allProducts: Product[] = Array.isArray(data) 
+          ? data 
+          : data.data && Array.isArray(data.data) 
+            ? data.data 
+            : []
 
-    // Category filter
-    const matchesCategory = !selectedCategory || 
-      product.categories?.some(cat => cat.name === selectedCategory)
+        // Extract unique filter options
+        const categories = new Set<string>()
+        const tags = new Set<string>()
+        const brands = new Set<string>()
 
-    // Tag filter
-    const matchesTag = !selectedTag || 
-      product.tags?.some(tag => tag.name === selectedTag)
+        allProducts.forEach(product => {
+          product.categories?.forEach(cat => {
+            if (cat.name) categories.add(cat.name)
+          })
+          product.tags?.forEach(tag => {
+            if (tag.name) tags.add(tag.name)
+          })
+          if (product.brand?.name) brands.add(product.brand.name)
+        })
 
-    // Brand filter
-    const matchesBrand = !selectedBrand || 
-      product.brand?.name === selectedBrand
+        setFilterOptions({
+          categories: Array.from(categories).sort(),
+          tags: Array.from(tags).sort(),
+          brands: Array.from(brands).sort(),
+        })
+        setFilterOptionsLoaded(true)
+      } catch (err) {
+        console.error('Error fetching filter options:', err)
+      }
+    }
 
-    return matchesSearch && matchesCategory && matchesTag && matchesBrand
-  })
+    fetchFilterOptions()
+  }, [filterOptionsLoaded])
 
-  const categories = getUniqueCategories()
-  const tags = getUniqueTags()
-  const brands = getUniqueBrands()
+  // Products are already filtered by backend
+  const filteredProducts = products
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchQuery) params.set('search', searchQuery)
+    if (selectedCategory) params.set('category', selectedCategory)
+    if (selectedTag) params.set('tag', selectedTag)
+    if (selectedBrand) params.set('brand', selectedBrand)
+    
+    const queryString = params.toString()
+    const newUrl = queryString ? `?${queryString}` : window.location.pathname
+    router.replace(newUrl, { scroll: false })
+  }, [searchQuery, selectedCategory, selectedTag, selectedBrand, router])
 
   const clearFilters = () => {
     setSearchQuery('')
@@ -424,17 +390,8 @@ export default function AllProductsPage() {
       {/* Products Grid Section */}
       <section className="py-20 bg-slate-50">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          {products.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-slate-600 text-lg">No products available at the moment.</p>
-              <Link href="/products" className="mt-4 inline-block text-emerald-700 hover:underline">
-                Back to Products
-              </Link>
-            </div>
-          ) : (
-            <>
-              {/* Search and Filters Section */}
-              <div className="mb-8 space-y-4">
+          {/* Search and Filters Section - Always show filters */}
+          <div className="mb-8 space-y-4">
                 {/* Search Bar */}
                 <div className="relative">
                   <input
@@ -467,7 +424,7 @@ export default function AllProductsPage() {
                       className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Categories</option>
-                      {categories.map((category) => (
+                      {filterOptions.categories.map((category) => (
                         <option key={category} value={category}>
                           {category}
                         </option>
@@ -486,7 +443,7 @@ export default function AllProductsPage() {
                       className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Tags</option>
-                      {tags.map((tag) => (
+                      {filterOptions.tags.map((tag) => (
                         <option key={tag} value={tag}>
                           {tag}
                         </option>
@@ -505,7 +462,7 @@ export default function AllProductsPage() {
                       className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Brands</option>
-                      {brands.map((brand) => (
+                      {filterOptions.brands.map((brand) => (
                         <option key={brand} value={brand}>
                           {brand}
                         </option>
@@ -525,37 +482,49 @@ export default function AllProductsPage() {
                 </div>
               </div>
 
-              {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
-                  {hasActiveFilters ? (
-                    <>
-                      Showing {filteredProducts.length} of {products.length} {products.length === 1 ? 'product' : 'products'}
-                    </>
-                  ) : (
-                    <>
-                      Showing {products.length} {products.length === 1 ? 'product' : 'products'}
-                    </>
-                  )}
-                </p>
-              </div>
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-slate-600">
+                {hasActiveFilters ? (
+                  <>
+                    Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+                    {filterOptionsLoaded && filterOptions.categories.length > 0 && (
+                      <> (filtered from available products)</>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+                  </>
+                )}
+              </p>
+            </div>
 
-              {/* Products Grid */}
-              {filteredProducts.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-slate-600 text-lg">No products match your filters.</p>
-                  {hasActiveFilters && (
+            {/* Products Grid */}
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-20">
+                {hasActiveFilters ? (
+                  <>
+                    <p className="text-slate-600 text-lg">No products match your filters.</p>
                     <button
                       onClick={clearFilters}
                       className="mt-4 inline-block text-emerald-700 hover:underline"
                     >
                       Clear all filters
                     </button>
-                  )}
-                </div>
-              ) : (
-                <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {filteredProducts.map((product, index) => {
+                  </>
+                ) : (
+                  <>
+                    <p className="text-slate-600 text-lg">No products available at the moment.</p>
+                    <Link href="/products" className="mt-4 inline-block text-emerald-700 hover:underline">
+                      Back to Products
+                    </Link>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredProducts.map((product, index) => {
                   const productName = getProductName(product)
                   const productDescription = getProductDescription(product)
                   const productImage = getProductImage(product)
@@ -616,10 +585,8 @@ export default function AllProductsPage() {
                     </div>
                   )
                 })}
-                </div>
-              )}
-            </>
-          )}
+              </div>
+            )}
         </div>
       </section>
 

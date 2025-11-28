@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { useSearchParams, useRouter } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 
@@ -67,6 +68,8 @@ function getYouTubeEmbedUrl(videoId: string): string {
 }
 
 export default function AllVideosPage() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -76,11 +79,11 @@ export default function AllVideosPage() {
   const [pageData, setPageData] = useState<any>(null)
   const [bannerContent, setBannerContent] = useState<any>(null)
   
-  // Filter and search states
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
-  const [selectedTag, setSelectedTag] = useState<string>('')
-  const [selectedBrand, setSelectedBrand] = useState<string>('')
+  // Filter and search states - initialize from URL params
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || '')
+  const [selectedTag, setSelectedTag] = useState<string>(searchParams.get('tag') || '')
+  const [selectedBrand, setSelectedBrand] = useState<string>(searchParams.get('brand') || '')
   
   // Video modal states
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
@@ -160,61 +163,66 @@ export default function AllVideosPage() {
   }, [bannerContent])
 
   useEffect(() => {
-    async function fetchAllVideos() {
-      try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
-        let allVideos: Video[] = []
-        
-        // Fetch without pagination to get all videos
-        let response = await fetch(`${API_BASE_URL}youtube-videos`, {
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+    // Debounce filter changes to reduce API calls
+    const timeoutId = setTimeout(() => {
+      async function fetchAllVideos() {
+        try {
+          setLoading(true)
+          const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+          
+          // Build query parameters
+          const params = new URLSearchParams()
+          if (searchQuery) params.append('search', searchQuery)
+          if (selectedCategory) params.append('category', selectedCategory)
+          if (selectedTag) params.append('tag', selectedTag)
+          if (selectedBrand) params.append('brand', selectedBrand)
+          
+          const queryString = params.toString()
+          const url = `${API_BASE_URL}youtube-videos${queryString ? `?${queryString}` : ''}`
+          
+          const response = await fetch(url, {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch videos: ${response.status} ${response.statusText}`)
-        }
-
-        let data = await response.json()
-        
-        console.log('YouTube Videos API Response:', data)
-        
-        // Handle different response structures
-        if (Array.isArray(data)) {
-          allVideos = data
-        } else if (data.data && Array.isArray(data.data)) {
-          if (data.data.items && Array.isArray(data.data.items)) {
-            allVideos = data.data.items
-          } else {
-            allVideos = data.data
+          if (!response.ok) {
+            throw new Error(`Failed to fetch videos: ${response.status} ${response.statusText}`)
           }
-        } else if (data.items && Array.isArray(data.items)) {
-          allVideos = data.items
-        } else if (Array.isArray(data.videos)) {
-          allVideos = data.videos
-        }
-        
-        console.log('Processed videos:', allVideos.length)
-        if (allVideos.length > 0) {
-          console.log('First video structure:', allVideos[0])
-          console.log('First video youtubeLink:', allVideos[0].youtubeLink)
-          console.log('First video videoUrl:', allVideos[0].videoUrl)
-          console.log('First video embedUrl:', allVideos[0].embedUrl)
-        }
-        
-        setVideos(allVideos)
-      } catch (err) {
-        console.error('Error fetching videos:', err)
-        setError(err instanceof Error ? err.message : 'Failed to load videos')
-      } finally {
-        setLoading(false)
-      }
-    }
 
-    fetchAllVideos()
-  }, [])
+          const data = await response.json()
+          
+          // Handle different response structures
+          let allVideos: Video[] = []
+          if (Array.isArray(data)) {
+            allVideos = data
+          } else if (data.data) {
+            if (Array.isArray(data.data)) {
+              allVideos = data.data
+            } else if (data.data.items && Array.isArray(data.data.items)) {
+              allVideos = data.data.items
+            }
+          } else if (data.items && Array.isArray(data.items)) {
+            allVideos = data.items
+          } else if (Array.isArray(data.videos)) {
+            allVideos = data.videos
+          }
+          
+          setVideos(allVideos)
+        } catch (err) {
+          console.error('Error fetching videos:', err)
+          setError(err instanceof Error ? err.message : 'Failed to load videos')
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      fetchAllVideos()
+    }, searchQuery ? 500 : 300) // Longer debounce for search, shorter for filters
+
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery, selectedCategory, selectedTag, selectedBrand])
 
   // Helper functions
   const getVideoName = (video: Video) => {
@@ -271,65 +279,86 @@ export default function AllVideosPage() {
     return null
   }
 
-  // Extract unique filter options from videos
-  const getUniqueCategories = () => {
-    const categories = new Set<string>()
-    videos.forEach(video => {
-      video.categories?.forEach(cat => {
-        if (cat.name) categories.add(cat.name)
-      })
-    })
-    return Array.from(categories).sort()
-  }
+  // Fetch filter options from backend - only once
+  const [filterOptions, setFilterOptions] = useState<{
+    categories: string[]
+    tags: string[]
+    brands: string[]
+  }>({ categories: [], tags: [], brands: [] })
+  const [filterOptionsLoaded, setFilterOptionsLoaded] = useState(false)
 
-  const getUniqueTags = () => {
-    const tags = new Set<string>()
-    videos.forEach(video => {
-      video.tags?.forEach(tag => {
-        if (tag.name) tags.add(tag.name)
-      })
-    })
-    return Array.from(tags).sort()
-  }
+  useEffect(() => {
+    // Only fetch filter options once
+    if (filterOptionsLoaded) return
 
-  const getUniqueBrands = () => {
-    const brands = new Set<string>()
-    videos.forEach(video => {
-      const brandName = getBrandName(video)
-      if (brandName) brands.add(brandName)
-    })
-    return Array.from(brands).sort()
-  }
+    async function fetchFilterOptions() {
+      try {
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+        
+        // Fetch all videos without filters to get unique filter options
+        const response = await fetch(`${API_BASE_URL}youtube-videos`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
 
-  // Filter videos based on search and filters
-  const filteredVideos = videos.filter(video => {
-    const videoName = getVideoName(video).toLowerCase()
-    const videoDescription = getVideoDescription(video).toLowerCase()
-    const searchLower = searchQuery.toLowerCase()
+        if (!response.ok) return
 
-    // Search filter
-    const matchesSearch = !searchQuery || 
-      videoName.includes(searchLower) || 
-      videoDescription.includes(searchLower)
+        const data = await response.json()
+        const allVideos: Video[] = Array.isArray(data)
+          ? data
+          : data.data && Array.isArray(data.data)
+            ? data.data
+            : data.items && Array.isArray(data.items)
+              ? data.items
+              : []
 
-    // Category filter
-    const matchesCategory = !selectedCategory || 
-      video.categories?.some(cat => cat.name === selectedCategory)
+        // Extract unique filter options
+        const categories = new Set<string>()
+        const tags = new Set<string>()
+        const brands = new Set<string>()
 
-    // Tag filter
-    const matchesTag = !selectedTag || 
-      video.tags?.some(tag => tag.name === selectedTag)
+        allVideos.forEach(video => {
+          video.categories?.forEach(cat => {
+            if (cat.name) categories.add(cat.name)
+          })
+          video.tags?.forEach(tag => {
+            if (tag.name) tags.add(tag.name)
+          })
+          const brandName = getBrandName(video)
+          if (brandName) brands.add(brandName)
+        })
 
-    // Brand filter
-    const brandName = getBrandName(video)
-    const matchesBrand = !selectedBrand || brandName === selectedBrand
+        setFilterOptions({
+          categories: Array.from(categories).sort(),
+          tags: Array.from(tags).sort(),
+          brands: Array.from(brands).sort(),
+        })
+        setFilterOptionsLoaded(true)
+      } catch (err) {
+        console.error('Error fetching filter options:', err)
+      }
+    }
 
-    return matchesSearch && matchesCategory && matchesTag && matchesBrand
-  })
+    fetchFilterOptions()
+  }, [filterOptionsLoaded])
 
-  const categories = getUniqueCategories()
-  const tags = getUniqueTags()
-  const brands = getUniqueBrands()
+  // Videos are already filtered by backend
+  const filteredVideos = videos
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchQuery) params.set('search', searchQuery)
+    if (selectedCategory) params.set('category', selectedCategory)
+    if (selectedTag) params.set('tag', selectedTag)
+    if (selectedBrand) params.set('brand', selectedBrand)
+    
+    const queryString = params.toString()
+    const newUrl = queryString ? `?${queryString}` : window.location.pathname
+    router.replace(newUrl, { scroll: false })
+  }, [searchQuery, selectedCategory, selectedTag, selectedBrand, router])
 
   const clearFilters = () => {
     setSearchQuery('')
@@ -459,17 +488,8 @@ export default function AllVideosPage() {
       {/* Videos Grid Section */}
       <section className="py-20 bg-slate-50">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          {videos.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-slate-600 text-lg">No videos available at the moment.</p>
-              <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline">
-                Back to Home
-              </Link>
-            </div>
-          ) : (
-            <>
-              {/* Search and Filters Section */}
-              <div className="mb-8 space-y-4">
+          {/* Search and Filters Section - Always show filters */}
+          <div className="mb-8 space-y-4">
                 {/* Search Bar */}
                 <div className="relative">
                   <input
@@ -502,7 +522,7 @@ export default function AllVideosPage() {
                       className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Categories</option>
-                      {categories.map((category) => (
+                      {filterOptions.categories.map((category) => (
                         <option key={category} value={category}>
                           {category}
                         </option>
@@ -521,7 +541,7 @@ export default function AllVideosPage() {
                       className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Tags</option>
-                      {tags.map((tag) => (
+                      {filterOptions.tags.map((tag) => (
                         <option key={tag} value={tag}>
                           {tag}
                         </option>
@@ -540,7 +560,7 @@ export default function AllVideosPage() {
                       className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Brands</option>
-                      {brands.map((brand) => (
+                      {filterOptions.brands.map((brand) => (
                         <option key={brand} value={brand}>
                           {brand}
                         </option>
@@ -560,96 +580,106 @@ export default function AllVideosPage() {
                 </div>
               </div>
 
-              {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
-                  {hasActiveFilters ? (
-                    <>
-                      Showing {filteredVideos.length} of {videos.length} {videos.length === 1 ? 'video' : 'videos'}
-                    </>
-                  ) : (
-                    <>
-                      Showing {videos.length} {videos.length === 1 ? 'video' : 'videos'}
-                    </>
-                  )}
-                </p>
-              </div>
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-slate-600">
+                {hasActiveFilters ? (
+                  <>
+                    Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
+                    {filterOptionsLoaded && filterOptions.categories.length > 0 && (
+                      <> (filtered from available videos)</>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
+                  </>
+                )}
+              </p>
+            </div>
 
-              {/* Videos Grid */}
-              {filteredVideos.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-slate-600 text-lg">No videos match your filters.</p>
-                  {hasActiveFilters && (
+            {/* Videos Grid */}
+            {filteredVideos.length === 0 ? (
+              <div className="text-center py-20">
+                {hasActiveFilters ? (
+                  <>
+                    <p className="text-slate-600 text-lg">No videos match your filters.</p>
                     <button
                       onClick={clearFilters}
                       className="mt-4 inline-block text-emerald-700 hover:underline"
                     >
                       Clear all filters
                     </button>
-                  )}
-                </div>
-              ) : (
-                <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {filteredVideos.map((video) => {
-                    const videoName = getVideoName(video)
-                    const videoDescription = getVideoDescription(video)
-                    const videoThumbnail = getVideoThumbnail(video)
-                    const brandName = getBrandName(video)
+                  </>
+                ) : (
+                  <>
+                    <p className="text-slate-600 text-lg">No videos available at the moment.</p>
+                    <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline">
+                      Back to Home
+                    </Link>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredVideos.map((video) => {
+                  const videoName = getVideoName(video)
+                  const videoDescription = getVideoDescription(video)
+                  const videoThumbnail = getVideoThumbnail(video)
+                  const brandName = getBrandName(video)
 
-                    return (
-                      <article
-                        key={video.id}
-                        onClick={() => handleVideoClick(video)}
-                        className="video-card relative opacity-0 group rounded-[28px] cursor-pointer text-slate-900 bg-[#F3F0E9] transition-colors duration-300 hover:bg-emerald-700 hover:text-white shadow-sm ring-1 ring-slate-100 hover:ring-emerald-700"
-                      >
-                        <div className="p-5">
-                          {(brandName || video.categories?.length || video.tags?.length) && (
-                            <div className="flex items-center gap-2 text-[11px] flex-wrap mb-4">
-                              {brandName && (
-                                <span className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
-                                  {brandName}
-                                </span>
-                              )}
-                              {video.categories?.slice(0, 2).map((category, idx) => (
-                                <span
-                                  key={idx}
-                                  className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white"
-                                >
-                                  {category.name}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <h3 className="text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">
-                            {videoName}
-                          </h3>
-                          <p className="mt-2 text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80 line-clamp-2">
-                            {videoDescription}
-                          </p>
-                        </div>
-                        <div className="mt-5 overflow-hidden rounded-b-2xl">
-                          <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-2xl">
-                            <div
-                              className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
-                              style={{ backgroundImage: `url("${encodeURI(videoThumbnail)}")` }}
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
-                            </div>
-                            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md">
-                                <span className="ml-0.5 inline-block h-0 w-0 border-y-8 border-l-[14px] border-y-transparent border-l-emerald-600" />
+                  return (
+                    <article
+                      key={video.id}
+                      onClick={() => handleVideoClick(video)}
+                      className="video-card relative opacity-0 group rounded-[28px] cursor-pointer text-slate-900 bg-[#F3F0E9] transition-colors duration-300 hover:bg-emerald-700 hover:text-white shadow-sm ring-1 ring-slate-100 hover:ring-emerald-700"
+                    >
+                      <div className="p-5">
+                        {(brandName || video.categories?.length || video.tags?.length) && (
+                          <div className="flex items-center gap-2 text-[11px] flex-wrap mb-4">
+                            {brandName && (
+                              <span className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
+                                {brandName}
                               </span>
-                            </div>
+                            )}
+                            {video.categories?.slice(0, 2).map((category, idx) => (
+                              <span
+                                key={idx}
+                                className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white"
+                              >
+                                {category.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <h3 className="text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">
+                          {videoName}
+                        </h3>
+                        <p className="mt-2 text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80 line-clamp-2">
+                          {videoDescription}
+                        </p>
+                      </div>
+                      <div className="mt-5 overflow-hidden rounded-b-2xl">
+                        <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-2xl">
+                          <div
+                            className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+                            style={{ backgroundImage: `url("${encodeURI(videoThumbnail)}")` }}
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
+                          </div>
+                          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md">
+                              <span className="ml-0.5 inline-block h-0 w-0 border-y-8 border-l-[14px] border-y-transparent border-l-emerald-600" />
+                            </span>
                           </div>
                         </div>
-                      </article>
-                    )
-                  })}
-                </div>
-              )}
-            </>
-          )}
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            )}
         </div>
       </section>
 

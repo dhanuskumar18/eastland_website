@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { useSearchParams, useRouter } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 
@@ -15,6 +16,8 @@ interface TeamMember {
 }
 
 export default function AllTeamPage() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -24,8 +27,8 @@ export default function AllTeamPage() {
   const [pageData, setPageData] = useState<any>(null)
   const [bannerContent, setBannerContent] = useState<any>(null)
   
-  // Filter and search states
-  const [searchQuery, setSearchQuery] = useState('')
+  // Filter and search states - initialize from URL params
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   
   // Team member detail modal states
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
@@ -168,6 +171,16 @@ export default function AllTeamPage() {
            description.includes(searchLower)
   })
 
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchQuery) params.set('search', searchQuery)
+    
+    const queryString = params.toString()
+    const newUrl = queryString ? `?${queryString}` : window.location.pathname
+    router.replace(newUrl, { scroll: false })
+  }, [searchQuery, router])
+
   const clearFilters = () => {
     setSearchQuery('')
   }
@@ -272,17 +285,8 @@ export default function AllTeamPage() {
       {/* Team Members Grid Section */}
       <section className="py-20 bg-slate-50">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          {teamMembers.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-slate-600 text-lg">No team members available at the moment.</p>
-              <Link href="/about-us" className="mt-4 inline-block text-emerald-700 hover:underline">
-                Back to About Us
-              </Link>
-            </div>
-          ) : (
-            <>
-              {/* Search Section */}
-              <div className="mb-8">
+          {/* Search Section - Always show search */}
+          <div className="mb-8">
                 <div className="relative max-w-md">
                   <input
                     type="text"
@@ -312,69 +316,68 @@ export default function AllTeamPage() {
                 </div>
               </div>
 
-              {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
-                  {hasActiveFilters ? (
-                    <>
-                      Showing {filteredMembers.length} of {teamMembers.length} {teamMembers.length === 1 ? 'team member' : 'team members'}
-                    </>
-                  ) : (
-                    <>
-                      Showing {teamMembers.length} {teamMembers.length === 1 ? 'team member' : 'team members'}
-                    </>
-                  )}
-                </p>
-              </div>
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-slate-600">
+                Showing {filteredMembers.length} {filteredMembers.length === 1 ? 'team member' : 'team members'}
+              </p>
+            </div>
 
-              {/* Team Members Grid */}
-              {filteredMembers.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-slate-600 text-lg">No team members match your search.</p>
-                  {hasActiveFilters && (
+            {/* Team Members Grid */}
+            {filteredMembers.length === 0 ? (
+              <div className="text-center py-20">
+                {hasActiveFilters ? (
+                  <>
+                    <p className="text-slate-600 text-lg">No team members match your search.</p>
                     <button
                       onClick={clearFilters}
                       className="mt-4 inline-block text-emerald-700 hover:underline"
                     >
                       Clear search
                     </button>
-                  )}
-                </div>
-              ) : (
-                <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {filteredMembers.map((member) => (
-                    <div
-                      key={member.id}
-                      onClick={() => handleMemberClick(member)}
-                      className="team-card relative opacity-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden hover:border-emerald-500 cursor-pointer"
-                    >
-                      <div className="p-6">
-                        {/* Member Image */}
-                        <div className="relative w-full aspect-square mb-4 rounded-lg overflow-hidden">
-                          <Image
-                            src={member.image || '/images/aboutUs/Property 1=Default.png'}
-                            alt={member.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-slate-600 text-lg">No team members available at the moment.</p>
+                    <Link href="/about-us" className="mt-4 inline-block text-emerald-700 hover:underline">
+                      Back to About Us
+                    </Link>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredMembers.map((member) => (
+                  <div
+                    key={member.id}
+                    onClick={() => handleMemberClick(member)}
+                    className="team-card relative opacity-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden hover:border-emerald-500 cursor-pointer"
+                  >
+                    <div className="p-6">
+                      {/* Member Image */}
+                      <div className="relative w-full aspect-square mb-4 rounded-lg overflow-hidden">
+                        <Image
+                          src={member.image || '/images/aboutUs/Property 1=Default.png'}
+                          alt={member.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
 
-                        {/* Member Info - Only Name and Role */}
-                        <div className="text-center">
-                          <h3 className="text-xl font-bold text-slate-900 mb-1">
-                            {member.name}
-                          </h3>
-                          <p className="text-sm font-medium text-emerald-700">
-                            {member.title}
-                          </p>
-                        </div>
+                      {/* Member Info - Only Name and Role */}
+                      <div className="text-center">
+                        <h3 className="text-xl font-bold text-slate-900 mb-1">
+                          {member.name}
+                        </h3>
+                        <p className="text-sm font-medium text-emerald-700">
+                          {member.title}
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
       </section>
 
