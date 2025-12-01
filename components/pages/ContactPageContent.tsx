@@ -138,6 +138,18 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
     setFormData(prev => ({ ...prev, subject: e.target.value }))
   }
 
+  // Validation helper functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validatePhone = (phone: string): boolean => {
+    // Allow various phone formats: +1234567890, (123) 456-7890, 123-456-7890, 1234567890, etc.
+    const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/
+    return phoneRegex.test(phone.replace(/\s/g, ''))
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -147,25 +159,77 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
       const fullName = `${formData.firstName} ${formData.lastName}`.trim()
       
       // Validate required fields
-      if (enableFirstName && firstNameRequired && !formData.firstName) {
+      if (enableFirstName && firstNameRequired && !formData.firstName.trim()) {
         setSubmitStatus({ type: 'error', message: `${firstNameLabel} is required.` })
         setIsSubmitting(false)
         return
       }
-      if (enableLastName && lastNameRequired && !formData.lastName) {
+      if (enableLastName && lastNameRequired && !formData.lastName.trim()) {
         setSubmitStatus({ type: 'error', message: `${lastNameLabel} is required.` })
         setIsSubmitting(false)
         return
       }
-      if (enableEmail && emailRequired && !formData.email) {
+      if (enableEmail && emailRequired && !formData.email.trim()) {
         setSubmitStatus({ type: 'error', message: `${emailLabel} is required.` })
         setIsSubmitting(false)
         return
       }
-      if (enableMessage && messageRequired && !formData.message) {
+      // Validate email format
+      if (enableEmail && formData.email && !validateEmail(formData.email)) {
+        setSubmitStatus({ type: 'error', message: `Please enter a valid ${emailLabel.toLowerCase()}.` })
+        setIsSubmitting(false)
+        return
+      }
+      // Validate phone format if provided
+      if (enablePhone && formData.phone && formData.phone.trim() && !validatePhone(formData.phone)) {
+        setSubmitStatus({ type: 'error', message: `Please enter a valid ${phoneLabel.toLowerCase()}.` })
+        setIsSubmitting(false)
+        return
+      }
+      if (enablePhone && phoneRequired && !formData.phone.trim()) {
+        setSubmitStatus({ type: 'error', message: `${phoneLabel} is required.` })
+        setIsSubmitting(false)
+        return
+      }
+      if (enableMessage && messageRequired && !formData.message.trim()) {
         setSubmitStatus({ type: 'error', message: `${messageLabel} is required.` })
         setIsSubmitting(false)
         return
+      }
+      
+      // Validate custom fields
+      for (const field of customFields) {
+        const fieldName = field.name
+        const value = formData.customFields[fieldName]
+        
+        if (field.required) {
+          if (!value || (typeof value === 'string' && !value.trim()) || (Array.isArray(value) && value.length === 0)) {
+            setSubmitStatus({ type: 'error', message: `${field.label} is required.` })
+            setIsSubmitting(false)
+            return
+          }
+        }
+        
+        // Validate email format for email custom fields
+        if (field.type === 'email' && value && typeof value === 'string' && !validateEmail(value)) {
+          setSubmitStatus({ type: 'error', message: `Please enter a valid ${field.label.toLowerCase()}.` })
+          setIsSubmitting(false)
+          return
+        }
+        
+        // Validate phone format for phone custom fields
+        if (field.type === 'tel' && value && typeof value === 'string' && !validatePhone(value)) {
+          setSubmitStatus({ type: 'error', message: `Please enter a valid ${field.label.toLowerCase()}.` })
+          setIsSubmitting(false)
+          return
+        }
+        
+        // Validate number format for number custom fields
+        if (field.type === 'number' && value && typeof value === 'string' && isNaN(Number(value))) {
+          setSubmitStatus({ type: 'error', message: `Please enter a valid number for ${field.label.toLowerCase()}.` })
+          setIsSubmitting(false)
+          return
+        }
       }
 
       await submitContactForm({
