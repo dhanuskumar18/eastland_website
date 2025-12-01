@@ -77,68 +77,108 @@ function transformApiResponse(apiData: ApiPageResponse): PageData {
  * Fetch page data by slug from CMS/Backend
  * Calls GET /pages/slug/{slug}
  */
-export async function fetchPageBySlug(slug: string): Promise<PageData | null> {
+export async function fetchPageBySlug(slug: string, retries: number = 2): Promise<PageData | null> {
   try {
     // Normalize contact page slugs to 'contact' (backend uses 'contact')
     const normalizedSlug = slug.toLowerCase() === 'contact-us' || slug.toLowerCase() === 'contactus' 
       ? 'contact' 
       : slug
     
-    const url = `${API_BASE_URL}pages/slug/${normalizedSlug}`
-    const response = await fetch(url, {
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-    })
+    // URL encode the slug to handle special characters like forward slashes
+    // For slugs with forward slashes (e.g., "videos/all"), we need to encode the entire slug
+    // This will convert "/" to "%2F" which NestJS will decode back to "/"
+    const encodedSlug = encodeURIComponent(normalizedSlug)
     
-    if (!response.ok) {
-      console.error(`API returned ${response.status} for slug: ${normalizedSlug} (original: ${slug})`)
-      return null
-    }
+    const url = `${API_BASE_URL}pages/slug/${encodedSlug}`
     
-    const apiData: ApiPageResponse = await response.json()
-    
-    // Debug: Log raw API response in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Raw API Response for slug:', slug, apiData)
-      console.log('Sections data:', apiData?.sections?.data)
-      if (apiData?.sections?.data) {
-        apiData.sections.data.forEach((section, idx) => {
-          console.log(`Section ${idx}:`, {
-            id: section.id,
-            name: section.name,
-            translations: section.translations?.map(t => ({
-              locale: t.locale,
-              contentKeys: Object.keys(t.content || {}),
-              hasCustomFields: !!(t.content as any)?.customFields,
-            })),
-          })
+    // Retry logic for rate limiting
+    let lastError: Error | null = null
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        if (attempt > 0) {
+          // Wait before retrying (exponential backoff)
+          const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000)
+          await new Promise(resolve => setTimeout(resolve, delay))
+        }
+        
+        const response = await fetch(url, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+          },
         })
+        
+        if (response.status === 429) {
+          // Rate limited - retry
+          lastError = new Error(`Rate limited (429) for slug: ${normalizedSlug}`)
+          if (attempt < retries) {
+            console.log(`Rate limited, retrying in ${Math.min(1000 * Math.pow(2, attempt), 5000)}ms...`)
+            continue
+          }
+        }
+        
+        if (!response.ok) {
+          console.error(`API returned ${response.status} for slug: ${normalizedSlug} (original: ${slug})`)
+          return null
+        }
+        
+        // Success - break out of retry loop
+        lastError = null
+        const apiData: ApiPageResponse = await response.json()
+        
+        // Debug: Log raw API response in development
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Raw API Response for slug:', slug, apiData)
+          console.log('Sections data:', apiData?.sections?.data)
+          if (apiData?.sections?.data) {
+            apiData.sections.data.forEach((section, idx) => {
+              console.log(`Section ${idx}:`, {
+                id: section.id,
+                name: section.name,
+                translations: section.translations?.map(t => ({
+                  locale: t.locale,
+                  contentKeys: Object.keys(t.content || {}),
+                  hasCustomFields: !!(t.content as any)?.customFields,
+                })),
+              })
+            })
+          }
+        }
+        
+        // Validate API response structure before transforming
+        if (!apiData || !apiData.sections || !apiData.sections.data) {
+          console.error('Invalid API response structure for slug:', slug)
+          return null
+        }
+        
+        const transformed = transformApiResponse(apiData)
+        
+        // Debug: Log transformed data
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Transformed Page Data:', transformed)
+          const contactFormSection = transformed.sections?.find(s => 
+            s.type?.toLowerCase().includes('contact_form') || s.type?.toLowerCase().includes('contact form')
+          )
+          console.log('Contact Form Section in Transformed Data:', contactFormSection)
+          console.log('Contact Form Content Keys:', contactFormSection?.content ? Object.keys(contactFormSection.content) : 'N/A')
+        }
+        
+        return transformed
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error('Unknown error')
+        if (attempt < retries) {
+          continue
+        }
       }
     }
     
-    // Validate API response structure before transforming
-    if (!apiData || !apiData.sections || !apiData.sections.data) {
-      console.error('Invalid API response structure for slug:', slug)
-      return null
+    // All retries failed
+    if (lastError) {
+      console.error('Error fetching page after retries:', lastError)
     }
-    
-    const transformed = transformApiResponse(apiData)
-    
-    // Debug: Log transformed data
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Transformed Page Data:', transformed)
-      const contactFormSection = transformed.sections?.find(s => 
-        s.type?.toLowerCase().includes('contact_form') || s.type?.toLowerCase().includes('contact form')
-      )
-      console.log('Contact Form Section in Transformed Data:', contactFormSection)
-      console.log('Contact Form Content Keys:', contactFormSection?.content ? Object.keys(contactFormSection.content) : 'N/A')
-    }
-    
-    return transformed
+    return null
   } catch (error) {
     console.error('Error fetching page:', error)
     return null

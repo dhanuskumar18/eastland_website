@@ -1,4 +1,5 @@
 import { PageData } from '@/types/page'
+import DynamicSectionRenderer from '@/components/sections/DynamicSectionRenderer'
 
 interface DefaultLayoutProps {
   pageData: PageData
@@ -28,9 +29,7 @@ export default function DefaultLayout({ pageData }: DefaultLayoutProps) {
       <div className="py-20">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           {pageData.sections.map((section) => (
-            <section key={section.id} className="mb-12">
-              {/* No-op renderer for unknown sections in Default layout */}
-            </section>
+            <DynamicSectionRenderer key={section.id} section={section} />
           ))}
         </div>
       </div>

@@ -17,18 +17,47 @@ export default function Navbar() {
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
+  
+  const defaultMenu: NavItem[] = [
+    { href: "/", label: "Home" },
+    { href: "/aboutus", label: "About Us" },
+    { href: "/products", label: "Products", children: [ { href: "/products", label: "Our Products" }, { href: "/qsrdesigns", label: "QSR Designs" } ] },
+    { href: "/services", label: "Services", children: [ { href: "/services", label: "Our Services" }, { href: "/portfolio", label: "Our Portfolio" } ] },
+    { href: "/contact", label: "Contact Us" },
+  ]
+  
   const [navData, setNavData] = useState<NavbarContent>({
     brandName: "eastland",
     buttonName: "Enquire Now",
     logo: "/images/logo.png",
-    menu: [
-      { href: "/", label: "Home" },
-      { href: "/aboutus", label: "About Us" },
-      { href: "/products", label: "Products", children: [ { href: "/products", label: "Our Products" }, { href: "/qsrdesigns", label: "QSR Designs" } ] },
-      { href: "/services", label: "Services", children: [ { href: "/services", label: "Our Services" }, { href: "/portfolio", label: "Our Portfolio" } ] },
-      { href: "/contact", label: "Contact Us" },
-    ]
+    menu: defaultMenu
   })
+
+  // Normalize contact page hrefs to /contact
+  const normalizeMenuHrefs = (menu: NavItem[]): NavItem[] => {
+    return menu.map(item => {
+      const normalizedHref = item.href?.toLowerCase() === '/contact-us' || item.href?.toLowerCase() === '/contactus'
+        ? '/contact'
+        : item.href
+      
+      const normalizedItem: NavItem = {
+        ...item,
+        href: normalizedHref
+      }
+      
+      // Also normalize children if they exist
+      if (item.children && Array.isArray(item.children)) {
+        normalizedItem.children = item.children.map(child => ({
+          ...child,
+          href: child.href?.toLowerCase() === '/contact-us' || child.href?.toLowerCase() === '/contactus'
+            ? '/contact'
+            : child.href
+        }))
+      }
+      
+      return normalizedItem
+    })
+  }
 
   // Fetch Navbar global
   useEffect(() => {
@@ -47,11 +76,12 @@ export default function Navbar() {
         const en = translations.find(t => t.locale === 'en') || translations[0]
         if (en?.content) {
           const c = en.content
+          const menu = Array.isArray(c.menu) && c.menu.length ? c.menu : navData.menu
           setNavData({
             brandName: c.brandName || navData.brandName,
             buttonName: c.buttonName || navData.buttonName,
             logo: c.logo || navData.logo,
-            menu: Array.isArray(c.menu) && c.menu.length ? c.menu : navData.menu,
+            menu: normalizeMenuHrefs(menu || []),
           })
         }
       } catch (e) {

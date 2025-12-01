@@ -3,7 +3,10 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { useSearchParams, useRouter } from "next/navigation"
 import { Star } from "lucide-react"
+import { fetchPageBySlug } from '@/lib/api'
+import Banner from '@/components/sections/Banner'
 
 interface Testimonial {
   id: number
@@ -15,78 +18,146 @@ interface Testimonial {
 }
 
 export default function AllTestimonialsPage() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   
-  // Filter and search states
-  const [searchQuery, setSearchQuery] = useState('')
+  // Page data and banner
+  const [pageData, setPageData] = useState<any>(null)
+  const [bannerContent, setBannerContent] = useState<any>(null)
+  
+  // Filter and search states - initialize from URL params
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   
   // Testimonial detail modal states
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  // Fetch page data for banner
   useEffect(() => {
-    async function fetchAllTestimonials() {
+    async function fetchPageData() {
       try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
-        let allTestimonials: Testimonial[] = []
+        // Try slugs based on admin panel: testimonials/all, testimonials, client-testimonials
+        const slugs = ['testimonials/all', 'testimonials', 'client-testimonials', 'clienttestimonials', 'all-testimonials']
+        let page = null
         
-        // Fetch without pagination to get all testimonials
-        let response = await fetch(`${API_BASE_URL}testimonials`, {
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch testimonials: ${response.status} ${response.statusText}`)
-        }
-
-        let data = await response.json()
-        
-        console.log('Testimonials API Response:', data)
-        
-        // Handle different response structures
-        if (Array.isArray(data)) {
-          allTestimonials = data
-        } else if (data.data && Array.isArray(data.data)) {
-          allTestimonials = data.data
-        } else if (data.items && Array.isArray(data.items)) {
-          allTestimonials = data.items
-        } else if (Array.isArray(data.testimonials)) {
-          allTestimonials = data.testimonials
+        for (const slug of slugs) {
+          try {
+            page = await fetchPageBySlug(slug)
+            if (page) {
+              console.log(`Found page with slug: ${slug}`)
+              break
+            }
+          } catch (err) {
+            // Continue to next slug if this one fails
+            console.log(`Slug ${slug} not found, trying next...`)
+            continue
+          }
         }
         
-        console.log('Processed testimonials:', allTestimonials.length)
-        
-        setTestimonials(allTestimonials)
+        if (page) {
+          setPageData(page)
+          // Find banner section - check for banner in section name or type
+          // Also check for see_more sections that have banner-like content (title, subTitle, image)
+          const bannerSection = page.sections?.find((s: any) => {
+            const type = (s.type || s.name || '').toLowerCase()
+            const hasBannerName = type.includes('banner') || type === 'testimonials_banner' || type === 'testimonial_banner'
+            
+            // Check if it's a see_more section with banner content
+            const isSeeMore = type.includes('see_more') || type.includes('see more')
+            const content = s.content || {}
+            const hasBannerContent = content.title || content.subTitle || content.image
+            
+            return hasBannerName || (isSeeMore && hasBannerContent)
+          })
+          if (bannerSection) {
+            console.log('Found banner section:', bannerSection)
+            setBannerContent(bannerSection.content)
+          } else {
+            console.log('No banner section found. Available sections:', page.sections?.map((s: any) => s.type || s.name))
+          }
+        } else {
+          console.log('No page found for testimonials. Will use default banner.')
+        }
       } catch (err) {
-        console.error('Error fetching testimonials:', err)
-        setError(err instanceof Error ? err.message : 'Failed to load testimonials')
-      } finally {
-        setLoading(false)
+        console.error('Error fetching page data:', err)
+        // Silently fail - will use default banner
       }
     }
-
-    fetchAllTestimonials()
+    
+    fetchPageData()
   }, [])
 
-  // Filter testimonials based on search
-  const filteredTestimonials = testimonials.filter(testimonial => {
-    if (!searchQuery) return true
+  useEffect(() => {
+    // Debounce search to reduce API calls
+    const timeoutId = setTimeout(() => {
+      async function fetchAllTestimonials() {
+        try {
+          setLoading(true)
+          const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5003/'
+          
+          // Build query parameters
+          const params = new URLSearchParams()
+          if (searchQuery) params.append('search', searchQuery)
+          
+          const queryString = params.toString()
+          const url = `${API_BASE_URL}testimonials${queryString ? `?${queryString}` : ''}`
+          
+          const response = await fetch(url, {
+            cache: 'no-store',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch testimonials: ${response.status} ${response.statusText}`)
+          }
+
+          const data = await response.json()
+          
+          // Handle different response structures
+          let allTestimonials: Testimonial[] = []
+          if (Array.isArray(data)) {
+            allTestimonials = data
+          } else if (data.data && Array.isArray(data.data)) {
+            allTestimonials = data.data
+          } else if (data.items && Array.isArray(data.items)) {
+            allTestimonials = data.items
+          } else if (Array.isArray(data.testimonials)) {
+            allTestimonials = data.testimonials
+          }
+          
+          setTestimonials(allTestimonials)
+        } catch (err) {
+          console.error('Error fetching testimonials:', err)
+          setError(err instanceof Error ? err.message : 'Failed to load testimonials')
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      fetchAllTestimonials()
+    }, 500) // 500ms debounce for search
+
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery])
+
+  // Testimonials are already filtered by backend
+  const filteredTestimonials = testimonials
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (searchQuery) params.set('search', searchQuery)
     
-    const searchLower = searchQuery.toLowerCase()
-    const name = (testimonial.clientName || '').toLowerCase()
-    const profession = (testimonial.profession || '').toLowerCase()
-    const review = (testimonial.review || '').toLowerCase()
-    
-    return name.includes(searchLower) || 
-           profession.includes(searchLower) || 
-           review.includes(searchLower)
-  })
+    const queryString = params.toString()
+    const newUrl = queryString ? `?${queryString}` : window.location.pathname
+    router.replace(newUrl, { scroll: false })
+  }, [searchQuery, router])
 
   const clearFilters = () => {
     setSearchQuery('')
@@ -181,35 +252,19 @@ export default function AllTestimonialsPage() {
 
   return (
     <main className="flex min-h-dvh flex-col">
-      {/* Header Section */}
-      <section className="relative h-[40vh] min-h-[300px] bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900"></div>
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-              Client Testimonials
-            </h1>
-            <p className="mt-4 text-xl text-slate-300">
-              What our valued clients say about us
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Dynamic Banner Section */}
+      <Banner 
+        content={bannerContent}
+        defaultTitle="Client Testimonials"
+        defaultSubTitle="What our valued clients say about us"
+        defaultImage="/images/default-banner.jpg"
+      />
 
       {/* Testimonials Grid Section */}
       <section className="py-20 bg-slate-50">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          {testimonials.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-slate-600 text-lg">No testimonials available at the moment.</p>
-              <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline">
-                Back to Home
-              </Link>
-            </div>
-          ) : (
-            <>
-              {/* Search Section */}
-              <div className="mb-8">
+          {/* Search Section - Always show search */}
+          <div className="mb-8">
                 <div className="relative max-w-md">
                   <input
                     type="text"
@@ -239,94 +294,93 @@ export default function AllTestimonialsPage() {
                 </div>
               </div>
 
-              {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
-                  {hasActiveFilters ? (
-                    <>
-                      Showing {filteredTestimonials.length} of {testimonials.length} {testimonials.length === 1 ? 'testimonial' : 'testimonials'}
-                    </>
-                  ) : (
-                    <>
-                      Showing {testimonials.length} {testimonials.length === 1 ? 'testimonial' : 'testimonials'}
-                    </>
-                  )}
-                </p>
-              </div>
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-slate-600">
+                Showing {filteredTestimonials.length} {filteredTestimonials.length === 1 ? 'testimonial' : 'testimonials'}
+              </p>
+            </div>
 
-              {/* Testimonials Grid */}
-              {filteredTestimonials.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-slate-600 text-lg">No testimonials match your search.</p>
-                  {hasActiveFilters && (
+            {/* Testimonials Grid */}
+            {filteredTestimonials.length === 0 ? (
+              <div className="text-center py-20">
+                {hasActiveFilters ? (
+                  <>
+                    <p className="text-slate-600 text-lg">No testimonials match your search.</p>
                     <button
                       onClick={clearFilters}
                       className="mt-4 inline-block text-emerald-700 hover:underline"
                     >
                       Clear search
                     </button>
-                  )}
-                </div>
-              ) : (
-                <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {filteredTestimonials.map((testimonial) => (
-                    <div
-                      key={testimonial.id}
-                      onClick={() => handleTestimonialClick(testimonial)}
-                      className="testimonial-card relative opacity-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer hover:border-emerald-500"
-                    >
-                      <div className="p-6">
-                        {/* Quote Icon */}
-                        <div className="mb-4">
-                          <Image 
-                            src="/images/quote1.svg" 
-                            alt="Quote" 
-                            width={40} 
-                            height={40} 
-                            className="text-slate-300"
-                          />
+                  </>
+                ) : (
+                  <>
+                    <p className="text-slate-600 text-lg">No testimonials available at the moment.</p>
+                    <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline">
+                      Back to Home
+                    </Link>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {filteredTestimonials.map((testimonial) => (
+                  <div
+                    key={testimonial.id}
+                    onClick={() => handleTestimonialClick(testimonial)}
+                    className="testimonial-card relative opacity-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer hover:border-emerald-500"
+                  >
+                    <div className="p-6">
+                      {/* Quote Icon */}
+                      <div className="mb-4">
+                        <Image 
+                          src="/images/quote1.svg" 
+                          alt="Quote" 
+                          width={40} 
+                          height={40} 
+                          className="text-slate-300"
+                        />
+                      </div>
+
+                      {/* Rating Stars */}
+                      {testimonial.rating && (
+                        <div className="flex gap-1 mb-4">
+                          {Array.from({ length: testimonial.rating }).map((_, i) => (
+                            <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
+                          ))}
                         </div>
+                      )}
 
-                        {/* Rating Stars */}
-                        {testimonial.rating && (
-                          <div className="flex gap-1 mb-4">
-                            {Array.from({ length: testimonial.rating }).map((_, i) => (
-                              <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
-                            ))}
+                      {/* Review Text */}
+                      <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                        {testimonial.review}
+                      </p>
+
+                      {/* Client Info */}
+                      <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
+                        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                          <Image
+                            src={testimonial.imageUrl || '/images/1.png'}
+                            alt={testimonial.clientName}
+                            fill
+                            className="object-cover"
+                          />
                           </div>
-                        )}
-
-                        {/* Review Text */}
-                        <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
-                          {testimonial.review}
-                        </p>
-
-                        {/* Client Info */}
-                        <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
-                          <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                            <Image
-                              src={testimonial.imageUrl || '/images/1.png'}
-                              alt={testimonial.clientName}
-                              fill
-                              className="object-cover"
-                            />
-                            </div>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="text-lg font-bold text-slate-900 truncate">
-                              {testimonial.clientName}
-                            </h3>
-                            <p className="text-sm text-slate-600 truncate">
-                              {testimonial.profession}
-                            </p>
-                          </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-lg font-bold text-slate-900 truncate">
+                            {testimonial.clientName}
+                          </h3>
+                          <p className="text-sm text-slate-600 truncate">
+                            {testimonial.profession}
+                          </p>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
       </section>
 
