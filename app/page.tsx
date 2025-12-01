@@ -1,24 +1,20 @@
 import { fetchPageBySlug } from '@/lib/api'
 import HomeLayout from '../components/layouts/HomeLayout'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
+import { buildPageMetadata } from '@/lib/seo'
 
-export async function generateMetadata() {
-  const pageData = await fetchPageBySlug('home')
+const PAGE_SLUG = 'home'
 
-  if (!pageData) {
-    return {
-      title: 'Home',
-    }
-  }
-
-  return {
-    title: pageData.meta?.title || pageData.title,
-    description: pageData.meta?.description || pageData.description,
-  }
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadata(PAGE_SLUG, {
+    title: 'Home',
+    description: 'Welcome to Eastland Website',
+  })
 }
 
 export default async function HomePage() {
-  const pageData = await fetchPageBySlug('home')
+  const pageData = await fetchPageBySlug(PAGE_SLUG)
 
   if (!pageData) {
     notFound()

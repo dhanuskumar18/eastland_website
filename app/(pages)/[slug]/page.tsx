@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { fetchPageBySlug } from '@/lib/api'
 import { PageData } from '@/types/page'
+import type { Metadata } from 'next'
+import { buildPageMetadata } from '@/lib/seo'
 
 // Force dynamic rendering to ensure fresh data
 export const dynamic = 'force-dynamic'
@@ -34,20 +36,26 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const pageData = await fetchPageBySlug(slug)
 
   if (!pageData) {
-    return {
+    // If we don't have CMS data, still try to build metadata from Global SEO + Page SEO
+    return buildPageMetadata(slug, {
       title: 'Page Not Found',
-    }
+      description: '',
+    })
   }
 
-  return {
-    title: pageData.meta?.title || pageData.title,
-    description: pageData.meta?.description || pageData.description,
-  }
+  const fallbackTitle = pageData.meta?.title || pageData.title
+  const fallbackDescription =
+    pageData.meta?.description || pageData.description || ''
+
+  return buildPageMetadata(slug, {
+    title: fallbackTitle,
+    description: fallbackDescription,
+  })
 }
 
 export default async function Page({ params }: PageProps) {
