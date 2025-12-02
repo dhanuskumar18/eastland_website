@@ -63,10 +63,11 @@ export default function LazyImage({
     return (
       <div
         ref={containerRef}
-        className="bg-gray-200 animate-pulse w-full h-full"
+        className="bg-gray-200 animate-pulse"
         style={{
           width: imageProps.fill ? '100%' : imageProps.width || '100%',
-          height: imageProps.fill ? '100%' : imageProps.height || '100%',
+          // Let height be dictated by intrinsic aspect ratio when possible to avoid stretching
+          height: imageProps.fill ? '100%' : imageProps.height,
         }}
         aria-label={imageProps.alt || 'Loading image'}
       />
@@ -77,11 +78,7 @@ export default function LazyImage({
   return (
     <div
       ref={containerRef}
-      className={
-        imageProps.fill
-          ? `relative w-full h-full ${className || ''}`.trim()
-          : className
-      }
+      className={imageProps.fill ? 'relative w-full h-full' : 'relative inline-block'}
     >
       {/*
         Explicitly spread required props first to satisfy TypeScript,
@@ -91,6 +88,7 @@ export default function LazyImage({
         {...(imageProps as ImageProps)}
         src={imageProps.src}
         alt={imageProps.alt}
+        className={className}
         loading={loading}
       />
     </div>

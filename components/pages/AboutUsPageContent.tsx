@@ -178,7 +178,8 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
       </section>
 
       {/* Company Background Section */}
-      <LazySection sectionId={companyBgSection?.id || ''}>
+      {/* Force render to ensure GSAP ScrollTrigger can attach correctly */}
+      <LazySection sectionId={companyBgSection?.id || ''} forceAlwaysRender>
         <section ref={sectionRef} className="company-background-section py-20 bg-white">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
@@ -265,7 +266,8 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
       </LazySection>
 
       {/* Mission & Vision Section */}
-      <LazySection sectionId={missionSection?.id || visionSection?.id || ''}>
+      {/* Force render to ensure GSAP ScrollTrigger can attach correctly */}
+      <LazySection sectionId={missionSection?.id || visionSection?.id || ''} forceAlwaysRender>
         <section className="relative py-20 text-white overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
@@ -283,7 +285,7 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
           {/* Mission Part */}
           <div ref={missionRef} className="mb-12 sm:mb-16 md:mb-20 grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-[60%_40%]">
             {/* Text on the left */}
-            <div className="md:col-span-1 order-2 md:order-1">
+            <div className="md:col-span-1">
               <p className="mb-2 text-xs sm:text-sm font-semibold text-white/80">Mission</p>
               <h2 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold leading-tight md:text-4xl">
                 {missionContent.title || "Delivering efficient, high-quality restaurant setups with precision and speed."}
@@ -293,7 +295,7 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
               </p>
             </div>
             {/* Image on the right */}
-            <div className="relative w-full max-w-[520px] justify-self-end md:col-span-1">
+            <div className="relative w-full max-w-[520px] md:col-span-1">
               <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
                 <LazyImage
                   src={missionContent.image || "/images/aboutUs/Rectangle 54.png"}
