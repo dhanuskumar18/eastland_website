@@ -1,13 +1,14 @@
 'use client'
 
 // import { TestimonialCard } from "@/components/testimonial-card"
-import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { Star } from "lucide-react"
+import LazyImage from "@/components/ui/LazyImage"
 
 interface TestimonialsProps {
   content?: Record<string, any>
+  sectionId?: number | string
 }
 
 // Array of 4 testimonials with content and images (fallback)
@@ -41,8 +42,8 @@ const defaultTestimonialsData = [
     rating: 5
   }
 ]
-
-export default function Testimonials({ content }: TestimonialsProps = {}) {
+ 
+export default function Testimonials({ content, sectionId }: TestimonialsProps = {}) {
   // Transform API data to component format
   const transformTestimonials = (reviews: any[]) => {
     if (!Array.isArray(reviews)) return []
@@ -230,12 +231,13 @@ export default function Testimonials({ content }: TestimonialsProps = {}) {
                 <div className="relative w-[250px] h-full overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
                   {/* Base image - always visible */}
                   <div className="absolute inset-0">
-                    <Image 
+                    <LazyImage 
                       src={testimonialsData[currentIndex].image} 
                       alt={testimonialsData[currentIndex].name} 
                       fill 
                       className="object-cover" 
-                      priority={true}
+                      imageType="gallery"
+                      sectionId={sectionId}
                     />
                   </div>
                   
@@ -249,11 +251,13 @@ export default function Testimonials({ content }: TestimonialsProps = {}) {
                           animation: 'slideInFromRight 0.5s ease-in-out forwards'
                         }}
                       >
-                        <Image 
+                        <LazyImage 
                           src={testimonialsData[nextIndex].image} 
                           alt={testimonialsData[nextIndex].name} 
                           fill 
                           className="object-cover" 
+                          imageType="gallery"
+                          sectionId={sectionId}
                         />
                       </div>
                     </div>
@@ -264,7 +268,16 @@ export default function Testimonials({ content }: TestimonialsProps = {}) {
               {/* Right side - Testimonial content with sliding text */}
               <div className="flex-1 flex flex-col min-w-0 max-w-full ">
                 {/* Quote mark icon */}
-                <div className="text-gray-300 text-5xl my-4"><Image src="/images/quote1.svg" alt="Quote left" width={50} height={50} /></div>
+                <div className="text-gray-300 text-5xl my-4">
+                  <LazyImage
+                    src="/images/quote1.svg"
+                    alt="Quote left"
+                    width={50}
+                    height={50}
+                    className="inline-block"
+                    imageType="other"
+                  />
+                </div>
 
                 {/* Sliding content container */}
                 <div className="relative flex-1 min-w-0 max-w-full overflow-hidden">
@@ -303,7 +316,16 @@ export default function Testimonials({ content }: TestimonialsProps = {}) {
               </div>
 
               {/* Right quote mark */}
-              <div className="absolute bottom-8 right-8 text-gray-300 text-5xl"><Image src="/images/quote2.svg" alt="Quote right" width={50} height={50} /></div>
+              <div className="absolute bottom-8 right-8 text-gray-300 text-5xl">
+                <LazyImage
+                  src="/images/quote2.svg"
+                  alt="Quote right"
+                  width={50}
+                  height={50}
+                  className="inline-block"
+                  imageType="other"
+                />
+              </div>
             </div>
           </div>
 

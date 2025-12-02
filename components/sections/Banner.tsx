@@ -1,6 +1,6 @@
 "use client"
 
-import Image from 'next/image'
+import LazyImage from '@/components/ui/LazyImage'
 
 interface BannerProps {
   content?: {
@@ -13,11 +13,11 @@ interface BannerProps {
   defaultImage?: string
 }
 
-export default function Banner({ 
-  content, 
+export default function Banner({
+  content,
   defaultTitle = "Page Title",
   defaultSubTitle = "Page Subtitle",
-  defaultImage = "/images/default-banner.jpg"
+  defaultImage = "/images/default-banner.jpg",
 }: BannerProps) {
   const title = content?.title || defaultTitle
   const subTitle = content?.subTitle || defaultSubTitle
@@ -27,17 +27,17 @@ export default function Banner({
     <section className="relative h-[60vh] min-h-[500px]">
       <div className="absolute inset-0">
         {image && (
-          <Image
+          <LazyImage
             src={image}
             alt={title}
             fill
             className="object-cover"
-            priority
+            imageType="page"
           />
         )}
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
-      
+
       {/* Content overlay */}
       <div className="relative z-10 h-full flex items-center justify-center">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
@@ -52,4 +52,5 @@ export default function Banner({
     </section>
   )
 }
+
 

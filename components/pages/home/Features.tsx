@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useScroll } from '../../../hooks/useScroll'
+import LazyImage from '@/components/ui/LazyImage'
 
 interface FeaturesProps {
   content?: {
@@ -14,9 +15,10 @@ interface FeaturesProps {
       productId?: number
     }>
   }
+  sectionId?: number | string
 }
 
-export default function Features({ content }: FeaturesProps = {}) {
+export default function Features({ content, sectionId }: FeaturesProps = {}) {
   const { ref, isInView } = useScroll()
   const [currentIndex, setCurrentIndex] = useState(0)
   const itemsPerPage = 4
@@ -94,10 +96,16 @@ export default function Features({ content }: FeaturesProps = {}) {
             <div className="absolute -left-6 top-0 hidden h-full w-px bg-slate-400 opacity-50                                                            lg:block" aria-hidden />
             <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
             <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
-              <div
-                className="aspect-[4/3] w-full bg-cover bg-center"
-                style={{ backgroundImage: `url("${encodeURI(image)}")` }}
-              />
+              <div className="relative aspect-[4/3] w-full">
+                <LazyImage
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                  imageType="gallery"
+                  sectionId={sectionId}
+                />
+              </div>
             </div>
             <p className="mt-5 text-sm leading-relaxed text-slate-600">{description}</p>
             <div className="mt-6">

@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import LazyImage from "@/components/ui/LazyImage"
 import { useScroll } from "@/hooks/useScroll"
 
 interface WhyChooseProps {
@@ -10,9 +10,10 @@ interface WhyChooseProps {
     descSubTitle?: string
     images?: string[]
   }
+  sectionId?: number | string
 }
 
-export default function WhyChoose({ content }: WhyChooseProps = {}) {
+export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
   const { ref, isInView } = useScroll()
 
   // Default fallback images
@@ -34,40 +35,48 @@ export default function WhyChoose({ content }: WhyChooseProps = {}) {
       <div className="grid items-center gap-16 md:grid-cols-2">
         {/* Collage */}
         <div className={`mx-auto grid w-full max-w-xl grid-cols-2 items-start transition-all duration-1000 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
-          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent" >
-            <Image 
+          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent">
+            <LazyImage 
               src={collage[0] || defaultCollage[0]} 
               alt="Why choose image 1" 
               width={220} 
               height={200} 
               className="absolute -right-4 -z-10" 
+              imageType="page"
+              sectionId={sectionId}
             />
           </div>
           <div className="">
-            <Image 
+            <LazyImage 
               src={collage[1] || defaultCollage[1]} 
               alt="Why choose image 2" 
               width={530} 
               height={540} 
               className="w-full h-auto relative right-8" 
+              imageType="page"
+              sectionId={sectionId}
             />
           </div>
           <div className="mt-6">
-            <Image 
+            <LazyImage 
               src={collage[2] || defaultCollage[2]} 
               alt="Why choose image 3" 
               width={287} 
               height={265} 
               className="w-full h-auto" 
+              imageType="page"
+              sectionId={sectionId}
             />
           </div>
           <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent">
-            <Image 
+            <LazyImage 
               src={collage[3] || defaultCollage[3]} 
               alt="Why choose image 4" 
               width={200} 
               height={200} 
               className="absolute -left-3 -top-4" 
+              imageType="page"
+              sectionId={sectionId}
             />
           </div>
         </div>

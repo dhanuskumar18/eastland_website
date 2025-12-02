@@ -97,4 +97,81 @@ export async function buildPageMetadata(
   }
 }
 
+// Lazy Loading Types
+export type LazyLoadingWhereToApply = 
+  | 'all-images' 
+  | 'page-images-only' 
+  | 'product-images-only' 
+  | 'gallery-images-only' 
+  | 'custom'
+
+export interface LazyLoadingSettings {
+  enabled: string
+  whereToApply: LazyLoadingWhereToApply
+  metaKeywords?: string
+  preloadThreshold: string
+  loadingAttribute: string
+}
+
+export interface LazyLoadingSectionConfig {
+  sectionId: number
+  enabled: boolean
+  loadingAttribute: string
+  preloadThreshold: string
+}
+
+export interface LazyLoadingResponse {
+  success: boolean
+  data: LazyLoadingSettings
+}
+
+export interface LazyLoadingSectionsResponse {
+  success: boolean
+  data: LazyLoadingSectionConfig[]
+}
+
+/**
+ * Fetch lazy loading settings from API
+ */
+export async function fetchLazyLoadingSettings(
+  cache: RequestCache = 'no-store',
+): Promise<LazyLoadingSettings | null> {
+  if (!API_URL) return null
+
+  try {
+    const res = await fetch(`${API_URL}api/seo/lazy-loading`, {
+      cache,
+    })
+
+    if (!res.ok) return null
+
+    const json: LazyLoadingResponse = await res.json()
+    return json?.data ?? null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Fetch lazy loading section configurations (when whereToApply is 'custom')
+ */
+export async function fetchLazyLoadingSections(
+  cache: RequestCache = 'no-store',
+): Promise<LazyLoadingSectionConfig[] | null> {
+  if (!API_URL) return null
+
+  try {
+    const res = await fetch(`${API_URL}api/seo/lazy-loading/sections`, {
+      cache,
+    })
+
+    if (!res.ok) return null
+
+    const json: LazyLoadingSectionsResponse = await res.json()
+    return json?.data ?? null
+  } catch {
+    return null
+  }
+}
+
 

@@ -1,7 +1,7 @@
 "use client"
 
-import Image from "next/image"
 import { useState } from "react"
+import LazyImage from "@/components/ui/LazyImage"
 import { PageData } from '@/types/page'
 import { submitContactForm } from '@/lib/api'
 
@@ -355,11 +355,13 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
-          <Image
+          <LazyImage
             src={bannerContent.image || "/images/Services/Rectangle 52 (5).png"}
             alt="Contact Us"
             fill
             className="object-cover"
+            imageType="page"
+            sectionId={bannerSection?.id}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -680,12 +682,13 @@ export default function ContactPageContent({ pageData }: ContactPageContentProps
 
                 {/* Letter Send Image */}
                 <div className="mt-8 flex justify-center">
-                  <Image
+                  <LazyImage
                     src="/images/letter_send 1.png"
                     alt="Send Message"
                     width={200}
                     height={100}
                     className="opacity-100"
+                    imageType="other"
                   />
                 </div>
               </div>

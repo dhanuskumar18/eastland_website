@@ -3,6 +3,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
+import LazyImage from "@/components/ui/LazyImage"
+import LazySection from "@/components/sections/LazySection"
 
 import { PageData } from '@/types/page'
 
@@ -147,11 +149,13 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
-          <Image
+          <LazyImage
             src={bannerContent.image || "/images/Services/Rectangle 52 (4).png"}
             alt="Our Services"
             fill
             className="object-cover"
+            imageType="page"
+            sectionId={bannerSection?.id}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -168,7 +172,8 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
       </section>
 
       {/* Our Services Section */}
-      <section className="py-20 bg-white">
+      <LazySection sectionId={ourServicesSection?.id || ''}>
+        <section className="py-20 bg-white">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={firstContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Image with custom border radius */}
@@ -195,12 +200,14 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                     borderBottomLeftRadius: '67px'
                   }}
                 >
-                  <Image 
+                  <LazyImage 
                     src={ourServicesContent.image || "/images/Services/1 (9).png"} 
                     alt="Modern Restaurant Interior" 
                     fill 
                     className="object-cover" 
                     style={{ transform: 'scaleX(-1)' }}
+                    imageType="page"
+                    sectionId={ourServicesSection?.id}
                   />
                 </div>
               </div>
@@ -262,9 +269,11 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
           </div>
         </div>
       </section>
+      </LazySection>
 
       {/* Services Cards Section */}
-      <section className="py-20 bg-gray-50">
+      <LazySection sectionId={kitchenInstallationsSection?.id || ''}>
+        <section className="py-20 bg-gray-50">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={middleContentRef} className="text-center mb-16 opacity-0">
             <p className="text-sm font-semibold text-slate-500">Services</p>
@@ -288,11 +297,13 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               {/* Card 1 */}
               <div ref={card1Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
-                <Image
+                <LazyImage
                   src={displayCards[0]?.image || defaultCards[0].image}
                   alt={displayCards[0]?.subTitle || defaultCards[0].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
+                  imageType="page"
+                  sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
@@ -318,11 +329,13 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               {/* Card 2 */}
               <div ref={card2Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
-                <Image
+                <LazyImage
                   src={displayCards[1]?.image || defaultCards[1].image}
                   alt={displayCards[1]?.subTitle || defaultCards[1].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
+                  imageType="page"
+                  sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
@@ -348,11 +361,13 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               {/* Card 3 */}
               <div ref={card3Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
-                <Image
+                <LazyImage
                   src={displayCards[2]?.image || defaultCards[2].image}
                   alt={displayCards[2]?.subTitle || defaultCards[2].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
+                  imageType="page"
+                  sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
@@ -378,11 +393,13 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               {/* Card 4 */}
               <div ref={card4Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
               <div className="relative h-full">
-                <Image
+                <LazyImage
                   src={displayCards[3]?.image || defaultCards[3].image}
                   alt={displayCards[3]?.subTitle || defaultCards[3].subTitle}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
+                  imageType="page"
+                  sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
@@ -407,9 +424,11 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
           </div>
         </div>
       </section>
+      </LazySection>
 
       {/* About Our Services Section */}
-      <section className="py-20 bg-white">
+      <LazySection sectionId={aboutOurServicesSection?.id || ''}>
+        <section className="py-20 bg-white">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={lastContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Overlapping Images */}
@@ -417,12 +436,14 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               {/* Main Image */}
               <div className="rounded-[22px]  bg-white p-3  ">
                 <div className="relative overflow-hidden rounded-[18px] h-[442px] w-[450px] p-3 border-2 border-gray-400">
-                  <Image 
+                  <LazyImage 
                     src={aboutOurServicesContent.image1 || "/images/Services/1 (9).png"} 
                     alt="Elegant Dining Area" 
                      height={350}
                      width={350}
                     className="object-cover h-full w-full" 
+                    imageType="page"
+                    sectionId={aboutOurServicesSection?.id}
                   />
                 </div>
               </div>
@@ -430,12 +451,14 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               {/* Overlapping Secondary Image */}
               <div className="absolute -bottom-6 -left-32 rounded-2xl shadow-2xl">
                 <div className="relative  overflow-hidden rounded-2xl h-[400px] w-[280px] p-3 border-2 border-gray-400 ">
-                  <Image 
+                  <LazyImage 
                     src={aboutOurServicesContent.image2 || "/images/Services/1 (8).png"} 
                     alt="Modern Cafe Setting" 
                     height={300}
                     width={300}
                     className="object-cover h-full w-full rounded-2xl" 
+                    imageType="page"
+                    sectionId={aboutOurServicesSection?.id}
                   />
                 </div>  
               </div>
@@ -493,6 +516,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
           </div>
         </div>
       </section>
+      </LazySection>
     </main>
   )
 }

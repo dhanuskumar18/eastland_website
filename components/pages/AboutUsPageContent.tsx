@@ -10,6 +10,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel"
+import LazyImage from "@/components/ui/LazyImage"
+import LazySection from "@/components/sections/LazySection"
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
@@ -151,11 +153,13 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
       {/* Top Panel with Image */}
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
-          <Image 
+          <LazyImage 
             src={bannerContent.image || "/images/aboutUs/Rectangle 52.png"} 
             alt="About Us - Modern Interior Design" 
             fill 
             className="object-cover" 
+            imageType="page"
+            sectionId={bannerSection?.id}
           />
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
@@ -174,18 +178,21 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
       </section>
 
       {/* Company Background Section */}
-      <section ref={sectionRef} className="company-background-section py-20 bg-white">
+      <LazySection sectionId={companyBgSection?.id || ''}>
+        <section ref={sectionRef} className="company-background-section py-20 bg-white">
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 md:grid-cols-2">
             {/* Image on the left */}
             <div ref={imageRef} className="relative w-full max-w-[520px]">
               <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
                 <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
-                  <Image 
+                  <LazyImage 
                     src={companyBgContent.image || "/images/aboutUs/1 (3).png"} 
                     alt="Company Background" 
                     fill 
                     className="object-cover" 
+                    imageType="page"
+                    sectionId={companyBgSection?.id}
                   />
                 </div>
               </div>
@@ -255,16 +262,20 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
           </div>
         </div>
       </section>
+      </LazySection>
 
       {/* Mission & Vision Section */}
-      <section className="relative py-20 text-white overflow-hidden">
+      <LazySection sectionId={missionSection?.id || visionSection?.id || ''}>
+        <section className="relative py-20 text-white overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <Image
+          <LazyImage
             src="/images/aboutUs/Frame 26080088.png"
             alt="Background Pattern"
             fill
             className="object-cover"
+            imageType="page"
+            sectionId={missionSection?.id || visionSection?.id}
           />
         </div>
         
@@ -284,11 +295,13 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
             {/* Image on the right */}
             <div className="relative w-full max-w-[520px] justify-self-end md:col-span-1">
               <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
-                <Image
+                <LazyImage
                   src={missionContent.image || "/images/aboutUs/Rectangle 54.png"}
                   alt="Modern Restaurant Interior"
                   fill
                   className="object-cover"
+                  imageType="page"
+                  sectionId={missionSection?.id}
                 />
               </div>
             </div>
@@ -299,11 +312,13 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
             {/* Image on the left */}
             <div className="relative w-full max-w-[520px] md:col-span-1">
               <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
-                <Image
+                <LazyImage
                   src={visionContent.image || "/images/aboutUs/Rectangle 55.png"}
                   alt="Elegant Dining Area"
                   fill
                   className="object-cover"
+                  imageType="page"
+                  sectionId={visionSection?.id}
                 />
               </div>
             </div>
@@ -320,9 +335,12 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
           </div>
         </div>
       </section>
+      </LazySection>
 
       {/* Team Section */}
-      <TeamSection teamContent={teamContent} />
+      <LazySection sectionId={teamSection?.id || ''}>
+        <TeamSection teamContent={teamContent} sectionId={teamSection?.id} />
+      </LazySection>
     </main>
   )
 }
@@ -389,9 +407,10 @@ interface TeamSectionProps {
       image?: string
     }>
   }
+  sectionId?: number | string
 }
 
-function TeamSection({ teamContent }: TeamSectionProps = {}) {
+function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [api, setApi] = useState<any>(null)
   const [previousMember, setPreviousMember] = useState<TeamMember | null>(null)
@@ -637,11 +656,13 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
                 zIndex: 4,
               }}
             >
-              <Image
+              <LazyImage
                 src={previousMember.image || "/placeholder.svg"}
                 alt={previousMember.name}
                 fill
                 className="object-cover"
+                imageType="page"
+                sectionId={sectionId}
               />
             </div>
           )}
@@ -657,11 +678,13 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
               zIndex: 5,
             }}
           >
-            <Image
+            <LazyImage
               src={currentMember.image || "/placeholder.svg"}
               alt={currentMember.name}
               fill
               className="object-cover"
+              imageType="page"
+              sectionId={sectionId}
             />
           </div>
         </div>
@@ -685,11 +708,13 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <div className="absolute -top-2 w-20 h-20 flex-shrink-0 rounded-lg ">
-                        <Image
+                        <LazyImage
                           src={member.image || "/placeholder.svg"}
                           alt={member.name}
                           fill
                           className="object-cover"
+                          imageType="page"
+                          sectionId={sectionId}
                         />
                       </div>
                       <div className="flex-1 text-center">

@@ -1,4 +1,5 @@
 import Image from "next/image"
+import LazyImage from "@/components/ui/LazyImage"
 
 interface GalleryProps {
   content?: {
@@ -10,9 +11,10 @@ interface GalleryProps {
       title?: string
     }>
   }
+  sectionId?: number | string
 }
 
-export default function Gallery({ content }: GalleryProps = {}) {
+export default function Gallery({ content, sectionId }: GalleryProps = {}) {
   // Static fallback images
   const defaultImages = [
     {
@@ -87,12 +89,14 @@ export default function Gallery({ content }: GalleryProps = {}) {
             className={`${image.gridClass} rounded-xl overflow-hidden group cursor-pointer`}
           >
             <div className="relative w-full h-full">
-              <Image 
+              <LazyImage 
                 src={image.src} 
                 alt={image.alt} 
                 fill 
                 className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                imageType="gallery"
+                sectionId={sectionId}
               />
               
               {/* Hover overlay with slide-up effect */}

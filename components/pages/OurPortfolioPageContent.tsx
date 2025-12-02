@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import LazyImage from "@/components/ui/LazyImage"
 import { PageData } from "@/types/page"
 
 interface OurPortfolioPageContentProps {
@@ -44,11 +45,13 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px]">
         <div className="absolute inset-0">
-          <Image
+          <LazyImage
             src={bannerContent.image || "/images/Services/Rectangle 52 (5).png"}
             alt={bannerContent.title || "Our Portfolio"}
             fill
             className="object-cover"
+            imageType="page"
+            sectionId={bannerSection?.id}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -90,12 +93,14 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
               
               return (
                 <div key={it.image || `portfolio-${idx}`} className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
-                  <Image
+                  <LazyImage
                     src={imageSrc}
                     alt={imageAlt}
                     fill
                     className="object-cover transition-transform group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                   <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/60 via-black/40 to-black/0 group-hover:from-black/60 group-hover:via-black/40 group-hover:to-black/0 transition-all duration-300 flex items-center justify-center transform translate-y-full group-hover:translate-y-0">
                     <span className="text-white font-semibold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">

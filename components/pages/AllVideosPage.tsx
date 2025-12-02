@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 import { Skeleton } from '@/components/ui/Skeleton'
+import LazyImage from "@/components/ui/LazyImage"
 
 interface Video {
   id: number
@@ -719,9 +720,12 @@ export default function AllVideosPage() {
                       </div>
                       <div className="mt-5 overflow-hidden rounded-b-2xl">
                         <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-2xl">
-                          <div
-                            className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
-                            style={{ backgroundImage: `url("${encodeURI(videoThumbnail)}")` }}
+                          <LazyImage
+                            src={videoThumbnail}
+                            alt={videoName}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-110"
+                            imageType="other"
                           />
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />

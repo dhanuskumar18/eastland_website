@@ -10,9 +10,10 @@ interface HomeFirstSectionProps {
       description?: string
     }>
   }
+  sectionId?: number | string
 }
 
-export default function HomeFirstSection({ content }: HomeFirstSectionProps = {}) {
+export default function HomeFirstSection({ content, sectionId }: HomeFirstSectionProps = {}) {
   // Default fallback data
   const defaultSliders = [
     {
@@ -69,6 +70,7 @@ export default function HomeFirstSection({ content }: HomeFirstSectionProps = {}
           content={carouselContent}
           autoPlay={true} 
           autoPlayInterval={8000}
+          sectionId={sectionId}
         />
       </div>
       <div className="absolute inset-0 bg-black/20" />

@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
+import LazyImage from "@/components/ui/LazyImage"
 
 import { PageData } from '@/types/page'
 
@@ -312,11 +313,13 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             <div className="relative w-full max-w-[520px]">
               <div className="rounded-tl-[250px] rounded-bl-[22px] border-2 border-slate-200 bg-white p-3 shadow">
                 <div className="relative aspect-[519/442] overflow-hidden rounded-tl-[250px] rounded-bl-[18px]">
-                  <Image 
+                  <LazyImage 
                     src={ourProductsContent.image || "/images/Products/1 (4).png"} 
                     alt="Modern Kitchen Interior" 
                     fill 
                     className="object-cover" 
+                    imageType="page"
+                    sectionId={ourProductsSection?.id}
                   />
                 </div>
               </div>
@@ -605,10 +608,12 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                     <div className="space-y-4">
                       {/* Main Image */}
                       <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-slate-200 shadow-lg bg-white">
-                        <img
+                        <LazyImage
                           src={productDetails.images[0].url}
                           alt={getProductName(productDetails)}
-                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                          fill
+                          className="object-cover transition-transform duration-300 hover:scale-105"
+                          imageType="product"
                         />
                       </div>
                       {/* Thumbnail Grid */}
@@ -619,10 +624,12 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                               key={index + 1} 
                               className="relative aspect-square overflow-hidden rounded-lg border border-slate-200 bg-white cursor-pointer hover:border-emerald-500 transition-all duration-200 hover:shadow-md"
                             >
-                              <img
+                              <LazyImage
                                 src={image.url}
                                 alt={`${getProductName(productDetails)} - Image ${index + 2}`}
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
+                                imageType="product"
                               />
                             </div>
                           ))}

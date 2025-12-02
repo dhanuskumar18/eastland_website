@@ -1,12 +1,12 @@
 "use client"
 
-import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 import { Skeleton } from '@/components/ui/Skeleton'
+import LazyImage from "@/components/ui/LazyImage"
 
 interface TeamMember {
   id: string
@@ -409,11 +409,12 @@ export default function AllTeamPage() {
                     <div className="p-6">
                       {/* Member Image */}
                       <div className="relative w-full aspect-square mb-4 rounded-lg overflow-hidden">
-                        <Image
+                        <LazyImage
                           src={member.image || '/images/aboutUs/Property 1=Default.png'}
                           alt={member.name}
                           fill
                           className="object-cover"
+                          imageType="other"
                         />
                       </div>
 
@@ -469,11 +470,12 @@ export default function AllTeamPage() {
               {/* Member Image and Info Section */}
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 pb-8 border-b border-slate-200">
                 <div className="relative w-48 h-48 rounded-full overflow-hidden flex-shrink-0 border-4 border-emerald-100 shadow-lg">
-                  <Image
+                  <LazyImage
                     src={selectedMember.image || '/images/aboutUs/Property 1=Default.png'}
                     alt={selectedMember.name}
                     fill
                     className="object-cover"
+                    imageType="other"
                   />
                 </div>
                 <div className="flex-1 text-center md:text-left">

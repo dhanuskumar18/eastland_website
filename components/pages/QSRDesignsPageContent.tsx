@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { useEffect, useRef } from "react"
+import LazyImage from "@/components/ui/LazyImage"
 import { PageData } from '@/types/page'
 
 interface QSRDesignsPageContentProps {
@@ -98,11 +99,13 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
       {/* Top Panel with Image */}
       <section className="relative h-[60vh] min-h-[500px] ">
         <div className="absolute inset-0">
-          <Image
+          <LazyImage
             src={bannerContent.image || "/images/Products/Rectangle 52 (3).png"}
             alt={bannerContent.title || "QSR Designs"}
             fill
             className="object-cover transition-transform duration-300 hover:scale-110"
+            imageType="page"
+            sectionId={bannerSection?.id}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -134,11 +137,13 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               {/* Main Image */}
               <div className=" bg-white  ">
                 <div className="relative aspect-[519/650] overflow-hidden rounded-[50px] ">
-                  <Image 
+                  <LazyImage 
                     src={qsrDesignsContent.image1 || qsrDesignsContent.image || "/images/Products/Rectangle 78.png"} 
                     alt={qsrDesignsContent.imageAlt || "Modern Cafe Interior"} 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
+                    imageType="page"
+                    sectionId={qsrDesignsSection?.id}
                   />
                 </div>
               </div>
@@ -146,12 +151,14 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               {/* Overlapping Secondary Image */}
               <div className="absolute -bottom-0 right-8 w-[300px] h-[300px] ">
                 <div className="relative aspect-[365/315] overflow-hidden rounded-[50px] left-44 p-[2px]  bg-white w-[350px]">
-                  <Image 
+                  <LazyImage 
                     src={qsrDesignsContent.image2 || "/images/Products/Rectangle 79.png"} 
                     alt={qsrDesignsContent.image2Alt || "Refined Dining Space"} 
                      width={350}
                      height={350}
                     className="object transition-transform duration-300 hover:scale-110 " 
+                    imageType="page"
+                    sectionId={qsrDesignsSection?.id}
                   />
                 </div>
               </div>
@@ -240,11 +247,13 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               {/* First Row - First 2 columns: 1 large image */}
               <div className="col-span-2 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg group">
-                  <Image 
+                  <LazyImage 
                     src={featured[0]?.image || defaultFeatured[0].image} 
                     alt={featured[0]?.title || defaultFeatured[0].title} 
                     fill 
                     className="object-cover transition-transform duration-300 group-hover:scale-110" 
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                   <div className="absolute bottom-4 left-4 overflow-hidden">
@@ -274,21 +283,25 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               {/* First Row - Next 2 columns: 2 separate images */}
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
-                  <Image 
+                  <LazyImage 
                     src={images[0] || defaultImages[0]} 
                     alt="Gallery image 1" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                 </div>
               </div>
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
-                  <Image 
+                  <LazyImage 
                     src={images[1] || defaultImages[1]} 
                     alt="Gallery image 2" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                 </div>
               </div>
@@ -301,21 +314,25 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               {/* Second Row - First 2 columns: 2 separate images */}
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
-                  <Image 
+                  <LazyImage 
                     src={images[2] || defaultImages[2]} 
                     alt="Gallery image 3" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                 </div>
               </div>
               <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
-                  <Image 
+                  <LazyImage 
                     src={images[3] || defaultImages[3]} 
                     alt="Gallery image 4" 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                 </div>
               </div>
@@ -323,11 +340,13 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               {/* Second Row - Next 2 columns: 1 large image */}
               <div className="col-span-2 row-span-1">
                 <div className="relative h-full rounded-2xl overflow-hidden shadow-lg group">
-                  <Image 
+                  <LazyImage 
                     src={featured[1]?.image || defaultFeatured[1].image} 
                     alt={featured[1]?.title || defaultFeatured[1].title} 
                     fill 
                     className="object-cover transition-transform duration-300 group-hover:scale-110" 
+                    imageType="gallery"
+                    sectionId={gallerySection?.id}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                   <div className="absolute bottom-4 left-4 overflow-hidden">
@@ -378,11 +397,13 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                 }}
               >
                 <div className="relative w-full h-full overflow-hidden rounded-[148px] rounded-br-[148px] rounded-tr-none rounded-bl-none">
-                  <Image 
+                  <LazyImage 
                     src={aboutQSRContent.image || "/images/Products/Rectangle 76.png"} 
                     alt={aboutQSRContent.imageAlt || "Modern Restaurant Interior"} 
                     fill 
                     className="object-cover transition-transform duration-300 hover:scale-110" 
+                    imageType="page"
+                    sectionId={aboutQSRSection?.id}
                   />
                 </div>
               </div>

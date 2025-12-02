@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 import { Skeleton } from '@/components/ui/Skeleton'
+import LazyImage from "@/components/ui/LazyImage"
 
 interface Product {
   id: number
@@ -701,10 +702,12 @@ export default function AllProductsPage() {
                     <div className="space-y-4">
                       {/* Main Image */}
                       <div className="relative aspect-[4/3] overflow-hidden rounded-xl border-2 border-slate-200 shadow-lg bg-white">
-                        <img
+                        <LazyImage
                           src={productDetails.images[0].url}
                           alt={getProductName(productDetails)}
-                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                          fill
+                          className="object-cover transition-transform duration-300 hover:scale-105"
+                          imageType="product"
                         />
                       </div>
                       {/* Thumbnail Grid */}
@@ -715,10 +718,12 @@ export default function AllProductsPage() {
                               key={index + 1} 
                               className="relative aspect-square overflow-hidden rounded-lg border border-slate-200 bg-white cursor-pointer hover:border-emerald-500 transition-all duration-200 hover:shadow-md"
                             >
-                              <img
+                              <LazyImage
                                 src={image.url}
                                 alt={`${getProductName(productDetails)} - Image ${index + 2}`}
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
+                                imageType="product"
                               />
                             </div>
                           ))}

@@ -1,10 +1,11 @@
 'use client'
-
+ 
 import { useEffect, useRef, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { gsap } from 'gsap'
 import { useScroll } from '@/hooks/useScroll'
 import { fetchYouTubeVideoById } from '@/lib/api'
+import LazyImage from '@/components/ui/LazyImage'
   
 interface VideosProps {
   content?: {
@@ -23,6 +24,7 @@ interface VideosProps {
       youtubeVideoId?: number
     }>
   }
+  sectionId?: number | string
 }
 
 // Helper function to extract YouTube video ID from various URL formats
@@ -66,7 +68,7 @@ function getYouTubeEmbedUrl(videoId: string): string {
   return `https://www.youtube.com/embed/${videoId}`
 }
 
-export default function Videos({ content }: VideosProps = {}) {
+export default function Videos({ content, sectionId }: VideosProps = {}) {
   const { ref, isInView } = useScroll()
   const featuredTextRef = useRef<HTMLParagraphElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -460,9 +462,13 @@ export default function Videos({ content }: VideosProps = {}) {
                 </div>
                 <div className="mt-5 overflow-hidden rounded-b-2xl">
                   <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-2xl">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url("${encodeURI(item.thumbnail)}")` }}
+                    <LazyImage
+                      src={item.thumbnail}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                      imageType="gallery"
+                      sectionId={sectionId}
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />

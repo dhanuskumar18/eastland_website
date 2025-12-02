@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -8,6 +7,7 @@ import { Star } from "lucide-react"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
 import { Skeleton } from '@/components/ui/Skeleton'
+import LazyImage from "@/components/ui/LazyImage"
 
 interface Testimonial {
   id: number
@@ -388,12 +388,13 @@ export default function AllTestimonialsPage() {
                     <div className="p-6">
                       {/* Quote Icon */}
                       <div className="mb-4">
-                        <Image 
-                          src="/images/quote1.svg" 
-                          alt="Quote" 
-                          width={40} 
-                          height={40} 
+                        <LazyImage
+                          src="/images/quote1.svg"
+                          alt="Quote"
+                          width={40}
+                          height={40}
                           className="text-slate-300"
+                          imageType="other"
                         />
                       </div>
 
@@ -414,11 +415,12 @@ export default function AllTestimonialsPage() {
                       {/* Client Info */}
                       <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
                         <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                          <Image
+                          <LazyImage
                             src={testimonial.imageUrl || '/images/1.png'}
                             alt={testimonial.clientName}
                             fill
                             className="object-cover"
+                            imageType="other"
                           />
                           </div>
                         <div className="min-w-0 flex-1">
@@ -473,11 +475,12 @@ export default function AllTestimonialsPage() {
               {/* Client Image and Info Section */}
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 pb-8 border-b border-slate-200">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-4 border-emerald-100 shadow-lg">
-                  <Image
+                  <LazyImage
                     src={selectedTestimonial.imageUrl || '/images/1.png'}
                     alt={selectedTestimonial.clientName}
                     fill
                     className="object-cover"
+                    imageType="other"
                   />
                 </div>
                 <div className="flex-1 text-center md:text-left">
@@ -499,19 +502,21 @@ export default function AllTestimonialsPage() {
 
               {/* Quote Icons */}
               <div className="flex justify-between items-start mb-6">
-                <Image 
-                  src="/images/quote1.svg" 
-                  alt="Quote left" 
-                  width={60} 
-                  height={60} 
+                <LazyImage
+                  src="/images/quote1.svg"
+                  alt="Quote left"
+                  width={60}
+                  height={60}
                   className="text-slate-300"
+                  imageType="other"
                 />
-                <Image 
-                  src="/images/quote2.svg" 
-                  alt="Quote right" 
-                  width={60} 
-                  height={60} 
+                <LazyImage
+                  src="/images/quote2.svg"
+                  alt="Quote right"
+                  width={60}
+                  height={60}
                   className="text-slate-300"
+                  imageType="other"
                 />
               </div>
 

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
+import LazyImage from '@/components/ui/LazyImage'
 
 interface SlideContent {
   title?: string
@@ -16,9 +17,16 @@ interface CarouselProps {
   content?: SlideContent[]
   autoPlay?: boolean
   autoPlayInterval?: number
+  sectionId?: number | string
 }
 
-export default function slider({ images, content, autoPlay = true, autoPlayInterval = 5000 }: CarouselProps) {
+export default function slider({
+  images,
+  content,
+  autoPlay = true,
+  autoPlayInterval = 5000,
+  sectionId,
+}: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -312,13 +320,16 @@ export default function slider({ images, content, autoPlay = true, autoPlayInter
             key={index}
             ref={addToRefs}
             className="absolute inset-0 w-full h-full"
-            style={{
-              backgroundImage: `url('${image}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          />
+          >
+            <LazyImage
+              src={image}
+              alt={content?.[index]?.title || 'Slide image'}
+              fill
+              className="object-cover"
+              imageType="page"
+              sectionId={sectionId}
+            />
+          </div>
         ))}
       </div>
 
