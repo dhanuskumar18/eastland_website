@@ -20,37 +20,37 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
     {
       src: "/images/Mask group.png",
       alt: "Modern restaurant interior with wooden bar counter",
-      gridClass: "row-span-2" // div1: spans 2 rows
+      gridClass: "md:row-span-2" // div1: spans 2 rows on desktop grid
     },
     {
       src: "/images/Mask group (1).png",
       alt: "Bright cafe with white textured ceiling",
-      gridClass: "row-span-4 col-start-1 row-start-3" // div2: 4 rows starting at column 1, row 3
+      gridClass: "md:row-span-4 md:col-start-1 md:row-start-3" // desktop-only positioning
     },
     {
       src: "/images/Mask group (2).png",
       alt: "Sophisticated cafe with dark blue walls and teal sofas",
-      gridClass: "col-span-3 row-span-3 col-start-2 row-start-1" // div3: 3 columns, 3 rows starting at column 2, row 1
+      gridClass: "md:col-span-3 md:row-span-3 md:col-start-2 md:row-start-1" // desktop-only positioning
     },
     {
       src: "/images/Mask group (3).png",
       alt: "Multi-level restaurant with warm lighting",
-      gridClass: "row-span-3 col-start-2 row-start-4" // div4: 3 rows starting at column 2, row 4
+      gridClass: "md:row-span-3 md:col-start-2 md:row-start-4" // desktop-only positioning
     },
     {
       src: "/images/Mask group (4).png",
       alt: "Industrial-style cafe with red brick walls",
-      gridClass: "col-span-2 row-span-3 col-start-3 row-start-4" // div5: 2 columns, 3 rows starting at column 3, row 4
+      gridClass: "md:col-span-2 md:row-span-3 md:col-start-3 md:row-start-4" // desktop-only positioning
     },
     {
       src: "/images/Mask group (5).png",
       alt: "Spacious modern cafe with high ceiling",
-      gridClass: "row-span-4 col-start-5 row-start-1" // div6: 4 rows starting at column 5, row 1
+      gridClass: "md:row-span-4 md:col-start-5 md:row-start-1" // desktop-only positioning
     },
     {
       src: "/images/Mask group (6).png",
       alt: "Chic restaurant with teal accent wall",
-      gridClass: "row-span-2 col-start-5 row-start-5" // div7: 2 rows starting at column 5, row 5
+      gridClass: "md:row-span-2 md:col-start-5 md:row-start-5" // desktop-only positioning
     }
   ]
 
@@ -81,8 +81,8 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
         </p>
       </div>
 
-      {/* Bento Grid Layout - 5 columns, 6 rows */}
-      <div className="mt-12 grid grid-cols-5 grid-rows-6 gap-4 h-[520px]">
+      {/* Responsive gallery grid: simple on mobile, bento layout on desktop */}
+      <div className="mt-10 sm:mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 md:grid-rows-6 gap-3 sm:gap-4 auto-rows-[120px] sm:auto-rows-[150px] md:auto-rows-auto md:h-[520px]">
         {images.map((image, index) => (
           <div 
             key={index} 

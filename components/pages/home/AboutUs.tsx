@@ -52,12 +52,12 @@ export default function AboutUs({ content, sectionId }: AboutUsProps = {}) {
 
   return (
     <section ref={aboutUsRef} className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 pb-12 sm:pb-16 md:pb-28 pt-12 sm:pt-16 md:pt-20 sm:px-6 lg:px-8 opacity-0">
-      <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2">
+      <div className="grid items-center gap-8 sm:gap-10 md:gap-14 md:grid-cols-2">
         {/* Image collage */}
-        <div className="relative w-full max-w-[520px] mx-auto md:mx-0">
+        <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[460px] mx-auto md:mx-0">
           {/* Outer framed image with rounded corners and fixed aspect */}
-          <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
-            <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+          <div className="rounded-[20px] border-2 border-slate-200 bg-white p-3 shadow">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[16px]">
               <LazyImage 
                 src={content?.image1 || "/images/1.png"} 
                 alt="About primary" 
@@ -70,8 +70,8 @@ export default function AboutUs({ content, sectionId }: AboutUsProps = {}) {
           </div>
 
           {/* Smaller overlapping image (has its own white border in asset) */}
-          <div className="absolute -bottom-12 -right-20 w-[300px] rounded-2xl shadow-2xl">
-            <div className="relative aspect-[365/252] overflow-hidden rounded-2xl">
+          <div className="absolute -bottom-10 -right-6 sm:-bottom-10 sm:-right-10 md:-right-16 w-[160px] sm:w-[220px] md:w-[260px] rounded-2xl shadow-2xl">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <LazyImage 
                 src={content?.image2 || "/images/2.png"} 
                 alt="About secondary" 

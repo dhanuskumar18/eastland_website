@@ -230,7 +230,7 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
               <div className="flex-shrink-0 w-full sm:w-auto flex justify-center sm:justify-start">
                 <div className="relative w-[100px] h-[100px] sm:w-[200px] md:w-[250px] sm:h-full overflow-hidden rounded-full sm:rounded-xl md:rounded-2xl mx-auto sm:mx-0" style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' }}>
                   {/* Base image - always visible */}
-                  <div className="absolute inset-0">
+                  <div className="absolute inset-0 ">
                     <LazyImage 
                       src={testimonialsData[currentIndex].image} 
                       alt={testimonialsData[currentIndex].name} 

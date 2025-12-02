@@ -75,11 +75,24 @@ export default function LazyImage({
 
   // Render the image
   return (
-    <div ref={containerRef} className={imageProps.fill ? className : undefined}>
+    <div
+      ref={containerRef}
+      className={
+        imageProps.fill
+          ? `relative w-full h-full ${className || ''}`.trim()
+          : undefined
+      }
+    >
+      {/*
+        Explicitly spread required props first to satisfy TypeScript,
+        then spread the rest of the Image props.
+      */}
       <Image
-        {...imageProps}
+        src={imageProps.src}
+        alt={imageProps.alt}
         loading={loading}
-        className={imageProps.fill ? undefined : className}
+        className={className}
+        {...imageProps}
       />
     </div>
   )

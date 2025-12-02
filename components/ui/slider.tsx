@@ -325,7 +325,7 @@ export default function slider({
               src={image}
               alt={content?.[index]?.title || 'Slide image'}
               fill
-              className="object-cover"
+              className="object-cover rounded-none"
               imageType="page"
               sectionId={sectionId}
             />
@@ -410,14 +410,13 @@ export default function slider({
                   <svg
                     width="14"
                     height="14"
-                    className="sm:w-4 sm:h-4"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                    className="sm:w-4 sm:h-4 transition-transform duration-300 rotate-0 group-hover:rotate-45"
                   >
                     <path d="M7 17L17 7M17 7H7M17 7V17"/>
                   </svg>
