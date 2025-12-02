@@ -77,14 +77,10 @@ export default function LazyImage({
   return (
     <div
       ref={containerRef}
-      className={imageProps.fill ? 'relative w-full h-full' : undefined}
-    >
-    <div
-      ref={containerRef}
       className={
         imageProps.fill
           ? `relative w-full h-full ${className || ''}`.trim()
-          : undefined
+          : className
       }
     >
       {/*
@@ -96,9 +92,6 @@ export default function LazyImage({
         src={imageProps.src}
         alt={imageProps.alt}
         loading={loading}
-        className={className}
-        className={className}
-        {...imageProps}
       />
     </div>
   )
