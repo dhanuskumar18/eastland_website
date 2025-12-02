@@ -271,7 +271,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               </div>
 
               {/* First Row - Next 2 columns: 2 separate images */}
-              <div className="col-span-1 row-span-1 hidden md:block">
+              <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-lg">
                   <Image 
                     src={images[0] || defaultImages[0]} 
@@ -281,7 +281,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                   />
                 </div>
               </div>
-              <div className="col-span-1 row-span-1 hidden md:block">
+              <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-lg">
                   <Image 
                     src={images[1] || defaultImages[1]} 
@@ -298,7 +298,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
           <div ref={secondRowRef} className="opacity-0">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 h-[200px] sm:h-[250px] md:h-[300px]">
               {/* Second Row - First 2 columns: 2 separate images */}
-              <div className="col-span-1 row-span-1 hidden md:block">
+              <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-lg">
                   <Image 
                     src={images[2] || defaultImages[2]} 
@@ -308,7 +308,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                   />
                 </div>
               </div>
-              <div className="col-span-1 row-span-1 hidden md:block">
+              <div className="col-span-1 row-span-1">
                 <div className="relative h-full rounded-xl sm:rounded-2xl overflow-hidden shadow-lg">
                   <Image 
                     src={images[3] || defaultImages[3]} 

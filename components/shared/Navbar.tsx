@@ -186,14 +186,8 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
-            <Link 
-              href="/contact" 
-              className="relative rounded-full bg-white px-3 py-1.5 text-black text-xs font-medium overflow-hidden group transition-all duration-300"
-            >
-              <span className="relative z-10 whitespace-nowrap">{navData.buttonName || 'Enquire Now'}</span>
-            </Link>
+          {/* Mobile Menu Button (no enquiry button on mobile) */}
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 text-white hover:text-emerald-400 transition-colors"
