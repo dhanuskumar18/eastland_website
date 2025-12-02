@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 interface Video {
   id: number
@@ -69,9 +70,9 @@ function getYouTubeEmbedUrl(videoId: string): string {
 
 export default function AllVideosPage() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(true)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   
@@ -210,9 +211,11 @@ export default function AllVideosPage() {
           }
           
           setVideos(allVideos)
+          setInitialLoading(false)
         } catch (err) {
           console.error('Error fetching videos:', err)
           setError(err instanceof Error ? err.message : 'Failed to load videos')
+          setInitialLoading(false)
         } finally {
           setLoading(false)
         }
@@ -347,7 +350,7 @@ export default function AllVideosPage() {
   // Videos are already filtered by backend
   const filteredVideos = videos
 
-  // Update URL when filters change
+  // Update URL when filters change (without page reload)
   useEffect(() => {
     const params = new URLSearchParams()
     if (searchQuery) params.set('search', searchQuery)
@@ -356,9 +359,11 @@ export default function AllVideosPage() {
     if (selectedBrand) params.set('brand', selectedBrand)
     
     const queryString = params.toString()
-    const newUrl = queryString ? `?${queryString}` : window.location.pathname
-    router.replace(newUrl, { scroll: false })
-  }, [searchQuery, selectedCategory, selectedTag, selectedBrand, router])
+    const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname
+    
+    // Use window.history.replaceState to update URL without page reload
+    window.history.replaceState({}, '', newUrl)
+  }, [searchQuery, selectedCategory, selectedTag, selectedBrand])
 
   const clearFilters = () => {
     setSearchQuery('')
@@ -451,13 +456,54 @@ export default function AllVideosPage() {
     }
   }, [selectedVideo])
 
-  if (loading) {
+  // Skeleton UI for initial load
+  if (initialLoading) {
     return (
-      <main className="flex min-h-dvh flex-col items-center justify-center bg-white">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent"></div>
-          <p className="mt-4 text-slate-600">Loading videos...</p>
-        </div>
+      <main className="flex min-h-dvh flex-col">
+        {/* Skeleton Banner */}
+        <section className="relative h-[50vh] min-h-[320px] bg-slate-200 animate-pulse">
+          <div className="absolute inset-0 bg-slate-300/40" />
+          <div className="relative z-10 h-full flex items-center justify-center">
+            <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full">
+              <Skeleton className="h-10 w-2/3 max-w-xl mb-4" />
+              <Skeleton className="h-4 w-1/2 max-w-md" />
+            </div>
+          </div>
+        </section>
+
+        {/* Skeleton Grid Section */}
+        <section className="py-20 bg-slate-50">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            {/* Skeleton filters */}
+            <div className="mb-8 space-y-4">
+              <div className="relative">
+                <Skeleton className="h-12 w-full rounded-lg" />
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <Skeleton className="h-10 w-40 rounded-lg" />
+                <Skeleton className="h-10 w-40 rounded-lg" />
+                <Skeleton className="h-10 w-40 rounded-lg" />
+              </div>
+            </div>
+
+            {/* Skeleton video cards */}
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6 flex flex-col gap-4"
+                >
+                  <Skeleton className="h-48 w-full rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-5/6" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
     )
   }
@@ -580,25 +626,37 @@ export default function AllVideosPage() {
                 </div>
               </div>
 
-            {/* Results Count */}
-            <div className="mb-6">
-              <p className="text-slate-600">
-                {hasActiveFilters ? (
-                  <>
-                    Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
-                    {filterOptionsLoaded && filterOptions.categories.length > 0 && (
-                      <> (filtered from available videos)</>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
-                  </>
-                )}
-              </p>
-            </div>
+            {/* Content Area with Loading Overlay */}
+            <div className="relative">
+              {/* Loading Indicator for Filter Changes */}
+              {loading && !initialLoading && (
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg min-h-[400px]">
+                  <div className="text-center">
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent"></div>
+                    <p className="mt-4 text-slate-600">Loading videos...</p>
+                  </div>
+                </div>
+              )}
 
-            {/* Videos Grid */}
+              {/* Results Count */}
+              <div className="mb-6">
+                <p className="text-slate-600">
+                  {hasActiveFilters ? (
+                    <>
+                      Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
+                      {filterOptionsLoaded && filterOptions.categories.length > 0 && (
+                        <> (filtered from available videos)</>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
+                    </>
+                  )}
+                </p>
+              </div>
+
+              {/* Videos Grid */}
             {filteredVideos.length === 0 ? (
               <div className="text-center py-20">
                 {hasActiveFilters ? (
@@ -680,6 +738,7 @@ export default function AllVideosPage() {
                 })}
               </div>
             )}
+            </div>
         </div>
       </section>
 

@@ -3,9 +3,10 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { fetchPageBySlug } from '@/lib/api'
 import Banner from '@/components/sections/Banner'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 interface TeamMember {
   id: string
@@ -17,9 +18,9 @@ interface TeamMember {
 
 export default function AllTeamPage() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [loading, setLoading] = useState(true)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   
@@ -146,9 +147,11 @@ export default function AllTeamPage() {
         
         console.log('Processed team members:', allMembers.length)
         setTeamMembers(allMembers)
+        setInitialLoading(false)
       } catch (err) {
         console.error('Error fetching team members:', err)
         setError(err instanceof Error ? err.message : 'Failed to load team members')
+        setInitialLoading(false)
       } finally {
         setLoading(false)
       }
@@ -171,15 +174,17 @@ export default function AllTeamPage() {
            description.includes(searchLower)
   })
 
-  // Update URL when filters change
+  // Update URL when filters change (without page reload)
   useEffect(() => {
     const params = new URLSearchParams()
     if (searchQuery) params.set('search', searchQuery)
     
     const queryString = params.toString()
-    const newUrl = queryString ? `?${queryString}` : window.location.pathname
-    router.replace(newUrl, { scroll: false })
-  }, [searchQuery, router])
+    const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname
+    
+    // Use window.history.replaceState to update URL without page reload
+    window.history.replaceState({}, '', newUrl)
+  }, [searchQuery])
 
   const clearFilters = () => {
     setSearchQuery('')
@@ -248,13 +253,49 @@ export default function AllTeamPage() {
     }
   }, [filteredMembers])
 
-  if (loading) {
+  // Skeleton UI for initial load
+  if (initialLoading) {
     return (
-      <main className="flex min-h-dvh flex-col items-center justify-center bg-white">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent"></div>
-          <p className="mt-4 text-slate-600">Loading team members...</p>
-        </div>
+      <main className="flex min-h-dvh flex-col">
+        {/* Skeleton Banner */}
+        <section className="relative h-[50vh] min-h-[320px] bg-slate-200 animate-pulse">
+          <div className="absolute inset-0 bg-slate-300/40" />
+          <div className="relative z-10 h-full flex items-center justify-center">
+            <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full">
+              <Skeleton className="h-10 w-2/3 max-w-xl mb-4" />
+              <Skeleton className="h-4 w-1/2 max-w-md" />
+            </div>
+          </div>
+        </section>
+
+        {/* Skeleton Grid Section */}
+        <section className="py-20 bg-slate-50">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            {/* Skeleton search */}
+            <div className="mb-8">
+              <Skeleton className="h-12 w-full max-w-md rounded-lg" />
+            </div>
+
+            {/* Skeleton team cards */}
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="relative bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col gap-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <Skeleton className="h-16 w-16 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-1/2" />
+                      <Skeleton className="h-3 w-1/3" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-20 w-full rounded-md" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
     )
   }
@@ -316,14 +357,26 @@ export default function AllTeamPage() {
                 </div>
               </div>
 
-            {/* Results Count */}
-            <div className="mb-6">
-              <p className="text-slate-600">
-                Showing {filteredMembers.length} {filteredMembers.length === 1 ? 'team member' : 'team members'}
-              </p>
-            </div>
+            {/* Content Area with Loading Overlay */}
+            <div className="relative">
+              {/* Loading Indicator for Filter Changes */}
+              {loading && !initialLoading && (
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg min-h-[400px]">
+                  <div className="text-center">
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent"></div>
+                    <p className="mt-4 text-slate-600">Loading team members...</p>
+                  </div>
+                </div>
+              )}
 
-            {/* Team Members Grid */}
+              {/* Results Count */}
+              <div className="mb-6">
+                <p className="text-slate-600">
+                  Showing {filteredMembers.length} {filteredMembers.length === 1 ? 'team member' : 'team members'}
+                </p>
+              </div>
+
+              {/* Team Members Grid */}
             {filteredMembers.length === 0 ? (
               <div className="text-center py-20">
                 {hasActiveFilters ? (
@@ -378,6 +431,7 @@ export default function AllTeamPage() {
                 ))}
               </div>
             )}
+            </div>
         </div>
       </section>
 
