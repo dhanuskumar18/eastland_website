@@ -97,7 +97,7 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
                     src={imageSrc}
                     alt={imageAlt}
                     fill
-                    className="object-cover transition-transform group-hover:scale-110"
+                    className="object-cover transition-transform duration-300 transform-gpu will-change-transform group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     imageType="gallery"
                     sectionId={gallerySection?.id}

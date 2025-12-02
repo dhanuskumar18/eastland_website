@@ -214,35 +214,27 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === row1Ref.current) {
               // Column 1, Row 1 - slide from top
-              console.log('Animating row1')
               entry.target.classList.add('animate-slide-down')
             } else if (entry.target === row2Ref.current) {
               // Column 2, Row 1 - slide from bottom
-              console.log('Animating row2')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === row3Ref.current) {
               // Column 3, Row 1 - slide from top
-              console.log('Animating row3')
               entry.target.classList.add('animate-slide-down')
             } else if (entry.target === row4Ref.current) {
               // Column 4, Row 1 - slide from bottom
-              console.log('Animating row4')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === row5Ref.current) {
               // Column 1, Row 2 - slide from top
-              console.log('Animating row5')
               entry.target.classList.add('animate-slide-down')
             } else if (entry.target === row6Ref.current) {
               // Column 2, Row 2 - slide from bottom
-              console.log('Animating row6')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === row7Ref.current) {
               // Column 3, Row 2 - slide from top
-              console.log('Animating row7')
               entry.target.classList.add('animate-slide-down')
             } else if (entry.target === row8Ref.current) {
               // Column 4, Row 2 - slide from bottom
-              console.log('Animating row8')
               entry.target.classList.add('animate-slide-up-bounce')
             }
 

@@ -63,7 +63,7 @@ export default function LazyImage({
     return (
       <div
         ref={containerRef}
-        className={`${className} bg-gray-200 animate-pulse`}
+        className="bg-gray-200 animate-pulse w-full h-full"
         style={{
           width: imageProps.fill ? '100%' : imageProps.width || '100%',
           height: imageProps.fill ? '100%' : imageProps.height || '100%',
@@ -75,11 +75,14 @@ export default function LazyImage({
 
   // Render the image
   return (
-    <div ref={containerRef} className={imageProps.fill ? className : undefined}>
+    <div
+      ref={containerRef}
+      className={imageProps.fill ? 'relative w-full h-full' : undefined}
+    >
       <Image
-        {...imageProps}
+        {...(imageProps as ImageProps)}
         loading={loading}
-        className={imageProps.fill ? undefined : className}
+        className={className}
       />
     </div>
   )
