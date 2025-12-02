@@ -45,7 +45,6 @@ export async function fetchPageSEOBySlug(
     const res = await fetch(`${API_URL}api/seo/pages/slug/${slug}`, {
       cache,
     })
-console.log('res####', res)
     if (!res.ok) return null
 
     const json = await res.json()

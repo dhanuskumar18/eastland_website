@@ -62,11 +62,11 @@ export default function Gallery({ content }: GalleryProps = {}) {
     : defaultImages
 
   return (
-    <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <p className="text-sm font-semibold text-slate-500">{content?.title || "Our Gallery"}</p>
+    <section className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8">
+      <p className="text-xs sm:text-sm font-semibold text-slate-500">{content?.title || "Our Gallery"}</p>
       
-      <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
-        <h2 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+      <div className="mt-2 grid items-start gap-4 sm:gap-6 md:gap-8 md:grid-cols-2">
+        <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
           {content?.descSubTitle || (
             <>
               Explore Cafes and Quick Service
@@ -74,35 +74,36 @@ export default function Gallery({ content }: GalleryProps = {}) {
             </>
           )}
         </h2>
-        <p className="text-sm leading-relaxed text-slate-600 md:mt-1">
+        <p className="text-xs sm:text-sm leading-relaxed text-slate-600 md:mt-1">
           {content?.description || "Discover how we transform ordinary spaces into high-performance cafés and quick service setups, designed for efficiency, aesthetics, and smooth customer flow."}
         </p>
       </div>
 
-      {/* Bento Grid Layout - 5 columns, 6 rows */}
-      <div className="mt-12 grid grid-cols-5 grid-rows-6 gap-4 h-[520px]">
-        {images.map((image, index) => (
-          <div 
-            key={index} 
-            className={`${image.gridClass} rounded-xl overflow-hidden group cursor-pointer`}
-          >
-            <div className="relative w-full h-full">
+      {/* Mobile: Simple 2-column grid, Desktop: Bento Grid Layout */}
+      <div className="mt-8 sm:mt-10 md:mt-12">
+        {/* Mobile Grid - Simple 2 columns showing all images */}
+        <div className="grid grid-cols-2 gap-3 md:hidden">
+          {images.map((image, index) => (
+            <div 
+              key={index} 
+              className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
+            >
               <Image 
                 src={image.src} 
                 alt={image.alt} 
                 fill 
                 className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="50vw"
               />
               
               {/* Hover overlay with slide-up effect */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-full group-hover:translate-y-0">
-                <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between">
-                  <h3 className="text-lg font-semibold text-white">View Project</h3>
-                  <button className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 group">
+                <div className="absolute bottom-0 left-0 right-0 p-3 flex items-end justify-between">
+                  <h3 className="text-sm font-semibold text-white">View Project</h3>
+                  <button className="bg-white text-black w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 group">
                     <svg
-                      width="16"
-                      height="16"
+                      width="12"
+                      height="12"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -117,8 +118,50 @@ export default function Gallery({ content }: GalleryProps = {}) {
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Desktop Bento Grid Layout - 5 columns, 6 rows */}
+        <div className="hidden md:grid md:grid-cols-5 md:grid-rows-6 gap-4 h-[520px]">
+          {images.map((image, index) => (
+            <div 
+              key={index} 
+              className={`${image.gridClass} rounded-xl overflow-hidden group cursor-pointer`}
+            >
+              <div className="relative w-full h-full">
+                <Image 
+                  src={image.src} 
+                  alt={image.alt} 
+                  fill 
+                  className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 1200px) 33vw, 20vw"
+                />
+                
+                {/* Hover overlay with slide-up effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-full group-hover:translate-y-0">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between">
+                    <h3 className="text-lg font-semibold text-white">View Project</h3>
+                    <button className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 group">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

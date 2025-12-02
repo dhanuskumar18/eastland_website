@@ -280,7 +280,7 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Top Panel with Image */}
-      <section className="relative h-[60vh] min-h-[500px]">
+      <section className="relative h-[40vh] min-h-[300px] sm:h-[50vh] sm:min-h-[400px] md:h-[60vh] md:min-h-[500px]">
         <div className="absolute inset-0">
           <Image
             src={bannerContent.image || "/images/Products/Rectangle 52 (2).png"}
@@ -293,25 +293,25 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
         
         {/* Content overlay */}
         <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
+          <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white">
               {bannerContent.title || "Our Products"}
             </h1>
             {bannerContent.subTitle && (
-              <p className="mt-4 text-xl text-white">{bannerContent.subTitle}</p>
+              <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-white">{bannerContent.subTitle}</p>
             )}
           </div>
         </div>
       </section>
 
       {/* Our Products Section */}
-      <section ref={productsSectionRef} className="py-20 bg-white opacity-0">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-16 md:grid-cols-2">
+      <section ref={productsSectionRef} className="py-12 sm:py-16 md:py-20 bg-white opacity-0">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2">
             {/* Left Side - Image */}
-            <div className="relative w-full max-w-[520px]">
-              <div className="rounded-tl-[250px] rounded-bl-[22px] border-2 border-slate-200 bg-white p-3 shadow">
-                <div className="relative aspect-[519/442] overflow-hidden rounded-tl-[250px] rounded-bl-[18px]">
+            <div className="relative w-full max-w-[520px] mx-auto md:mx-0">
+              <div className="rounded-tl-[150px] sm:rounded-tl-[200px] md:rounded-tl-[250px] rounded-bl-[18px] sm:rounded-bl-[20px] md:rounded-bl-[22px] border-2 border-slate-200 bg-white p-2 sm:p-3 shadow">
+                <div className="relative aspect-[519/442] overflow-hidden rounded-tl-[130px] sm:rounded-tl-[180px] md:rounded-tl-[250px] rounded-bl-[14px] sm:rounded-bl-[16px] md:rounded-bl-[18px]">
                   <Image 
                     src={ourProductsContent.image || "/images/Products/1 (4).png"} 
                     alt="Modern Kitchen Interior" 
@@ -323,9 +323,9 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             </div>
 
             {/* Right Side - Content */}
-            <div>
-              <p className="text-sm font-semibold text-slate-500">Our Products</p>
-              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+            <div className="mt-6 md:mt-0">
+              <p className="text-xs sm:text-sm font-semibold text-slate-500">Our Products</p>
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
                 {ourProductsContent.title ? (
                   <>
                     {ourProductsContent.title}
@@ -341,23 +341,23 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
               </h2>
               {ourProductsContent.description ? (
                 (ourProductsContent.description as string).split('\n').filter((part: string) => part.trim()).map((part: string, index: number) => (
-                  <p key={index} className="mt-4 text-sm leading-relaxed text-slate-700">
+                  <p key={index} className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                     {part.trim()}
                   </p>
                 ))
               ) : (
                 <>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                     Expert Kitchen Services with Essential Equipment and Sanitization Product Support
                   </p>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                     We provide end-to-end commercial kitchen solutions, including design, installation, maintenance, and deep cleaning services. Alongside our expertise, we offer essential kitchen equipment, smallwares, and professional sanitization products to ensure safety, efficiency, and compliance across all food service operations. Our support is tailored to hotels, restaurants, cafeterias, bakeries, and industrial facilities.
                   </p>
                 </>
               )}
 
-              <div className="mt-10">
-                <Link href="/contact" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+              <div className="mt-6 sm:mt-8 md:mt-10">
+                <Link href="/contact" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -380,9 +380,9 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
       </section>
 
       {/* Products Grid Section */}
-      <section ref={gridSectionRef} className="bg-slate-50 py-20 opacity-0">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+      <section ref={gridSectionRef} className="bg-slate-50 py-12 sm:py-16 md:py-20 opacity-0">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
             {quickInstallationsContent.title ? (
               <>
                 {quickInstallationsContent.title}
@@ -400,13 +400,13 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             )}
           </h2>
 
-          <div className="mt-14 relative">
+          <div className="mt-8 sm:mt-12 md:mt-14 relative">
             {/* Continuous vertical lines for each column */}
             <div className="absolute left-1/4 top-0 hidden h-full w-px bg-slate-200 lg:block" aria-hidden />
             <div className="absolute left-1/2 top-0 hidden h-full w-px bg-slate-200 lg:block" aria-hidden />
             <div className="absolute left-3/4 top-0 hidden h-full w-px bg-slate-200 lg:block" aria-hidden />
             
-            <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-4">
               {displayCards.map((card: any, index: number) => {
                 // Determine row ref based on index (only assign refs for first 8 items)
                 const rowRef = index < 8 ? rowRefs[index] || null : null
@@ -416,20 +416,20 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
 
                 return (
                   <div key={index} ref={rowRef} className={`relative ${marginClass} opacity-0`}>
-                    <h3 className="text-lg font-semibold text-slate-900">{card.title || "Untitled"}</h3>
-                    <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900">{card.title || "Untitled"}</h3>
+                    <div className="mt-3 sm:mt-4 overflow-hidden rounded-lg sm:rounded-xl ring-1 ring-slate-200">
                       <div
                         className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                         style={{ backgroundImage: `url("${encodeURI(card.image || '/images/Products/2 (7).png')}")` }}
                       />
                     </div>
-                    <p className="mt-5 text-sm leading-relaxed text-slate-600">
+                    <p className="mt-4 sm:mt-5 text-xs sm:text-sm leading-relaxed text-slate-600">
                       {card.description || "No description available"}
                     </p>
-                    <div className="mt-6">
+                    <div className="mt-4 sm:mt-6">
                       <button
                         onClick={() => handleProductClick(card)}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
+                        className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
                         aria-label="View product details"
                       >
                         <svg
@@ -457,12 +457,12 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
 
       {/* See More Button Section - Only show if there are more than 8 products */}
       {hasMoreProducts && (
-        <section className="py-12 bg-slate-50">
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+        <section className="py-8 sm:py-10 md:py-12 bg-slate-50">
+          <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center">
               <Link 
                 href="/products/all"
-                className="inline-flex items-center gap-2 rounded-full border border-emerald-700 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-700 bg-white px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
               >
                 See More
                 <svg
@@ -485,41 +485,39 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
       )}
 
       {/* About Our Products Section */}
-      <section ref={aboutProductsRef} className="py-20 bg-white opacity-0">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-16 md:grid-cols-2">
+      <section ref={aboutProductsRef} className="py-12 sm:py-16 md:py-20 bg-white opacity-0">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2">
             {/* Left Side - Overlapping Images */}
-            <div className="relative w-full max-w-[520px]">
+            <div className="relative w-full max-w-[520px] mx-auto md:mx-0">
               {/* Main Image */}
-              <div className="rounded-[22px]  bg-white p-3  ">
-                <div className="relative overflow-hidden rounded-[18px] h-[442px] w-[400px] p-3 border-2 border-gray-400">
+              <div className="rounded-[18px] sm:rounded-[20px] md:rounded-[22px] bg-white p-2 sm:p-3">
+                <div className="relative overflow-hidden rounded-[14px] sm:rounded-[16px] md:rounded-[18px] h-[280px] sm:h-[350px] md:h-[442px] w-full max-w-[280px] sm:max-w-[350px] md:max-w-[400px] mx-auto md:mx-0 p-2 sm:p-3 border-2 border-gray-400">
                   <Image 
                     src={aboutOurProductsContent.image1 || "/images/Products/1 (5).png"} 
                     alt="Elegant Dining Area" 
-                     height={350}
-                     width={350}
-                    className="object-cover h-full w-full" 
+                    fill
+                    className="object-cover rounded-[12px] sm:rounded-[14px] md:rounded-[16px]" 
                   />
                 </div>
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-6 -right-12 rounded-2xl shadow-2xl">
-                <div className="relative  overflow-hidden rounded-2xl h-[400px] w-[250px] p-3 border-2 border-gray-400 ">
+              <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-6 md:-bottom-6 md:-right-12 rounded-xl sm:rounded-2xl shadow-2xl">
+                <div className="relative overflow-hidden rounded-xl sm:rounded-2xl h-[150px] sm:h-[200px] md:h-[300px] lg:h-[400px] w-[120px] sm:w-[150px] md:w-[200px] lg:w-[250px] p-2 sm:p-3 border-2 border-gray-400">
                   <Image 
                     src={aboutOurProductsContent.image2 || "/images/Products/1 (6).png"} 
                     alt="Modern Cafe Setting" 
-                    height={300}
-                    width={300}
-                    className="object-cover h-full w-full rounded-2xl" 
+                    fill
+                    className="object-cover rounded-lg sm:rounded-xl md:rounded-2xl" 
                   />
                 </div>  
               </div>
             </div>
             {/* Right Side - Content */}
-            <div>
-              <p className="text-sm font-semibold text-slate-500">About Our Products</p>
-              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+            <div className="mt-6 md:mt-0">
+              <p className="text-xs sm:text-sm font-semibold text-slate-500">About Our Products</p>
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
                 {aboutOurProductsContent.title ? (
                   <>
                     {aboutOurProductsContent.title}
@@ -533,12 +531,12 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                   </>
                 )}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
+              <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                 {aboutOurProductsContent.description || "Founded with a vision to revolutionize the food service industry, we specialize in designing and installing high-performance spaces for quick service restaurants, cafés, and delis. What began as a small setup service has evolved into a full-scale solutions provider offering everything from layout planning and custom fabrication to equipment integration and end-to-end installation."}
               </p>
 
-              <div className="mt-10">
-                <Link href="/contact" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+              <div className="mt-6 sm:mt-8 md:mt-10">
+                <Link href="/contact" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -563,11 +561,11 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
       {/* Product Detail Modal */}
       {isModalOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200"
           onClick={closeModal}
         >
           <div 
-            className="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
+            className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -591,16 +589,16 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
             </button>
 
             {loadingDetails ? (
-              <div className="flex items-center justify-center py-32">
+              <div className="flex items-center justify-center py-16 sm:py-24 md:py-32">
                 <div className="text-center">
-                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent mb-4"></div>
-                  <p className="text-slate-600 font-medium">Loading product details...</p>
+                  <div className="inline-block h-10 w-10 sm:h-12 sm:w-12 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent mb-4"></div>
+                  <p className="text-sm sm:text-base text-slate-600 font-medium">Loading product details...</p>
                 </div>
               </div>
             ) : productDetails ? (
               <div className="flex flex-col lg:flex-row h-full overflow-y-auto">
                 {/* Left Side - Images */}
-                <div className="lg:w-1/2 bg-slate-50 p-6 lg:p-8">
+                <div className="lg:w-1/2 bg-slate-50 p-4 sm:p-6 lg:p-8">
                   {productDetails.images && productDetails.images.length > 0 ? (
                     <div className="space-y-4">
                       {/* Main Image */}
@@ -639,9 +637,9 @@ export default function ProductsPageContent({ pageData }: ProductsPageContentPro
                 </div>
 
                 {/* Right Side - Details */}
-                <div className="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+                <div className="lg:w-1/2 p-4 sm:p-6 lg:p-8 overflow-y-auto">
                   {/* Product Name */}
-                  <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
                     {getProductName(productDetails)}
                   </h2>
 

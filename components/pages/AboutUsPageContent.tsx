@@ -149,7 +149,7 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Top Panel with Image */}
-      <section className="relative h-[60vh] min-h-[500px]">
+      <section className="relative h-[40vh] min-h-[300px] sm:h-[50vh] sm:min-h-[400px] md:h-[60vh] md:min-h-[500px]">
         <div className="absolute inset-0">
           <Image 
             src={bannerContent.image || "/images/aboutUs/Rectangle 52.png"} 
@@ -162,25 +162,25 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
         
         {/* Content overlay */}
         <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
+          <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8 w-full text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white">
               {bannerContent.title || "About Us"}
             </h1>
             {bannerContent.subTitle && bannerContent.subTitle !== ".." && (
-              <p className="mt-4 text-xl text-white">{bannerContent.subTitle}</p>
+              <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-white">{bannerContent.subTitle}</p>
             )}
           </div>
         </div>
       </section>
 
       {/* Company Background Section */}
-      <section ref={sectionRef} className="company-background-section py-20 bg-white">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-16 md:grid-cols-2">
+      <section ref={sectionRef} className="company-background-section py-12 sm:py-16 md:py-20 bg-white">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2">
             {/* Image on the left */}
-            <div ref={imageRef} className="relative w-full max-w-[520px]">
-              <div className="rounded-[22px] border-2 border-slate-200 bg-white p-3 shadow">
-                <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+            <div ref={imageRef} className="relative w-full max-w-[520px] mx-auto md:mx-0">
+              <div className="rounded-[18px] sm:rounded-[22px] border-2 border-slate-200 bg-white p-2 sm:p-3 shadow">
+                <div className="relative aspect-[519/442] overflow-hidden rounded-[14px] sm:rounded-[18px]">
                   <Image 
                     src={companyBgContent.image || "/images/aboutUs/1 (3).png"} 
                     alt="Company Background" 
@@ -192,9 +192,9 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
             </div>
 
             {/* Content on the right */}
-            <div ref={contentRef}>
-              <p className="text-sm font-semibold text-slate-500">Company Background</p>
-              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+            <div ref={contentRef} className="mt-6 md:mt-0">
+              <p className="text-xs sm:text-sm font-semibold text-slate-500">Company Background</p>
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
                 {companyBgContent.title ? (
                   companyBgContent.subTitle && companyBgContent.title.includes(companyBgContent.subTitle) ? (
                     <>
@@ -218,23 +218,23 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
               </h2>
               {companyBgContent.description ? (
                 (companyBgContent.description as string).split('\n').filter((part: string) => part.trim()).map((part: string, index: number) => (
-                  <p key={index} className="mt-4 max-w-[600px] text-sm leading-relaxed text-slate-700">
+                  <p key={index} className="mt-3 sm:mt-4 max-w-[600px] text-xs sm:text-sm leading-relaxed text-slate-700">
                     {part.trim()}
                   </p>
                 ))
               ) : (
                 <>
-                  <p className="mt-4 max-w-[600px] text-sm leading-relaxed text-slate-700">
+                  <p className="mt-3 sm:mt-4 max-w-[600px] text-xs sm:text-sm leading-relaxed text-slate-700">
                     Founded with a vision to revolutionize the food service industry, we specialize in designing and installing high-performance spaces for quick service restaurants, cafés, and delis. What began as a small setup service has evolved into a full-scale solutions provider offering everything from layout planning and custom fabrication to equipment integration and end-to-end installation.
                   </p>
-                  <p className="mt-4 max-w-[600px] text-sm leading-relaxed text-slate-700">
+                  <p className="mt-3 sm:mt-4 max-w-[600px] text-xs sm:text-sm leading-relaxed text-slate-700">
                     With a team of experienced designers, engineers, and fabricators, we ensure every project is delivered with precision, speed, and long-term durability.
                   </p>
                 </>
               )}
 
-              <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+              <div className="mt-6 sm:mt-8 md:mt-10">
+                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -257,7 +257,7 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
       </section>
 
       {/* Mission & Vision Section */}
-      <section className="relative py-20 text-white overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 text-white overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -268,22 +268,22 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
           />
         </div>
         
-        <div className="relative z-10 mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
           {/* Mission Part */}
-          <div ref={missionRef} className="mb-20 grid items-center gap-16 md:grid-cols-[60%_40%]">
+          <div ref={missionRef} className="mb-12 sm:mb-16 md:mb-20 grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-[60%_40%]">
             {/* Text on the left */}
-            <div className="md:col-span-1">
-              <p className="mb-2 text-sm font-semibold text-white/80">Mission</p>
-              <h2 className="mb-6 text-3xl font-bold leading-tight md:text-4xl">
+            <div className="md:col-span-1 order-2 md:order-1">
+              <p className="mb-2 text-xs sm:text-sm font-semibold text-white/80">Mission</p>
+              <h2 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold leading-tight md:text-4xl">
                 {missionContent.title || "Delivering efficient, high-quality restaurant setups with precision and speed."}
               </h2>
-              <p className="text-lg leading-relaxed text-white/80">
+              <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white/80">
                 {missionContent.description || "Our mission is to deliver end-to-end design and installation solutions that turn empty spaces into fully functional, high-performance food service environments. By integrating intelligent layouts, durable materials, and precise execution, we enable brands to operate efficiently, serve customers faster, and achieve consistent quality, ensuring long-term success and a competitive edge in the industry."}
               </p>
             </div>
             {/* Image on the right */}
-            <div className="relative w-full max-w-[520px] justify-self-end md:col-span-1">
-              <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+            <div className="relative w-full max-w-[520px] justify-self-center md:justify-self-end md:col-span-1 order-1 md:order-2">
+              <div className="relative aspect-[519/442] overflow-hidden rounded-[14px] sm:rounded-[18px]">
                 <Image
                   src={missionContent.image || "/images/aboutUs/Rectangle 54.png"}
                   alt="Modern Restaurant Interior"
@@ -295,10 +295,10 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
           </div>
 
           {/* Vision Part */}
-          <div ref={visionRef} className="grid items-center gap-16 md:grid-cols-[40%_60%]">
+          <div ref={visionRef} className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-[40%_60%]">
             {/* Image on the left */}
-            <div className="relative w-full max-w-[520px] md:col-span-1">
-              <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
+            <div className="relative w-full max-w-[520px] mx-auto md:mx-0 md:col-span-1 order-1 md:order-1">
+              <div className="relative aspect-[519/442] overflow-hidden rounded-[14px] sm:rounded-[18px]">
                 <Image
                   src={visionContent.image || "/images/aboutUs/Rectangle 55.png"}
                   alt="Elegant Dining Area"
@@ -308,12 +308,12 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
               </div>
             </div>
             {/* Text on the right */}
-            <div className="md:col-span-1">
-              <p className="mb-2 text-sm font-semibold text-white/80">Vision</p>
-              <h2 className="mb-6 text-3xl font-bold leading-tight md:text-4xl">
+            <div className="md:col-span-1 order-2 md:order-2">
+              <p className="mb-2 text-xs sm:text-sm font-semibold text-white/80">Vision</p>
+              <h2 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold leading-tight md:text-4xl">
                 {visionContent.title || "Empowering food businesses with smarter, faster, future-ready restaurant spaces."}
               </h2>
-              <p className="text-lg leading-relaxed text-white/80">
+              <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white/80">
                 {visionContent.description || "We strive to be the global benchmark for quick service restaurant and café design, creating spaces that seamlessly combine efficiency, innovation, and visual appeal. Our vision is to empower every food brand with future-ready environments that enhance operational performance, delight customers, and support sustainable growth while setting new industry standards."}
               </p>
             </div>
@@ -557,10 +557,10 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
   const currentMember = membersToUse[middleIndex]
 
   return (
-    <section className="relative w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white">
       {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl sm:text-5xl font-bold">
+      <div className="text-center mb-8 sm:mb-10 md:mb-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
           {teamContent?.title ? (
             teamContent.title.includes('Team') ? (
               <>
@@ -586,7 +586,7 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
           {/* Previous name (exiting) */}
           {isTransitioning && previousMember && (
             <h2
-              className="text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-bold text-center whitespace-nowrap name-exit"
+              className="text-4xl sm:text-6xl md:text-8xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-bold text-center whitespace-nowrap name-exit"
               style={{
                 background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
                 WebkitBackgroundClip: 'text',
@@ -606,7 +606,7 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
           
           {/* Current name (entering) */}
           <h2
-            className={`text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-bold text-center whitespace-nowrap ${isTransitioning ? 'name-enter' : 'name-static'}`}
+            className={`text-4xl sm:text-6xl md:text-8xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-bold text-center whitespace-nowrap ${isTransitioning ? 'name-enter' : 'name-static'}`}
             style={{
               background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
               WebkitBackgroundClip: 'text',
@@ -624,11 +624,11 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
         </div>
 
         {/* Featured Image - Large Center Display */}
-        <div className="relative mb-16 z-10" style={{ height: '600px' }}>
+        <div className="relative mb-8 sm:mb-12 md:mb-16 z-10" style={{ height: 'clamp(250px, 30vw, 600px)', minHeight: '250px' }}>
           {/* Previous image (exiting) */}
           {isTransitioning && previousMember && (
             <div
-              className="absolute rounded-3xl overflow-hidden w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] xl:w-[800px] xl:h-[800px] image-exit"
+              className="absolute rounded-2xl sm:rounded-3xl overflow-hidden w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px] xl:w-[650px] xl:h-[650px] 2xl:w-[800px] 2xl:h-[800px] image-exit"
               style={{
                 top: '50%',
                 left: '50%',
@@ -648,7 +648,7 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
           
           {/* Current image (entering) */}
           <div
-            className={`absolute rounded-3xl overflow-hidden w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] xl:w-[800px] xl:h-[800px] ${isTransitioning ? 'image-enter' : 'image-static'}`}
+            className={`absolute rounded-2xl sm:rounded-3xl overflow-hidden w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px] xl:w-[650px] xl:h-[650px] 2xl:w-[800px] 2xl:h-[800px] ${isTransitioning ? 'image-enter' : 'image-static'}`}
             style={{
               top: '50%',
               left: '50%',
@@ -667,7 +667,7 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
         </div>
 
         {/* Team Cards Container - Shows 3 at a time - Overlay on featured image */}
-        <div className="max-w-[80%] mx-auto relative z-20 -mt-32">
+        <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[80%] mx-auto relative z-20 -mt-16 sm:-mt-24 md:-mt-32">
           <Carousel
             setApi={setApi}
             opts={{
@@ -677,27 +677,27 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-2 sm:-ml-4">
               {membersToUse.map((member, index) => (
-                <CarouselItem key={member.id} className="pl-4 basis-1/3">
+                <CarouselItem key={member.id} className="pl-2 sm:pl-4 basis-full sm:basis-1/2 md:basis-1/3">
                   <div
-                    className={`bg-white rounded-3xl p-6  border transition-all duration-300 cursor-pointer h-full relative`}
+                    className={`bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border transition-all duration-300 cursor-pointer h-full relative`}
                   >
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="absolute -top-2 w-20 h-20 flex-shrink-0 rounded-lg ">
+                    <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
+                      <div className="absolute -top-2 w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg">
                         <Image
                           src={member.image || "/placeholder.svg"}
                           alt={member.name}
                           fill
-                          className="object-cover"
+                          className="object-cover rounded-lg"
                         />
                       </div>
                       <div className="flex-1 text-center">
-                        <h3 className="font-semibold text-lg text-gray-900 mb-1">{member.name}</h3>
-                        <p className="text-sm text-[#003B27] font-medium">{member.title}</p>
+                        <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-1">{member.name}</h3>
+                        <p className="text-xs sm:text-sm text-[#003B27] font-medium">{member.title}</p>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 leading-relaxed">{member.description}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{member.description}</p>
                   </div>
                 </CarouselItem>
               ))}
@@ -706,12 +706,12 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
         </div>
 
         {/* Timeline Navigation Dots */}
-        <div className="flex justify-center mt-8 space-x-2">
+        <div className="flex justify-center mt-4 sm:mt-6 md:mt-8 space-x-2">
           {membersToUse.map((_, index) => (
             <button
               key={index}
               onClick={() => api?.scrollTo(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                 currentIndex === index
                   ? 'bg-[#003B27] scale-125'
                   : 'bg-gray-300 hover:bg-gray-400'
@@ -722,10 +722,10 @@ function TeamSection({ teamContent }: TeamSectionProps = {}) {
       </div>
 
       {/* CTA Button */}
-      <div className="flex justify-center mt-12 relative z-20">
+      <div className="flex justify-center mt-8 sm:mt-10 md:mt-12 relative z-20">
         <Link 
           href="/team/all"
-          className="px-8 py-3 bg-white text-[#003B27] border border-[#003B27] rounded-full font-semibold hover:bg-[#003B27] hover:text-white hover:border-[#003B27] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 group"
+          className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-[#003B27] border border-[#003B27] rounded-full text-sm sm:text-base font-semibold hover:bg-[#003B27] hover:text-white hover:border-[#003B27] hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 sm:gap-3 group"
         >
           See More
           <svg

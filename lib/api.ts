@@ -45,17 +45,6 @@ function transformApiResponse(apiData: ApiPageResponse): PageData {
     // Get English translation or first available translation
     const translation = apiSection.translations?.find(t => t.locale === 'en') || apiSection.translations?.[0]
     
-    // Debug logging in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`Section ${index}:`, {
-        id: apiSection.id,
-        name: apiSection.name,
-        hasTranslation: !!translation,
-        locale: translation?.locale,
-        contentKeys: translation?.content ? Object.keys(translation.content) : [],
-      })
-    }
-    
     return {
       id: String(apiSection.id),
       type: apiSection.name,
@@ -114,7 +103,6 @@ export async function fetchPageBySlug(slug: string, retries: number = 2): Promis
           // Rate limited - retry
           lastError = new Error(`Rate limited (429) for slug: ${normalizedSlug}`)
           if (attempt < retries) {
-            console.log(`Rate limited, retrying in ${Math.min(1000 * Math.pow(2, attempt), 5000)}ms...`)
             continue
           }
         }
@@ -128,25 +116,6 @@ export async function fetchPageBySlug(slug: string, retries: number = 2): Promis
         lastError = null
         const apiData: ApiPageResponse = await response.json()
         
-        // Debug: Log raw API response in development
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Raw API Response for slug:', slug, apiData)
-          console.log('Sections data:', apiData?.sections?.data)
-          if (apiData?.sections?.data) {
-            apiData.sections.data.forEach((section, idx) => {
-              console.log(`Section ${idx}:`, {
-                id: section.id,
-                name: section.name,
-                translations: section.translations?.map(t => ({
-                  locale: t.locale,
-                  contentKeys: Object.keys(t.content || {}),
-                  hasCustomFields: !!(t.content as any)?.customFields,
-                })),
-              })
-            })
-          }
-        }
-        
         // Validate API response structure before transforming
         if (!apiData || !apiData.sections || !apiData.sections.data) {
           console.error('Invalid API response structure for slug:', slug)
@@ -154,16 +123,6 @@ export async function fetchPageBySlug(slug: string, retries: number = 2): Promis
         }
         
         const transformed = transformApiResponse(apiData)
-        
-        // Debug: Log transformed data
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Transformed Page Data:', transformed)
-          const contactFormSection = transformed.sections?.find(s => 
-            s.type?.toLowerCase().includes('contact_form') || s.type?.toLowerCase().includes('contact form')
-          )
-          console.log('Contact Form Section in Transformed Data:', contactFormSection)
-          console.log('Contact Form Content Keys:', contactFormSection?.content ? Object.keys(contactFormSection.content) : 'N/A')
-        }
         
         return transformed
       } catch (error) {
@@ -237,13 +196,6 @@ export async function fetchYouTubeVideoById(id: number): Promise<{
     const result = await response.json()
     const video = result?.data || result
     
-    // Debug: Log the video object to see its structure
-    if (process.env.NODE_ENV === 'development') {
-      console.log('YouTube Video API Response:', video)
-      console.log('Brand object:', video.brand)
-      console.log('BrandId:', video.brandId)
-    }
-    
     // Extract brand information - brand can be an object with name property
     let brandName = ""
     if (video.brand && typeof video.brand === 'object' && video.brand.name) {
@@ -254,11 +206,7 @@ export async function fetchYouTubeVideoById(id: number): Promise<{
       brandName = video.brandName
     }
     
-    // Debug: Log extracted brand name
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Extracted brandName:', brandName)
-    }
-    
+    // Ensure we always return a consistent structure
     return {
       id: video.id,
       brand: video.brand,

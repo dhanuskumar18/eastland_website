@@ -324,20 +324,20 @@ export default function AllTeamPage() {
       />
 
       {/* Team Members Grid Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-20 bg-slate-50">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
           {/* Search Section - Always show search */}
-          <div className="mb-8">
-                <div className="relative max-w-md">
+          <div className="mb-6 sm:mb-8">
+                <div className="relative max-w-md w-full">
                   <input
                     type="text"
                     placeholder="Search team members..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pl-10 sm:pl-12 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
                   />
                   <svg
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
+                    className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -347,9 +347,9 @@ export default function AllTeamPage() {
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -370,45 +370,45 @@ export default function AllTeamPage() {
               )}
 
               {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
+              <div className="mb-4 sm:mb-6">
+                <p className="text-xs sm:text-sm text-slate-600">
                   Showing {filteredMembers.length} {filteredMembers.length === 1 ? 'team member' : 'team members'}
                 </p>
               </div>
 
               {/* Team Members Grid */}
             {filteredMembers.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-12 sm:py-16 md:py-20">
                 {hasActiveFilters ? (
                   <>
-                    <p className="text-slate-600 text-lg">No team members match your search.</p>
+                    <p className="text-slate-600 text-base sm:text-lg">No team members match your search.</p>
                     <button
                       onClick={clearFilters}
-                      className="mt-4 inline-block text-emerald-700 hover:underline"
+                      className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base"
                     >
                       Clear search
                     </button>
                   </>
                 ) : (
                   <>
-                    <p className="text-slate-600 text-lg">No team members available at the moment.</p>
-                    <Link href="/about-us" className="mt-4 inline-block text-emerald-700 hover:underline">
+                    <p className="text-slate-600 text-base sm:text-lg">No team members available at the moment.</p>
+                    <Link href="/about-us" className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base">
                       Back to About Us
                     </Link>
                   </>
                 )}
               </div>
             ) : (
-              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div ref={gridRef} className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredMembers.map((member) => (
                   <div
                     key={member.id}
                     onClick={() => handleMemberClick(member)}
-                    className="team-card relative opacity-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden hover:border-emerald-500 cursor-pointer"
+                    className="team-card relative opacity-0 bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden hover:border-emerald-500 cursor-pointer"
                   >
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                       {/* Member Image */}
-                      <div className="relative w-full aspect-square mb-4 rounded-lg overflow-hidden">
+                      <div className="relative w-full aspect-square mb-3 sm:mb-4 rounded-lg overflow-hidden">
                         <Image
                           src={member.image || '/images/aboutUs/Property 1=Default.png'}
                           alt={member.name}
@@ -419,10 +419,10 @@ export default function AllTeamPage() {
 
                       {/* Member Info - Only Name and Role */}
                       <div className="text-center">
-                        <h3 className="text-xl font-bold text-slate-900 mb-1">
+                        <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1">
                           {member.name}
                         </h3>
-                        <p className="text-sm font-medium text-emerald-700">
+                        <p className="text-xs sm:text-sm font-medium text-emerald-700">
                           {member.title}
                         </p>
                       </div>
@@ -438,11 +438,11 @@ export default function AllTeamPage() {
       {/* Team Member Detail Modal */}
       {isModalOpen && selectedMember && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200"
           onClick={closeModal}
         >
           <div 
-            className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden animate-in zoom-in-95 duration-300"
+            className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -465,10 +465,10 @@ export default function AllTeamPage() {
               </svg>
             </button>
 
-            <div className="p-6 md:p-8 overflow-x-hidden">
+            <div className="p-4 sm:p-6 md:p-8 overflow-x-hidden">
               {/* Member Image and Info Section */}
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 pb-8 border-b border-slate-200">
-                <div className="relative w-48 h-48 rounded-full overflow-hidden flex-shrink-0 border-4 border-emerald-100 shadow-lg">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 sm:gap-6 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-slate-200">
+                <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full overflow-hidden flex-shrink-0 border-4 border-emerald-100 shadow-lg">
                   <Image
                     src={selectedMember.image || '/images/aboutUs/Property 1=Default.png'}
                     alt={selectedMember.name}
@@ -477,10 +477,10 @@ export default function AllTeamPage() {
                   />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
                     {selectedMember.name}
                   </h2>
-                  <p className="text-lg text-emerald-700 font-semibold mb-4">
+                  <p className="text-base sm:text-lg text-emerald-700 font-semibold mb-3 sm:mb-4">
                     {selectedMember.title}
                   </p>
                 </div>

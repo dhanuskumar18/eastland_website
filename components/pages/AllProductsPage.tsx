@@ -441,10 +441,10 @@ export default function AllProductsPage() {
       />
 
       {/* Products Grid Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-20 bg-slate-50">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
           {/* Search and Filters Section - Always show filters */}
-          <div className="mb-8 space-y-4">
+          <div className="mb-6 sm:mb-8 space-y-3 sm:space-y-4">
                 {/* Search Bar */}
                 <div className="relative">
                   <input
@@ -452,10 +452,10 @@ export default function AllProductsPage() {
                     placeholder="Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pl-10 sm:pl-12 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
                   />
                   <svg
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
+                    className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -465,16 +465,16 @@ export default function AllProductsPage() {
                 </div>
 
                 {/* Filters Row */}
-                <div className="flex flex-wrap gap-4 items-end">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-stretch sm:items-end">
                   {/* Category Filter */}
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex-1 min-w-full sm:min-w-[200px]">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
                       Category
                     </label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Categories</option>
                       {filterOptions.categories.map((category) => (
@@ -486,14 +486,14 @@ export default function AllProductsPage() {
                   </div>
 
                   {/* Tag Filter */}
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex-1 min-w-full sm:min-w-[200px]">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
                       Tag
                     </label>
                     <select
                       value={selectedTag}
                       onChange={(e) => setSelectedTag(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Tags</option>
                       {filterOptions.tags.map((tag) => (
@@ -505,14 +505,14 @@ export default function AllProductsPage() {
                   </div>
 
                   {/* Brand Filter */}
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex-1 min-w-full sm:min-w-[200px]">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
                       Brand
                     </label>
                     <select
                       value={selectedBrand}
                       onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Brands</option>
                       {filterOptions.brands.map((brand) => (
@@ -527,7 +527,7 @@ export default function AllProductsPage() {
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
-                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                      className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors w-full sm:w-auto"
                     >
                       Clear Filters
                     </button>
@@ -548,8 +548,8 @@ export default function AllProductsPage() {
               )}
 
               {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
+              <div className="mb-4 sm:mb-6">
+                <p className="text-xs sm:text-sm text-slate-600">
                   {hasActiveFilters ? (
                     <>
                       Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
@@ -567,28 +567,28 @@ export default function AllProductsPage() {
 
               {/* Products Grid */}
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-12 sm:py-16 md:py-20">
                 {hasActiveFilters ? (
                   <>
-                    <p className="text-slate-600 text-lg">No products match your filters.</p>
+                    <p className="text-slate-600 text-base sm:text-lg">No products match your filters.</p>
                     <button
                       onClick={clearFilters}
-                      className="mt-4 inline-block text-emerald-700 hover:underline"
+                      className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base"
                     >
                       Clear all filters
                     </button>
                   </>
                 ) : (
                   <>
-                    <p className="text-slate-600 text-lg">No products available at the moment.</p>
-                    <Link href="/products" className="mt-4 inline-block text-emerald-700 hover:underline">
+                    <p className="text-slate-600 text-base sm:text-lg">No products available at the moment.</p>
+                    <Link href="/products" className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base">
                       Back to Products
                     </Link>
                   </>
                 )}
               </div>
             ) : (
-              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div ref={gridRef} className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredProducts.map((product, index) => {
                   const productName = getProductName(product)
                   const productDescription = getProductDescription(product)
@@ -599,37 +599,37 @@ export default function AllProductsPage() {
                       key={product.id}
                       className="product-card relative opacity-0"
                     >
-                      <h3 className="text-lg font-semibold text-slate-900 mb-4">{productName}</h3>
-                      <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-slate-200">
+                      <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">{productName}</h3>
+                      <div className="mt-3 sm:mt-4 overflow-hidden rounded-lg sm:rounded-xl ring-1 ring-slate-200">
                         <div
                           className="aspect-[4/3] w-full bg-cover bg-center transition-transform duration-300 hover:scale-110"
                           style={{ backgroundImage: `url("${encodeURI(productImage)}")` }}
                         />
                       </div>
-                      <p className="mt-5 text-sm leading-relaxed text-slate-600 line-clamp-3">
+                      <p className="mt-4 sm:mt-5 text-xs sm:text-sm leading-relaxed text-slate-600 line-clamp-3">
                         {productDescription}
                       </p>
                       {product.brand && (
-                        <p className="mt-3 text-xs text-slate-500">
+                        <p className="mt-2 sm:mt-3 text-[10px] sm:text-xs text-slate-500">
                           Brand: {product.brand.name}
                         </p>
                       )}
                       {product.categories && product.categories.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-2">
+                        <div className="mt-2 sm:mt-3 flex flex-wrap gap-1.5 sm:gap-2">
                           {product.categories.slice(0, 2).map((category, idx) => (
                             <span
                               key={idx}
-                              className="px-2 py-1 text-xs bg-slate-100 text-slate-700 rounded"
+                              className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs bg-slate-100 text-slate-700 rounded"
                             >
                               {category.name}
                             </span>
                           ))}
                         </div>
                       )}
-                      <div className="mt-6">
+                      <div className="mt-4 sm:mt-6">
                         <button
                           onClick={() => handleProductClick(product)}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
+                          className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
                           aria-label="View product details"
                         >
                           <svg
@@ -659,11 +659,11 @@ export default function AllProductsPage() {
       {/* Product Detail Modal */}
       {isModalOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200"
           onClick={closeModal}
         >
           <div 
-            className="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
+            className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -687,16 +687,16 @@ export default function AllProductsPage() {
             </button>
 
             {loadingDetails ? (
-              <div className="flex items-center justify-center py-32">
+              <div className="flex items-center justify-center py-16 sm:py-24 md:py-32">
                 <div className="text-center">
-                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent mb-4"></div>
-                  <p className="text-slate-600 font-medium">Loading product details...</p>
+                  <div className="inline-block h-10 w-10 sm:h-12 sm:w-12 animate-spin rounded-full border-4 border-solid border-emerald-700 border-r-transparent mb-4"></div>
+                  <p className="text-sm sm:text-base text-slate-600 font-medium">Loading product details...</p>
                 </div>
               </div>
             ) : productDetails ? (
               <div className="flex flex-col lg:flex-row h-full overflow-y-auto">
                 {/* Left Side - Images */}
-                <div className="lg:w-1/2 bg-slate-50 p-6 lg:p-8">
+                <div className="lg:w-1/2 bg-slate-50 p-4 sm:p-6 lg:p-8">
                   {productDetails.images && productDetails.images.length > 0 ? (
                     <div className="space-y-4">
                       {/* Main Image */}
@@ -735,9 +735,9 @@ export default function AllProductsPage() {
                 </div>
 
                 {/* Right Side - Details */}
-                <div className="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+                <div className="lg:w-1/2 p-4 sm:p-6 lg:p-8 overflow-y-auto">
                   {/* Product Name */}
-                  <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
                     {getProductName(productDetails)}
                   </h2>
 

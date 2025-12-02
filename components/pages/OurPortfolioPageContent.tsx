@@ -42,7 +42,7 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px]">
+      <section className="relative h-[40vh] min-h-[300px] sm:h-[50vh] sm:min-h-[400px] md:h-[60vh] md:min-h-[500px]">
         <div className="absolute inset-0">
           <Image
             src={bannerContent.image || "/images/Services/Rectangle 52 (5).png"}
@@ -53,11 +53,11 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
           <div className="absolute inset-0 bg-black/40" />
         </div>
         <div className="relative z-10 flex h-full items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold sm:text-5xl lg:text-6xl">
+          <div className="text-center text-white px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
               {bannerContent.title || "Our Portfolio"}
             </h1>
-            <p className="mt-4 text-lg sm:text-xl">
+            <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl">
               {bannerContent.subTitle || "Showcasing Our Best Work"}
             </p>
           </div>
@@ -65,31 +65,31 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
       </section>
 
       {/* Gallery Section */}
-      <section className="py-20 bg-white">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 md:text-4xl">
               {galleryContent.title || 'Our Gallery'}
             </h2>
             {galleryContent.subTitle && (
-              <p className="mt-4 text-lg text-slate-600">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-slate-600">
                 {galleryContent.subTitle}
               </p>
             )}
             {!galleryContent.subTitle && (
-              <p className="mt-4 text-lg text-slate-600">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-slate-600">
                 Showcasing Exceptional Designs Through Visual Project Highlights
               </p>
             )}
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {displayItems.map((it, idx) => {
               const imageSrc = it.image || defaultGalleryImages[idx % defaultGalleryImages.length]
               const imageAlt = it.title || `Project ${idx + 1}`
               
               return (
-                <div key={it.image || `portfolio-${idx}`} className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
+                <div key={it.image || `portfolio-${idx}`} className="group relative h-48 sm:h-56 md:h-64 rounded-xl sm:rounded-2xl overflow-hidden shadow-lg cursor-pointer">
                   <Image
                     src={imageSrc}
                     alt={imageAlt}
@@ -98,7 +98,7 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/60 via-black/40 to-black/0 group-hover:from-black/60 group-hover:via-black/40 group-hover:to-black/0 transition-all duration-300 flex items-center justify-center transform translate-y-full group-hover:translate-y-0">
-                    <span className="text-white font-semibold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-white font-semibold text-sm sm:text-base md:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {it.title || 'View'}
                     </span>
                   </div>

@@ -303,20 +303,20 @@ export default function AllTestimonialsPage() {
       />
 
       {/* Testimonials Grid Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-20 bg-slate-50">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
           {/* Search Section - Always show search */}
-          <div className="mb-8">
-                <div className="relative max-w-md">
+          <div className="mb-6 sm:mb-8">
+                <div className="relative max-w-md w-full">
                   <input
                     type="text"
                     placeholder="Search testimonials..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pl-10 sm:pl-12 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
                   />
                   <svg
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
+                    className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -326,9 +326,9 @@ export default function AllTestimonialsPage() {
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -349,71 +349,71 @@ export default function AllTestimonialsPage() {
               )}
 
               {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
+              <div className="mb-4 sm:mb-6">
+                <p className="text-xs sm:text-sm text-slate-600">
                   Showing {filteredTestimonials.length} {filteredTestimonials.length === 1 ? 'testimonial' : 'testimonials'}
                 </p>
               </div>
 
               {/* Testimonials Grid */}
             {filteredTestimonials.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-12 sm:py-16 md:py-20">
                 {hasActiveFilters ? (
                   <>
-                    <p className="text-slate-600 text-lg">No testimonials match your search.</p>
+                    <p className="text-slate-600 text-base sm:text-lg">No testimonials match your search.</p>
                     <button
                       onClick={clearFilters}
-                      className="mt-4 inline-block text-emerald-700 hover:underline"
+                      className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base"
                     >
                       Clear search
                     </button>
                   </>
                 ) : (
                   <>
-                    <p className="text-slate-600 text-lg">No testimonials available at the moment.</p>
-                    <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline">
+                    <p className="text-slate-600 text-base sm:text-lg">No testimonials available at the moment.</p>
+                    <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base">
                       Back to Home
                     </Link>
                   </>
                 )}
               </div>
             ) : (
-              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <div ref={gridRef} className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredTestimonials.map((testimonial) => (
                   <div
                     key={testimonial.id}
                     onClick={() => handleTestimonialClick(testimonial)}
-                    className="testimonial-card relative opacity-0 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer hover:border-emerald-500"
+                    className="testimonial-card relative opacity-0 bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer hover:border-emerald-500"
                   >
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                       {/* Quote Icon */}
-                      <div className="mb-4">
+                      <div className="mb-3 sm:mb-4">
                         <Image 
                           src="/images/quote1.svg" 
                           alt="Quote" 
-                          width={40} 
-                          height={40} 
-                          className="text-slate-300"
+                          width={32}
+                          height={32}
+                          className="text-slate-300 w-8 h-8 sm:w-10 sm:h-10"
                         />
                       </div>
 
                       {/* Rating Stars */}
                       {testimonial.rating && (
-                        <div className="flex gap-1 mb-4">
+                        <div className="flex gap-1 mb-3 sm:mb-4">
                           {Array.from({ length: testimonial.rating }).map((_, i) => (
-                            <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
+                            <Star key={i} size={16} className="sm:w-5 sm:h-5 fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
                       )}
 
                       {/* Review Text */}
-                      <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed mb-4 sm:mb-6 line-clamp-4">
                         {testimonial.review}
                       </p>
 
                       {/* Client Info */}
-                      <div className="flex items-center gap-4 pt-4 border-t border-slate-200">
-                        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                      <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-slate-200">
+                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
                           <Image
                             src={testimonial.imageUrl || '/images/1.png'}
                             alt={testimonial.clientName}
@@ -422,10 +422,10 @@ export default function AllTestimonialsPage() {
                           />
                           </div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="text-lg font-bold text-slate-900 truncate">
+                          <h3 className="text-base sm:text-lg font-bold text-slate-900 truncate">
                             {testimonial.clientName}
                           </h3>
-                          <p className="text-sm text-slate-600 truncate">
+                          <p className="text-xs sm:text-sm text-slate-600 truncate">
                             {testimonial.profession}
                           </p>
                         </div>
@@ -442,11 +442,11 @@ export default function AllTestimonialsPage() {
       {/* Testimonial Detail Modal */}
       {isModalOpen && selectedTestimonial && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200"
           onClick={closeModal}
         >
           <div 
-            className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden animate-in zoom-in-95 duration-300"
+            className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -469,10 +469,10 @@ export default function AllTestimonialsPage() {
               </svg>
             </button>
 
-            <div className="p-6 md:p-8 overflow-x-hidden">
+            <div className="p-4 sm:p-6 md:p-8 overflow-x-hidden">
               {/* Client Image and Info Section */}
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 pb-8 border-b border-slate-200">
-                <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-4 border-emerald-100 shadow-lg">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 sm:gap-6 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-slate-200">
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden flex-shrink-0 border-4 border-emerald-100 shadow-lg">
                   <Image
                     src={selectedTestimonial.imageUrl || '/images/1.png'}
                     alt={selectedTestimonial.clientName}
@@ -481,16 +481,16 @@ export default function AllTestimonialsPage() {
                   />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
                     {selectedTestimonial.clientName}
                   </h2>
-                  <p className="text-lg text-slate-600 mb-4">
+                  <p className="text-base sm:text-lg text-slate-600 mb-3 sm:mb-4">
                     {selectedTestimonial.profession}
                   </p>
                   {selectedTestimonial.rating && (
                     <div className="flex gap-1 justify-center md:justify-start">
                       {Array.from({ length: selectedTestimonial.rating }).map((_, i) => (
-                        <Star key={i} size={28} className="fill-yellow-400 text-yellow-400" />
+                        <Star key={i} size={20} className="sm:w-7 sm:h-7 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
                   )}

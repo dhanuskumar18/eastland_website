@@ -532,10 +532,10 @@ export default function AllVideosPage() {
       />
 
       {/* Videos Grid Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-20 bg-slate-50">
+        <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
           {/* Search and Filters Section - Always show filters */}
-          <div className="mb-8 space-y-4">
+          <div className="mb-6 sm:mb-8 space-y-3 sm:space-y-4">
                 {/* Search Bar */}
                 <div className="relative">
                   <input
@@ -543,10 +543,10 @@ export default function AllVideosPage() {
                     placeholder="Search videos..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pl-10 sm:pl-12 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent"
                   />
                   <svg
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"
+                    className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -556,16 +556,16 @@ export default function AllVideosPage() {
                 </div>
 
                 {/* Filters Row */}
-                <div className="flex flex-wrap gap-4 items-end">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-stretch sm:items-end">
                   {/* Category Filter */}
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex-1 min-w-full sm:min-w-[200px]">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
                       Category
                     </label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Categories</option>
                       {filterOptions.categories.map((category) => (
@@ -577,14 +577,14 @@ export default function AllVideosPage() {
                   </div>
 
                   {/* Tag Filter */}
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex-1 min-w-full sm:min-w-[200px]">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
                       Tag
                     </label>
                     <select
                       value={selectedTag}
                       onChange={(e) => setSelectedTag(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Tags</option>
                       {filterOptions.tags.map((tag) => (
@@ -596,14 +596,14 @@ export default function AllVideosPage() {
                   </div>
 
                   {/* Brand Filter */}
-                  <div className="flex-1 min-w-[200px]">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex-1 min-w-full sm:min-w-[200px]">
+                    <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-2">
                       Brand
                     </label>
                     <select
                       value={selectedBrand}
                       onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:border-transparent bg-white"
                     >
                       <option value="">All Brands</option>
                       {filterOptions.brands.map((brand) => (
@@ -618,7 +618,7 @@ export default function AllVideosPage() {
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
-                      className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                      className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors w-full sm:w-auto"
                     >
                       Clear Filters
                     </button>
@@ -639,8 +639,8 @@ export default function AllVideosPage() {
               )}
 
               {/* Results Count */}
-              <div className="mb-6">
-                <p className="text-slate-600">
+              <div className="mb-4 sm:mb-6">
+                <p className="text-xs sm:text-sm text-slate-600">
                   {hasActiveFilters ? (
                     <>
                       Showing {filteredVideos.length} {filteredVideos.length === 1 ? 'video' : 'videos'}
@@ -658,28 +658,28 @@ export default function AllVideosPage() {
 
               {/* Videos Grid */}
             {filteredVideos.length === 0 ? (
-              <div className="text-center py-20">
+              <div className="text-center py-12 sm:py-16 md:py-20">
                 {hasActiveFilters ? (
                   <>
-                    <p className="text-slate-600 text-lg">No videos match your filters.</p>
+                    <p className="text-slate-600 text-base sm:text-lg">No videos match your filters.</p>
                     <button
                       onClick={clearFilters}
-                      className="mt-4 inline-block text-emerald-700 hover:underline"
+                      className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base"
                     >
                       Clear all filters
                     </button>
                   </>
                 ) : (
                   <>
-                    <p className="text-slate-600 text-lg">No videos available at the moment.</p>
-                    <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline">
+                    <p className="text-slate-600 text-base sm:text-lg">No videos available at the moment.</p>
+                    <Link href="/" className="mt-4 inline-block text-emerald-700 hover:underline text-sm sm:text-base">
                       Back to Home
                     </Link>
                   </>
                 )}
               </div>
             ) : (
-              <div ref={gridRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div ref={gridRef} className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredVideos.map((video) => {
                   const videoName = getVideoName(video)
                   const videoDescription = getVideoDescription(video)
@@ -690,45 +690,45 @@ export default function AllVideosPage() {
                     <article
                       key={video.id}
                       onClick={() => handleVideoClick(video)}
-                      className="video-card relative opacity-0 group rounded-[28px] cursor-pointer text-slate-900 bg-[#F3F0E9] transition-colors duration-300 hover:bg-emerald-700 hover:text-white shadow-sm ring-1 ring-slate-100 hover:ring-emerald-700"
+                      className="video-card relative opacity-0 group rounded-2xl sm:rounded-[28px] cursor-pointer text-slate-900 bg-[#F3F0E9] transition-colors duration-300 hover:bg-emerald-700 hover:text-white shadow-sm ring-1 ring-slate-100 hover:ring-emerald-700"
                     >
-                      <div className="p-5">
+                      <div className="p-3 sm:p-4 md:p-5">
                         {(brandName || video.categories?.length || video.tags?.length) && (
-                          <div className="flex items-center gap-2 text-[11px] flex-wrap mb-4">
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] flex-wrap mb-3 sm:mb-4">
                             {brandName && (
-                              <span className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
+                              <span className="rounded-full bg-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white">
                                 {brandName}
                               </span>
                             )}
                             {video.categories?.slice(0, 2).map((category, idx) => (
                               <span
                                 key={idx}
-                                className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white"
+                                className="rounded-full bg-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white"
                               >
                                 {category.name}
                               </span>
                             ))}
                           </div>
                         )}
-                        <h3 className="text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">
                           {videoName}
                         </h3>
-                        <p className="mt-2 text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80 line-clamp-2">
+                        <p className="mt-2 text-xs sm:text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80 line-clamp-2">
                           {videoDescription}
                         </p>
                       </div>
-                      <div className="mt-5 overflow-hidden rounded-b-2xl">
-                        <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-2xl">
+                      <div className="mt-3 sm:mt-4 md:mt-5 overflow-hidden rounded-b-xl sm:rounded-b-2xl">
+                        <div className="relative aspect-[16/12] w-full overflow-hidden rounded-b-xl sm:rounded-b-2xl">
                           <div
                             className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
                             style={{ backgroundImage: `url("${encodeURI(videoThumbnail)}")` }}
                           />
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
+                            <div className="h-0 w-0 rounded-xl sm:rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
                           </div>
                           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md">
-                              <span className="ml-0.5 inline-block h-0 w-0 border-y-8 border-l-[14px] border-y-transparent border-l-emerald-600" />
+                            <span className="inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-white shadow-md">
+                              <span className="ml-0.5 inline-block h-0 w-0 border-y-6 border-l-[10px] sm:border-y-8 sm:border-l-[14px] border-y-transparent border-l-emerald-600" />
                             </span>
                           </div>
                         </div>
@@ -745,11 +745,11 @@ export default function AllVideosPage() {
       {/* Video Detail Modal */}
       {isDetailModalOpen && selectedVideoDetails && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200"
           onClick={closeDetailModal}
         >
           <div 
-            className="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
+            className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -774,7 +774,7 @@ export default function AllVideosPage() {
 
             <div className="flex flex-col lg:flex-row h-full overflow-y-auto">
               {/* Left Side - Video Player */}
-              <div className="lg:w-1/2 bg-slate-900 p-6 lg:p-8 flex items-center justify-center">
+              <div className="lg:w-1/2 bg-slate-900 p-3 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center">
                 {selectedVideo ? (
                   <div className="relative w-full aspect-video">
                     <iframe
@@ -787,11 +787,11 @@ export default function AllVideosPage() {
                   </div>
                 ) : (
                   <div className="relative w-full aspect-video bg-slate-800 rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <svg className="w-24 h-24 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="text-center px-4">
+                      <svg className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
-                      <p className="text-slate-400">Video not available</p>
+                      <p className="text-sm sm:text-base text-slate-400">Video not available</p>
                       {getVideoUrl(selectedVideoDetails) && (
                         <button
                           onClick={() => {
@@ -800,7 +800,7 @@ export default function AllVideosPage() {
                               window.open(videoUrl, '_blank')
                             }
                           }}
-                          className="mt-4 px-6 py-3 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors"
+                          className="mt-4 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors"
                         >
                           Open Video Link
                         </button>
@@ -811,9 +811,9 @@ export default function AllVideosPage() {
               </div>
 
               {/* Right Side - Details */}
-              <div className="lg:w-1/2 p-6 lg:p-8 overflow-y-auto">
+              <div className="lg:w-1/2 p-4 sm:p-6 lg:p-8 overflow-y-auto">
                 {/* Video Name */}
-                <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3 leading-tight">
                   {getVideoName(selectedVideoDetails)}
                 </h2>
 
@@ -916,21 +916,22 @@ export default function AllVideosPage() {
       {/* Video Player Modal (for when playing video from detail modal) */}
       {selectedVideo && !isDetailModalOpen && (
         <div 
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4"
           onClick={closeVideoModal}
         >
           <div 
-            className="relative w-full max-w-4xl aspect-video"
+            className="relative w-full max-w-4xl aspect-video mx-2 sm:mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={closeVideoModal}
-              className="absolute -top-10 right-0 text-white hover:text-emerald-400 transition-colors p-2 rounded-full hover:bg-white/10"
+              className="absolute -top-8 sm:-top-10 right-0 text-white hover:text-emerald-400 transition-colors p-1.5 sm:p-2 rounded-full hover:bg-white/10"
               aria-label="Close video"
             >
               <svg
-                width="32"
-                height="32"
+                width="24"
+                height="24"
+                className="sm:w-8 sm:h-8"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
