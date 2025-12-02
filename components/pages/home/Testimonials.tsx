@@ -217,15 +217,18 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
         </div>
 
         {/* Right Section - Carousel */}
-        <div className="relative mt-6 md:mt-0 overflow-hidden">
+        <div className="relative mt-6 md:mt-0 ">
           {/* Static Card Container */}
-          <div className="relative w-full max-w-4xl mx-auto overflow-visible sm:overflow-hidden">
+          <div className="relative w-full max-w-4xl mx-auto overflow-visible">
             {/* Fixed decorative rectangles - outside of sliding content - hidden on mobile to prevent overflow */}
             <div className="hidden sm:block absolute -top-5 -left-5 h-[150px] w-[150px] md:h-[200px] md:w-[200px] border border-slate-500 rounded-lg"></div>
             <div className="hidden sm:block absolute -bottom-5 -right-5 h-[150px] w-[150px] md:h-[200px] md:w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
 
             {/* Main card container - slides from right when visible */}
-            <div ref={cardRef} className="relative flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-stretch bg-[#F4F4F4] rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm w-full max-w-full opacity-0 p-4 sm:p-0 overflow-hidden">
+            <div
+              ref={cardRef}
+              className="relative flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-center sm:items-stretch bg-[#F4F4F4] rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm w-full max-w-full opacity-0 p-4 sm:p-0 overflow-hidden"
+            >
               {/* Left side - Profile image with overlay slide effect */}
               <div className="flex-shrink-0 w-full sm:w-auto flex justify-center sm:justify-start">
                 <div className="relative w-[100px] h-[100px] sm:w-[200px] md:w-[250px] sm:h-full overflow-hidden rounded-full sm:rounded-xl md:rounded-2xl mx-auto sm:mx-0" style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' }}>
