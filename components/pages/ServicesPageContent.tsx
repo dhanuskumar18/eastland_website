@@ -86,31 +86,24 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
 
             if (entry.target === firstContentRef.current) {
               // First content - slide up with bounce
-              console.log('Animating first content')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === middleContentRef.current) {
               // Middle content - slide up with bounce
-              console.log('Animating middle content')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === card1Ref.current) {
               // Card 1 - slide up with bounce
-              console.log('Animating card 1')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === card2Ref.current) {
               // Card 2 - slide up with bounce
-              console.log('Animating card 2')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === card3Ref.current) {
               // Card 3 - slide up with bounce
-              console.log('Animating card 3')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === card4Ref.current) {
               // Card 4 - slide up with bounce
-              console.log('Animating card 4')
               entry.target.classList.add('animate-slide-up-bounce')
             } else if (entry.target === lastContentRef.current) {
               // Last content - slide up with bounce
-              console.log('Animating last content')
               entry.target.classList.add('animate-slide-up-bounce')
             }
 
@@ -171,11 +164,11 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
         </div>
       </section>
 
-      {/* Our Services Section */}
-      <LazySection sectionId={ourServicesSection?.id || ''}>
+      {/* Our Services Section (LazySection kept, but forced to always render) */}
+      <LazySection sectionId={ourServicesSection?.id || ''} forceAlwaysRender>
         <section className="py-20 bg-white">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div ref={firstContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            <div ref={firstContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Image with custom border radius */}
             <div className="relative w-full max-w-[543px] mx-auto md:mx-0">
               <div 
@@ -269,14 +262,14 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
             </div>
           </div>
         </div>
-      </section>
+        </section>
       </LazySection>
 
-      {/* Services Cards Section */}
-      <LazySection sectionId={kitchenInstallationsSection?.id || ''}>
+      {/* Services Cards Section (LazySection kept, but forced to always render) */}
+      <LazySection sectionId={kitchenInstallationsSection?.id || ''} forceAlwaysRender>
         <section className="py-20 bg-gray-50">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div ref={middleContentRef} className="text-center mb-16 opacity-0">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            <div ref={middleContentRef} className="text-center mb-16 opacity-0">
             <p className="text-sm font-semibold text-slate-500">Services</p>
             <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
               {kitchenInstallationsContent.title ? (
@@ -424,25 +417,24 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
             </div>
           </div>
         </div>
-      </section>
+        </section>
       </LazySection>
 
-      {/* About Our Services Section */}
-      <LazySection sectionId={aboutOurServicesSection?.id || ''}>
+      {/* About Our Services Section (LazySection kept, but forced to always render) */}
+      <LazySection sectionId={aboutOurServicesSection?.id || ''} forceAlwaysRender>
         <section className="py-20 bg-white">
-        <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
-          <div ref={lastContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
+          <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
+            <div ref={lastContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Overlapping Images */}
             <div className="relative w-full max-w-[520px] mx-auto md:mx-0">
               {/* Main Image */}
-              <div className="rounded-[22px]  bg-white p-3  ">
-                <div className="relative overflow-hidden rounded-[18px] h-[442px] w-[450px] p-3 border-2 border-gray-400">
+              <div className="rounded-[18px] sm:rounded-[20px] md:rounded-[22px] bg-white p-2 sm:p-3">
+                <div className="relative overflow-hidden rounded-[14px] sm:rounded-[16px] md:rounded-[18px] h-[280px] sm:h-[350px] md:h-[442px] w-full max-w-[280px] sm:max-w-[350px] md:max-w-[400px] mx-auto md:mx-0 p-2 sm:p-3 border-2 border-gray-400">
                   <LazyImage 
                     src={aboutOurServicesContent.image1 || "/images/Services/1 (9).png"} 
                     alt="Elegant Dining Area" 
-                     height={350}
-                     width={350}
-                    className="object-cover h-full w-full" 
+                    fill
+                    className="object-cover rounded-[12px] sm:rounded-[14px] md:rounded-[16px] transition-transform duration-300 hover:scale-110 transform-gpu will-change-transform" 
                     imageType="page"
                     sectionId={aboutOurServicesSection?.id}
                   />
@@ -450,14 +442,13 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-6 -left-32 rounded-2xl shadow-2xl">
-                <div className="relative  overflow-hidden rounded-2xl h-[400px] w-[280px] p-3 border-2 border-gray-400 ">
+              <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-6 md:-bottom-6 md:-left-12 rounded-xl sm:rounded-2xl shadow-2xl">
+                <div className="relative overflow-hidden rounded-xl sm:rounded-2xl h-[150px] sm:h-[200px] md:h-[300px] lg:h-[400px] w-[120px] sm:w-[150px] md:w-[200px] lg:w-[250px] p-2 sm:p-3 border-2 border-gray-400">
                   <LazyImage 
                     src={aboutOurServicesContent.image2 || "/images/Services/1 (8).png"} 
                     alt="Modern Cafe Setting" 
-                    height={300}
-                    width={300}
-                    className="object-cover h-full w-full rounded-2xl" 
+                    fill
+                    className="object-cover rounded-lg sm:rounded-xl md:rounded-2xl transition-transform duration-300 hover:scale-110 transform-gpu will-change-transform" 
                     imageType="page"
                     sectionId={aboutOurServicesSection?.id}
                   />
@@ -516,7 +507,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
             </div>
           </div>
         </div>
-      </section>
+        </section>
       </LazySection>
     </main>
   )

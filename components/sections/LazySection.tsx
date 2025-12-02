@@ -7,13 +7,22 @@ interface LazySectionProps {
   sectionId: number | string
   children: ReactNode
   className?: string
+  /**
+   * If true, bypasses lazy loading logic and always renders children immediately.
+   * Useful for sections that manage their own animations or where lazy loading causes UX issues.
+   */
+  forceAlwaysRender?: boolean
 }
 
 /**
  * LazySection component that lazy loads entire sections when whereToApply is 'custom'
  * Only renders the section content when it comes into view based on custom threshold settings
  */
-export default function LazySection({ sectionId, children, className }: LazySectionProps) {
+export default function LazySection({ sectionId, children, className, forceAlwaysRender }: LazySectionProps) {
+  // If explicitly forced, render immediately and skip all lazy logic
+  if (forceAlwaysRender) {
+    return <div className={className}>{children}</div>
+  }
   const { settings, sectionConfigs } = useLazyLoading()
   const [shouldRender, setShouldRender] = useState(false)
 

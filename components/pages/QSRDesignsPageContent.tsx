@@ -133,15 +133,15 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
         <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2">
             {/* Left Side - Overlapping Images */}
-            <div className="relative w-full max-w-[400px] mx-auto md:mx-0">
+            <div className="relative w-full max-w-[520px] mx-auto md:mx-0">
               {/* Main Image */}
-              <div className=" bg-white  ">
-                <div className="relative aspect-[519/650] overflow-hidden rounded-[50px] ">
+              <div className="rounded-[18px] sm:rounded-[20px] md:rounded-[22px] bg-white p-2 sm:p-3">
+                <div className="relative overflow-hidden rounded-[14px] sm:rounded-[16px] md:rounded-[18px] h-[280px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full max-w-[280px] sm:max-w-[350px] md:max-w-[400px] mx-auto md:mx-0 p-2 sm:p-3 border-2 border-gray-400">
                   <LazyImage 
                     src={qsrDesignsContent.image1 || qsrDesignsContent.image || "/images/Products/Rectangle 78.png"} 
                     alt={qsrDesignsContent.imageAlt || "Modern Cafe Interior"} 
                     fill 
-                    className="object-cover transition-transform duration-300 hover:scale-110" 
+                    className="object-cover rounded-[12px] sm:rounded-[14px] md:rounded-[16px] transition-transform duration-300 hover:scale-110 transform-gpu will-change-transform" 
                     imageType="page"
                     sectionId={qsrDesignsSection?.id}
                   />
@@ -149,14 +149,13 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               </div>
 
               {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-0 right-8 w-[300px] h-[300px] ">
-                <div className="relative aspect-[365/315] overflow-hidden rounded-[50px] left-44 p-[2px]  bg-white w-[350px]">
+              <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-6 md:-bottom-6 md:-right-12 rounded-xl sm:rounded-2xl shadow-2xl">
+                <div className="relative overflow-hidden rounded-xl sm:rounded-2xl h-[150px] sm:h-[200px] md:h-[240px] lg:h-[300px] w-[120px] sm:w-[150px] md:w-[200px] lg:w-[250px] p-2 sm:p-3 border-2 border-gray-400">
                   <LazyImage 
                     src={qsrDesignsContent.image2 || "/images/Products/Rectangle 79.png"} 
                     alt={qsrDesignsContent.image2Alt || "Refined Dining Space"} 
-                     width={350}
-                     height={350}
-                    className="object transition-transform duration-300 hover:scale-110 " 
+                    fill
+                    className="object-cover rounded-lg sm:rounded-xl md:rounded-2xl transition-transform duration-300 hover:scale-110 transform-gpu will-change-transform" 
                     imageType="page"
                     sectionId={qsrDesignsSection?.id}
                   />
@@ -397,7 +396,15 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                   padding: 'clamp(10px, 2vw, 20px)'
                 }}
               >
-                <div className="relative w-full h-full overflow-hidden rounded-[148px] rounded-br-[148px] rounded-tr-none rounded-bl-none">
+                <div
+                  className="relative w-full h-full overflow-hidden"
+                  style={{
+                    borderTopLeftRadius: 'clamp(70px, 13vw, 148px)',
+                    borderBottomRightRadius: 'clamp(70px, 13vw, 148px)',
+                    borderTopRightRadius: '0px',
+                    borderBottomLeftRadius: '0px'
+                  }}
+                >
                   <LazyImage 
                     src={aboutQSRContent.image || "/images/Products/Rectangle 76.png"} 
                     alt={aboutQSRContent.imageAlt || "Modern Restaurant Interior"} 
