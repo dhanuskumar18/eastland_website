@@ -334,7 +334,7 @@ export default function slider({
       </div>
 
       {/* Navigation arrows - Bottom right corner */}
-      <div className="absolute bottom-8 right-32 z-20 flex gap-4">
+      <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 md:right-32 z-20 flex gap-2 sm:gap-4">
         <button
           onClick={goToPrev}
           disabled={isTransitioning}
@@ -345,7 +345,7 @@ export default function slider({
           }`}
           aria-label="Previous slide"
         >
-          <svg className="h-24 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-12 w-8 sm:h-16 sm:w-12 md:h-24 md:w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -360,7 +360,7 @@ export default function slider({
           }`}
           aria-label="Next slide"
         >
-          <svg className="h-24 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-12 w-8 sm:h-16 sm:w-12 md:h-24 md:w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -371,28 +371,28 @@ export default function slider({
         <div
           key={index}
           ref={addContentToRefs}
-          className={`absolute inset-0 flex max-w-full flex-row justify-around items-end px-4 py-24 sm:px-6 lg:px-16 min-h-screen ${
+          className={`absolute inset-0 flex max-w-full flex-col sm:flex-row justify-around items-end px-4 py-12 sm:py-16 md:py-24 sm:px-6 lg:px-16 min-h-screen ${
             index === currentIndex ? 'z-20' : 'z-10'
           }`}
         >
-          <div className="max-w-4xl">
+          <div className="max-w-4xl w-full sm:w-auto">
             {slideContent.title && (
-              <h1 className="text-6xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white">
                 {slideContent.title}
               </h1>
             )}
             {slideContent.subtitle && (
-              <p className="mt-6 text-2xl font-light text-white/90 sm:text-3xl">
+              <p className="mt-3 sm:mt-4 md:mt-6 text-base sm:text-lg md:text-2xl lg:text-3xl font-light text-white/90">
                 {slideContent.subtitle}
               </p>
             )}
           </div>
 
-          <div className="max-w-2xl">
+          <div className="max-w-2xl w-full sm:w-auto mt-4 sm:mt-0">
             {slideContent.description && (
               <p 
                 ref={addDescriptionToRefs}
-                className="text-lg text-white/80 leading-relaxed sm:text-xl"
+                className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 leading-relaxed"
               >
                 {slideContent.description}
               </p>
@@ -400,16 +400,17 @@ export default function slider({
             {slideContent.buttonText && slideContent.buttonLink && (
               <div 
                 ref={addButtonToRefs}
-                className="mt-8"
+                className="mt-4 sm:mt-6 md:mt-8"
               >
                 <a
                   href={slideContent.buttonLink}
-                  className="inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:scale-105 group"
+                  className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-white/30 bg-white/10 px-4 sm:px-6 md:px-8 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white backdrop-blur transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:scale-105 group"
                 >
                   {slideContent.buttonText}
                   <svg
-                    width="16"
-                    height="16"
+                    width="14"
+                    height="14"
+                    className="sm:w-4 sm:h-4"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -428,13 +429,13 @@ export default function slider({
       ))}
 
       {/* Navigation dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
             disabled={isTransitioning}
-            className={`h-3 w-3 rounded-full border transition-all duration-300 ${
+            className={`h-2 w-2 sm:h-3 sm:w-3 rounded-full border transition-all duration-300 ${
               isTransitioning
                 ? 'cursor-not-allowed'
                 : 'cursor-pointer'

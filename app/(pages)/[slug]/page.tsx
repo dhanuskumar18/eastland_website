@@ -60,21 +60,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params
-  
-  // Debug: Log slug being fetched
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Fetching page with slug:', slug)
-  }
-  
+
   const pageData = await fetchPageBySlug(slug)
-  
-  // Debug: Log fetched page data
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Fetched Page Data:', pageData)
-    if (pageData?.sections) {
-      console.log('Page Sections:', pageData.sections.map(s => ({ type: s.type, hasContent: !!s.content, contentKeys: Object.keys(s.content || {}) })))
-    }
-  }
 
   // For contact page, allow rendering even if API returns 404
   // This handles cases where the page might not exist in the CMS yet

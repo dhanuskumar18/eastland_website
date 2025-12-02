@@ -181,34 +181,34 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
   }
 
   return (
-    <section className="mx-auto w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <div className="grid items-start gap-8 md:grid-cols-2">
+    <section className="mx-auto w-[90%] sm:w-[80%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8 overflow-hidden">
+      <div className="grid items-start gap-6 sm:gap-8 md:grid-cols-2">
         {/* Left Section - Introduction */}
         <div>
-          <p className="text-sm font-semibold text-slate-500">Client Testimonial</p>
-          <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+          <p className="text-xs sm:text-sm font-semibold text-slate-500">Client Testimonial</p>
+          <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
             What Our Valued Clients Say About Us
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600">
+          <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-600">
             Discover what our valued clients have to say about their experience with us. Each testimonial reflects our dedication to quality, trust, and long-lasting.
           </p>
           {/* See More Button - Only show if there are more than 4 testimonials */}
           {hasMoreTestimonials && (
             <Link 
               href="/testimonials/all"
-              className="mt-6 inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
+              className="mt-4 sm:mt-6 inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
             >
               See More
               <svg
-                width="16"
-                height="16"
+                width="14"
+                height="14"
+                className="sm:w-4 sm:h-4 transition-transform duration-300 rotate-0 group-hover:rotate-45"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
               >
                 <path d="M7 17L17 7M17 7H7M17 7V17"/>
               </svg>
@@ -217,18 +217,18 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
         </div>
 
         {/* Right Section - Carousel */}
-        <div className="relative">
+        <div className="relative mt-6 md:mt-0 overflow-hidden">
           {/* Static Card Container */}
-          <div className="relative w-full max-w-4xl mx-auto ">
-            {/* Fixed decorative rectangles - outside of sliding content */}
-            <div className="absolute -top-5 -left-5 h-[200px] w-[200px] border border-slate-500 rounded-lg"></div>
-            <div className="absolute -bottom-5 -right-5 h-[200px] w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
+          <div className="relative w-full max-w-4xl mx-auto overflow-visible sm:overflow-hidden">
+            {/* Fixed decorative rectangles - outside of sliding content - hidden on mobile to prevent overflow */}
+            <div className="hidden sm:block absolute -top-5 -left-5 h-[150px] w-[150px] md:h-[200px] md:w-[200px] border border-slate-500 rounded-lg"></div>
+            <div className="hidden sm:block absolute -bottom-5 -right-5 h-[150px] w-[150px] md:h-[200px] md:w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
 
             {/* Main card container - slides from right when visible */}
-            <div ref={cardRef} className="relative flex gap-8 items-stretch bg-[#F4F4F4] rounded-3xl border border-gray-200 shadow-sm max-w-full opacity-0">
+            <div ref={cardRef} className="relative flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 items-stretch bg-[#F4F4F4] rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm w-full max-w-full opacity-0 p-4 sm:p-0 overflow-hidden">
               {/* Left side - Profile image with overlay slide effect */}
-              <div className="flex-shrink-0">
-                <div className="relative w-[250px] h-full overflow-hidden rounded-2xl" style={{ clipPath: 'polygon(0% 0%, 85% 0%, 75% 100%, 0% 100%)' }}>
+              <div className="flex-shrink-0 w-full sm:w-auto flex justify-center sm:justify-start">
+                <div className="relative w-[100px] h-[100px] sm:w-[200px] md:w-[250px] sm:h-full overflow-hidden rounded-full sm:rounded-xl md:rounded-2xl mx-auto sm:mx-0" style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' }}>
                   {/* Base image - always visible */}
                   <div className="absolute inset-0">
                     <LazyImage 
@@ -266,7 +266,7 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
               </div>
 
               {/* Right side - Testimonial content with sliding text */}
-              <div className="flex-1 flex flex-col min-w-0 max-w-full ">
+              <div className="flex-1 flex flex-col min-w-0 w-full sm:w-auto">
                 {/* Quote mark icon */}
                 <div className="text-gray-300 text-5xl my-4">
                   <LazyImage
@@ -280,9 +280,9 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
                 </div>
 
                 {/* Sliding content container */}
-                <div className="relative flex-1 min-w-0 max-w-full overflow-hidden">
+                <div className="relative flex-1 min-w-0 w-full overflow-hidden">
                   <div 
-                    className=" flex transition-transform duration-500 ease-in-out py-2 "
+                    className="flex transition-transform duration-500 ease-in-out py-2"
                     style={{
                       transform: `translateX(-${(isTransitioning ? nextIndex : currentIndex) * (100 / testimonialsData.length)}%)`,
                       width: `${testimonialsData.length * 100}%`
@@ -291,23 +291,23 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
                     {testimonialsData.map((testimonial: typeof defaultTestimonialsData[0], index: number) => (
                       <div
                         key={index}
-                        className="flex-shrink-0 flex flex-col px-4 min-w-0"
+                        className="flex-shrink-0 flex flex-col px-2 sm:px-4 min-w-0 w-full"
                         style={{ width: `${100 / testimonialsData.length}%` }}
                       >
                         {/* Quote text */}
-                        <p className="text-gray-700 text-lg leading-relaxed mb-6 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.quote}</p>
+                        <p className="text-gray-700 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed mb-3 sm:mb-4 md:mb-6 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word text-center sm:text-left">{testimonial.quote}</p>
 
                         {/* Rating stars */}
-                        <div className="flex gap-1 mb-4">
+                        <div className="flex gap-1 mb-2 sm:mb-3 md:mb-4 justify-center sm:justify-start">
                           {Array.from({ length: testimonial.rating }).map((_, i) => (
-                            <Star key={i} size={24} className="fill-yellow-400 text-yellow-400" />
+                            <Star key={i} size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
 
                         {/* Author info */}
-                        <div className="min-w-0">
-                          <h3 className="text-xl font-bold text-gray-900 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.name}</h3>
-                          <p className="text-gray-600 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.title}</p>
+                        <div className="min-w-0 text-center sm:text-left">
+                          <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-gray-900 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.name}</h3>
+                          <p className="text-xs sm:text-sm md:text-base text-gray-600 break-words hyphens-auto overflow-wrap-anywhere word-break-break-word">{testimonial.title}</p>
                         </div>
                       </div>
                     ))}
@@ -330,20 +330,20 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-between mt-4 sm:mt-6">
             {/* Previous/Next Buttons */}
-            <div className="flex gap-2">
+            <div className="flex gap-1.5 sm:gap-2">
               <button
                 onClick={goToPrev}
                 disabled={isTransitioning}
-                className={`p-2 rounded-full border transition-all duration-200 ${
+                className={`p-1.5 sm:p-2 rounded-full border transition-all duration-200 ${
                   isTransitioning
                     ? 'border-gray-300 text-gray-300 cursor-not-allowed'
                     : 'border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white'
                 }`}
                 aria-label="Previous testimonial"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
@@ -351,27 +351,27 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
               <button
                 onClick={goToNext}
                 disabled={isTransitioning}
-                className={`p-2 rounded-full border transition-all duration-200 ${
+                className={`p-1.5 sm:p-2 rounded-full border transition-all duration-200 ${
                   isTransitioning
                     ? 'border-gray-300 text-gray-300 cursor-not-allowed'
                     : 'border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white'
                 }`}
                 aria-label="Next testimonial"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
 
             {/* Dots Indicator */}
-            <div className="flex gap-2">
+            <div className="flex gap-1.5 sm:gap-2">
               {testimonialsData.map((_: typeof defaultTestimonialsData[0], index: number) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
                   disabled={isTransitioning}
-                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                  className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
                     index === currentIndex
                       ? 'bg-emerald-700'
                       : 'bg-gray-300 hover:bg-emerald-500'
@@ -385,8 +385,8 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
           </div>
 
           {/* Slide Counter */}
-          <div className="mt-4 text-center">
-            <span className="text-sm text-gray-500">
+          <div className="mt-3 sm:mt-4 text-center">
+            <span className="text-xs sm:text-sm text-gray-500">
               {currentIndex + 1} of {testimonialsData.length}
             </span>
           </div>

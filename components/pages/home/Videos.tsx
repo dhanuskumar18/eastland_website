@@ -294,14 +294,14 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
     return (
       <span
         className={[
-          "inline-flex h-10 w-10 items-center justify-center rounded-full bg-white",
+          "inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-white",
           "shadow-md",
         ].join(" ")}
         aria-hidden
       >
         <span
           className={[
-            "ml-0.5 inline-block h-0 w-0 border-y-8 border-l-[14px] border-y-transparent",
+            "ml-0.5 inline-block h-0 w-0 border-y-6 border-l-[10px] sm:border-y-8 sm:border-l-[14px] border-y-transparent",
             "border-l-emerald-600",
           ].join(" ")}
         />
@@ -365,21 +365,21 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
 
   return (
     <>
-      <section ref={ref} className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-        <p ref={featuredTextRef} className="text-sm font-semibold text-slate-500">
+      <section ref={ref} className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8">
+        <p ref={featuredTextRef} className="text-xs sm:text-sm font-semibold text-slate-500">
           {content?.subTitle1 || "Featured Videos"}
         </p>
 
-        <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
-          <h2 ref={titleRef} className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+        <div className="mt-2 grid items-start gap-4 sm:gap-6 md:gap-8 md:grid-cols-2">
+          <h2 ref={titleRef} className="text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
             {buildTitle()}
           </h2>
-          <p ref={descriptionRef} className="text-sm leading-relaxed text-slate-600 md:mt-1">
+          <p ref={descriptionRef} className="text-xs sm:text-sm leading-relaxed text-slate-600 md:mt-1">
             {content?.description || "Witness complete transformations as we convert blank layouts into fully functional, customer-ready restaurants with precision planning, rapid execution, and flawless finishing."}
           </p>
         </div>
 
-        <div ref={cardsRef} className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div ref={cardsRef} className="mt-8 sm:mt-10 md:mt-12 grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {displayItems.map((item) => {
             // Build badges array from brand, category, and tags
             const badges: string[] = []
@@ -437,26 +437,26 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
                 key={item.id}
                 onClick={() => handleVideoClick(item)}
                 className={[
-                  "group relative rounded-[28px] cursor-pointer text-slate-900",
+                  "group relative rounded-2xl sm:rounded-[28px] cursor-pointer text-slate-900",
                   "bg-[#F3F0E9] transition-colors duration-300 hover:bg-emerald-700 hover:text-white",
                   "shadow-sm ring-1 ring-slate-100 hover:ring-emerald-700",
                 ].join(" ")}
               >
-                <div className="p-5">
-                  <div className="flex items-center gap-2 text-[11px] flex-wrap">
+                <div className="p-3 sm:p-4 md:p-5">
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] flex-wrap">
                     {badges.slice(0, 3).map((badge, idx) => (
                       <span 
                         key={idx}
-                        className="rounded-full bg-white px-2 py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white"
+                        className="rounded-full bg-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-slate-700 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white"
                       >
                         {badge}
                       </span>
                     ))}
                   </div>
-                  <h3 className="mt-4 text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">
+                  <h3 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-white">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80">
+                  <p className="mt-2 text-xs sm:text-sm text-slate-600 transition-colors duration-300 group-hover:text-white/80">
                     {item.description || "Witness complete transformations as we convert"}
                   </p>
                 </div>
@@ -471,7 +471,7 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
                       sectionId={sectionId}
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-0 w-0 rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
+                      <div className="h-0 w-0 rounded-xl sm:rounded-2xl bg-black/30 transition-all duration-[1000ms] ease-out group-hover:h-full group-hover:w-full" />
                     </div>
                     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                       <PlayButton />
@@ -485,50 +485,51 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
 
         {/* See More Button - Only show if there are more than 4 videos */}
         {hasMoreVideos ? (
-          <div ref={buttonRef} className="mt-12 text-center">
+          <div ref={buttonRef} className="mt-8 sm:mt-10 md:mt-12 text-center">
             <Link
               href="/videos/all"
-              className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
+              className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
             >
               See More
               <svg
-                width="16"
-                height="16"
+                width="14"
+                height="14"
+                className="sm:w-4 sm:h-4 transition-transform duration-300 rotate-0 group-hover:rotate-45"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="transition-transform duration-300 rotate-0 group-hover:rotate-45"
               >
                 <path d="M7 17L17 7M17 7H7M17 7V17"/>
               </svg>
             </Link>
           </div>
         ) : (
-          <div ref={buttonRef} className="mt-12"></div>
+          <div ref={buttonRef} className="mt-8 sm:mt-10 md:mt-12"></div>
         )}
       </section>
 
       {/* Video Modal */}
       {selectedVideo && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 sm:p-4"
           onClick={closeVideoModal}
         >
           <div 
-            className="relative w-full max-w-4xl aspect-video"
+            className="relative w-full max-w-4xl aspect-video mx-2 sm:mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={closeVideoModal}
-              className="absolute -top-10 right-0 text-white hover:text-emerald-400 transition-colors"
+              className="absolute -top-8 sm:-top-10 right-0 text-white hover:text-emerald-400 transition-colors p-1.5 sm:p-2 rounded-full hover:bg-white/10"
               aria-label="Close video"
             >
               <svg
-                width="32"
-                height="32"
+                width="24"
+                height="24"
+                className="sm:w-8 sm:h-8"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

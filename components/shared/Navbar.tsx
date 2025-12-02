@@ -16,6 +16,7 @@ type NavbarContent = {
 export default function Navbar() {
   const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
   
   const defaultMenu: NavItem[] = [
@@ -118,17 +119,18 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8" ref={navRef}>
-        <nav className={`mt-6 flex items-center justify-between rounded-full border border-white/20 px-4 py-2 backdrop-blur transition-all duration-300 ${
+      <div className="mx-auto max-w-[90%] sm:max-w-[80%] px-2 sm:px-4 md:px-6 lg:px-8" ref={navRef}>
+        <nav className={`mt-3 sm:mt-4 md:mt-6 flex items-center justify-between rounded-full border border-white/20 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 backdrop-blur transition-all duration-300 ${
           isScrolled 
             ? 'bg-black/40 border-black/20' 
             : 'bg-white/10 border-white/20'
         }`}>
-          <Link href="/" >
-            <img src={navData.logo || "/images/logo.png"} alt={(navData.brandName || "Eastland") + " Logo"} className="h-14 w-42" />
+          <Link href="/" className="flex-shrink-0">
+            <img src={navData.logo || "/images/logo.png"} alt={(navData.brandName || "Eastland") + " Logo"} className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto" />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white drop-shadow-sm">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-white drop-shadow-sm">
             {navData.menu?.map((item, idx) => {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0
               if (!hasChildren) {
@@ -173,16 +175,101 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="ml-4">
+          {/* Desktop Button */}
+          <div className="hidden md:block ml-4">
             <Link 
               href="/contact" 
-              className="relative rounded-full bg-white p-3 text-black font-medium overflow-hidden group transition-all duration-300 hover:scale-105"
+              className="relative rounded-full bg-white px-4 py-2 lg:px-5 lg:py-3 text-black text-xs lg:text-sm font-medium overflow-hidden group transition-all duration-300 hover:scale-105"
             >
-              <span className="relative z-10">{navData.buttonName || 'Enquire Now'}</span>
+              <span className="relative z-10 whitespace-nowrap">{navData.buttonName || 'Enquire Now'}</span>
               <div className="absolute inset-0 bg-yellow-400 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 ease-out origin-center"></div>
             </Link>
           </div>
+
+          {/* Mobile Menu Button (no enquiry button on mobile) */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 text-white hover:text-emerald-400 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
         </nav>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className={`md:hidden mt-2 rounded-2xl border backdrop-blur transition-all duration-300 ${
+            isScrolled 
+              ? 'bg-black/40 border-black/20' 
+              : 'bg-white/20 border-white/30'
+          }`}>
+            <nav className="px-4 py-4 space-y-2">
+              {navData.menu?.map((item, idx) => {
+                const hasChildren = Array.isArray(item.children) && item.children.length > 0
+                const isDropdownOpen = openDropdownIndex === idx
+                
+                if (!hasChildren) {
+                  return (
+                    <Link
+                      key={`${item.href}-${idx}`}
+                      href={item.href}
+                      className="block px-4 py-2 text-sm font-medium text-white hover:text-emerald-400 transition-colors rounded-lg"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  )
+                }
+                
+                return (
+                  <div key={`${item.href}-${idx}`} className="space-y-1">
+                    <button
+                      onClick={() => setOpenDropdownIndex(isDropdownOpen ? null : idx)}
+                      className="w-full flex items-center justify-between px-4 py-2 text-sm font-medium text-white hover:text-emerald-400 transition-colors rounded-lg"
+                    >
+                      <span>{item.label}</span>
+                      <svg 
+                        className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {isDropdownOpen && (
+                      <div className="pl-4 space-y-1">
+                        {item.children!.map((child, cidx) => (
+                          <Link
+                            key={`${child.href}-${cidx}`}
+                            href={child.href}
+                            className="block px-4 py-2 text-sm text-gray-300 hover:text-emerald-400 transition-colors rounded-lg"
+                            onClick={() => {
+                              setIsMobileMenuOpen(false)
+                              setOpenDropdownIndex(null)
+                            }}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   )

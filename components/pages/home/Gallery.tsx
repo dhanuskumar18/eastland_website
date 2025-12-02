@@ -64,11 +64,11 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
     : defaultImages
 
   return (
-    <section className="mx-auto max-w-[80%] px-4 py-20 sm:px-6 lg:px-8">
-      <p className="text-sm font-semibold text-slate-500">{content?.title || "Our Gallery"}</p>
+    <section className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8">
+      <p className="text-xs sm:text-sm font-semibold text-slate-500">{content?.title || "Our Gallery"}</p>
       
-      <div className="mt-2 grid items-start gap-8 md:grid-cols-2">
-        <h2 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+      <div className="mt-2 grid items-start gap-4 sm:gap-6 md:gap-8 md:grid-cols-2">
+        <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
           {content?.descSubTitle || (
             <>
               Explore Cafes and Quick Service
@@ -76,7 +76,7 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
             </>
           )}
         </h2>
-        <p className="text-sm leading-relaxed text-slate-600 md:mt-1">
+        <p className="text-xs sm:text-sm leading-relaxed text-slate-600 md:mt-1">
           {content?.description || "Discover how we transform ordinary spaces into high-performance cafés and quick service setups, designed for efficiency, aesthetics, and smooth customer flow."}
         </p>
       </div>

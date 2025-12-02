@@ -79,9 +79,9 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
   const showNavigation = items.length > itemsPerPage
 
   return (
-    <section ref={ref} className="mx-auto max-w-[100%] px-4 py-20 sm:px-6 lg:px-8 bg-green-50/50">
-      <div className="max-w-[80%] mx-auto">
-      <h2 className={`text-center text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce' : 'opacity-0'}`}>
+    <section ref={ref} className="mx-auto max-w-[100%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8 bg-green-50/50">
+      <div className="max-w-[90%] sm:max-w-[80%] mx-auto">
+      <h2 className={`text-center text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce' : 'opacity-0'}`}>
         {content?.title || (
           <>
             Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
@@ -90,7 +90,7 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
         )}
       </h2>
 
-      <div className="mt-14 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 sm:mt-10 md:mt-14 grid gap-6 sm:gap-8 md:gap-12 sm:grid-cols-2 lg:grid-cols-4">
         {visibleItems.map(({ title, image, description }, idx) => (
           <div key={`${title}-${startIndex + idx}`} className={["relative", idx % 2 === 0 ? "lg:mt-6" : "lg:mt-32"].join(" ") }>
             <div className="absolute -left-6 top-0 hidden h-full w-px bg-slate-400 opacity-50                                                            lg:block" aria-hidden />
@@ -107,12 +107,13 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
                 />
               </div>
             </div>
-            <p className="mt-5 text-sm leading-relaxed text-slate-600">{description}</p>
-            <div className="mt-6">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+            <p className="mt-4 sm:mt-5 text-xs sm:text-sm leading-relaxed text-slate-600">{description}</p>
+            <div className="mt-4 sm:mt-6">
+              <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
                 <svg
-                  width="16"
-                  height="16"
+                  width="14"
+                  height="14"
+                  className="sm:w-4 sm:h-4"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -131,22 +132,22 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
 
       {/* Green Navigation Buttons - Only show if there are more than 4 items */}
       {showNavigation && (
-        <div className={`mt-12 flex justify-center gap-4 transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce-delayed' : 'opacity-0'}`}>
+        <div className={`mt-8 sm:mt-10 md:mt-12 flex justify-center gap-3 sm:gap-4 transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce-delayed' : 'opacity-0'}`}>
           <button 
             onClick={goToPrev}
-            className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg hover:scale-110 active:scale-95"
+            className="bg-emerald-600 text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg hover:scale-110 active:scale-95"
             aria-label="Previous items"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <button 
             onClick={goToNext}
-            className="bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg hover:scale-110 active:scale-95"
+            className="bg-emerald-600 text-white w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors duration-200 shadow-lg hover:scale-110 active:scale-95"
             aria-label="Next items"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>

@@ -147,7 +147,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px]">
+      <section className="relative h-[40vh] min-h-[300px] sm:h-[50vh] sm:min-h-[400px] md:h-[60vh] md:min-h-[500px]">
         <div className="absolute inset-0">
           <LazyImage
             src={bannerContent.image || "/images/Services/Rectangle 52 (4).png"}
@@ -160,11 +160,11 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
           <div className="absolute inset-0 bg-black/40" />
         </div>
         <div className="relative z-10 flex h-full items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold sm:text-5xl lg:text-6xl">
+          <div className="text-center text-white px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
               {bannerContent.title || "Our Services"}
             </h1>
-            <p className="mt-4 text-lg sm:text-xl">
+            <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl">
               {bannerContent.subTitle || "Comprehensive Solutions for Your Business Needs"}
             </p>
           </div>
@@ -177,18 +177,19 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={firstContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Image with custom border radius */}
-            <div className="relative w-full max-w-[543px]">
+            <div className="relative w-full max-w-[543px] mx-auto md:mx-0">
               <div 
                 className="relative shadow-lg"
                 style={{
-                  width: '543px',
-                  height: '502px',
+                  width: '100%',
+                  maxWidth: '543px',
+                  aspectRatio: '543/502',
                   border: '1px solid black',
                   borderTopLeftRadius: '0px',
                   borderBottomRightRadius: '0px',
-                  borderTopRightRadius: '231px',
-                  borderBottomLeftRadius: '87px',
-                  padding: '20px'
+                  borderTopRightRadius: 'clamp(100px, 20vw, 231px)',
+                  borderBottomLeftRadius: 'clamp(40px, 8vw, 87px)',
+                  padding: 'clamp(10px, 2vw, 20px)'
                 }}
               >
                 <div 
@@ -196,8 +197,8 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                   style={{
                     borderTopLeftRadius: '0px',
                     borderBottomRightRadius: '0px',
-                    borderTopRightRadius: '211px',
-                    borderBottomLeftRadius: '67px'
+                    borderTopRightRadius: 'clamp(90px, 18vw, 211px)',
+                    borderBottomLeftRadius: 'clamp(30px, 6vw, 67px)'
                   }}
                 >
                   <LazyImage 
@@ -214,9 +215,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
             </div>
 
             {/* Right Side - Content */}
-            <div>
-              <p className="text-sm font-semibold text-slate-500">Our Services</p>
-              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+            <div className="mt-6 md:mt-0">
+              <p className="text-xs sm:text-sm font-semibold text-slate-500">Our Services</p>
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
                 {ourServicesContent.title ? (
                   <>
                     {ourServicesContent.title}
@@ -232,23 +233,23 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               </h2>
               {ourServicesContent.description ? (
                 (ourServicesContent.description as string).split('\n').filter((part: string) => part.trim()).map((part: string, index: number) => (
-                  <p key={index} className="mt-4 text-sm leading-relaxed text-slate-700">
+                  <p key={index} className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                     {part.trim()}
                   </p>
                 ))
               ) : (
                 <>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                     Expert Kitchen Services with Essential Equipment and Sanitization Product Support We provide end-to-end commercial kitchen solutions, including design, installation, maintenance, and deep cleaning services.
                   </p>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-700">
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                     Alongside our expertise, we offer essential kitchen equipment, smallwares, and professional sanitization products to ensure safety, efficiency, and compliance across all food service operations. Our support is tailored to hotels, restaurants, cafeterias, bakeries, and industrial facilities.
                   </p>
                 </>
               )}
 
-              <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+              <div className="mt-6 sm:mt-8 md:mt-10">
+                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -293,9 +294,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
             </h2>
           </div>
 
-          <div className="flex justify-center" style={{ gap: '35px' }}>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-[35px]">
               {/* Card 1 */}
-              <div ref={card1Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
+              <div ref={card1Ref} className="group relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0 w-full max-w-[270px] sm:w-[240px] md:w-[270px] h-[350px] sm:h-[380px] md:h-[410px]">
               <div className="relative h-full">
                 <LazyImage
                   src={displayCards[0]?.image || defaultCards[0].image}
@@ -306,28 +307,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                   sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">{displayCards[0]?.subTitle || defaultCards[0].subTitle}</h3>
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
+                  <h3 className="text-white font-bold text-base sm:text-lg">{displayCards[0]?.subTitle || defaultCards[0].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
-              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+              <div className="absolute inset-0 bg-emerald-600/80 p-4 sm:p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[0]?.title || defaultCards[0].title}</p>
-                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[0]?.subTitle || defaultCards[0].subTitle}</h3>
-                  <p className="text-emerald-100 text-sm leading-relaxed">
+                  <p className="text-emerald-100 text-[10px] sm:text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[0]?.title || defaultCards[0].title}</p>
+                  <h3 className="text-white font-bold text-lg sm:text-xl mb-3 sm:mb-4">{displayCards[0]?.subTitle || defaultCards[0].subTitle}</h3>
+                  <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
                     {displayCards[0]?.description || defaultCards[0].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
                 </button>
               </div>
             </div>
 
               {/* Card 2 */}
-              <div ref={card2Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
+              <div ref={card2Ref} className="group relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0 w-full max-w-[270px] sm:w-[240px] md:w-[270px] h-[350px] sm:h-[380px] md:h-[410px]">
               <div className="relative h-full">
                 <LazyImage
                   src={displayCards[1]?.image || defaultCards[1].image}
@@ -338,28 +339,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                   sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">{displayCards[1]?.subTitle || defaultCards[1].subTitle}</h3>
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
+                  <h3 className="text-white font-bold text-base sm:text-lg">{displayCards[1]?.subTitle || defaultCards[1].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
-              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+              <div className="absolute inset-0 bg-emerald-600/80 p-4 sm:p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[1]?.title || defaultCards[1].title}</p>
-                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[1]?.subTitle || defaultCards[1].subTitle}</h3>
-                  <p className="text-emerald-100 text-sm leading-relaxed">
+                  <p className="text-emerald-100 text-[10px] sm:text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[1]?.title || defaultCards[1].title}</p>
+                  <h3 className="text-white font-bold text-lg sm:text-xl mb-3 sm:mb-4">{displayCards[1]?.subTitle || defaultCards[1].subTitle}</h3>
+                  <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
                     {displayCards[1]?.description || defaultCards[1].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
                 </button>
               </div>
             </div>
 
               {/* Card 3 */}
-              <div ref={card3Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
+              <div ref={card3Ref} className="group relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0 w-full max-w-[270px] sm:w-[240px] md:w-[270px] h-[350px] sm:h-[380px] md:h-[410px]">
               <div className="relative h-full">
                 <LazyImage
                   src={displayCards[2]?.image || defaultCards[2].image}
@@ -370,28 +371,28 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                   sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">{displayCards[2]?.subTitle || defaultCards[2].subTitle}</h3>
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
+                  <h3 className="text-white font-bold text-base sm:text-lg">{displayCards[2]?.subTitle || defaultCards[2].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
-              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+              <div className="absolute inset-0 bg-emerald-600/80 p-4 sm:p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[2]?.title || defaultCards[2].title}</p>
-                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[2]?.subTitle || defaultCards[2].subTitle}</h3>
-                  <p className="text-emerald-100 text-sm leading-relaxed">
+                  <p className="text-emerald-100 text-[10px] sm:text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[2]?.title || defaultCards[2].title}</p>
+                  <h3 className="text-white font-bold text-lg sm:text-xl mb-3 sm:mb-4">{displayCards[2]?.subTitle || defaultCards[2].subTitle}</h3>
+                  <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
                     {displayCards[2]?.description || defaultCards[2].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
                 </button>
               </div>
             </div>
 
               {/* Card 4 */}
-              <div ref={card4Ref} className="group relative rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0" style={{ width: '270px', height: '410px' }}>
+              <div ref={card4Ref} className="group relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg cursor-pointer opacity-0 w-full max-w-[270px] sm:w-[240px] md:w-[270px] h-[350px] sm:h-[380px] md:h-[410px]">
               <div className="relative h-full">
                 <LazyImage
                   src={displayCards[3]?.image || defaultCards[3].image}
@@ -402,21 +403,21 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                   sectionId={kitchenInstallationsSection?.id}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-emerald-600/90 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg">{displayCards[3]?.subTitle || defaultCards[3].subTitle}</h3>
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
+                  <h3 className="text-white font-bold text-base sm:text-lg">{displayCards[3]?.subTitle || defaultCards[3].subTitle}</h3>
                 </div>
               </div>
               
               {/* Hover Content */}
-              <div className="absolute inset-0 bg-emerald-600/80 p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+              <div className="absolute inset-0 bg-emerald-600/80 p-4 sm:p-6 flex flex-col justify-between transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 <div>
-                  <p className="text-emerald-100 text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[3]?.title || defaultCards[3].title}</p>
-                  <h3 className="text-white font-bold text-xl mb-4">{displayCards[3]?.subTitle || defaultCards[3].subTitle}</h3>
-                  <p className="text-emerald-100 text-sm leading-relaxed">
+                  <p className="text-emerald-100 text-[10px] sm:text-xs font-semibold uppercase tracking-wide mb-2">{displayCards[3]?.title || defaultCards[3].title}</p>
+                  <h3 className="text-white font-bold text-lg sm:text-xl mb-3 sm:mb-4">{displayCards[3]?.subTitle || defaultCards[3].subTitle}</h3>
+                  <p className="text-emerald-100 text-xs sm:text-sm leading-relaxed">
                     {displayCards[3]?.description || defaultCards[3].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
                   Enquiry Now
                 </button>
               </div>
@@ -432,7 +433,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
         <div className="mx-auto max-w-[80%] px-4 sm:px-6 lg:px-8">
           <div ref={lastContentRef} className="grid items-center gap-16 md:grid-cols-2 opacity-0">
             {/* Left Side - Overlapping Images */}
-            <div className="relative w-full max-w-[520px]">
+            <div className="relative w-full max-w-[520px] mx-auto md:mx-0">
               {/* Main Image */}
               <div className="rounded-[22px]  bg-white p-3  ">
                 <div className="relative overflow-hidden rounded-[18px] h-[442px] w-[450px] p-3 border-2 border-gray-400">
@@ -465,9 +466,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
             </div>
 
             {/* Right Side - Content */}
-            <div>
-              <p className="text-sm font-semibold text-slate-500">About Our Services</p>
-              <h2 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
+            <div className="mt-6 md:mt-0">
+              <p className="text-xs sm:text-sm font-semibold text-slate-500">About Our Services</p>
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
                 {aboutOurServicesContent.title ? (
                   <>
                     {aboutOurServicesContent.title}
@@ -481,7 +482,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                   </>
                 )}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-slate-700">
+              <p className="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-slate-700">
                 {aboutOurServicesContent.description ? (
                   (aboutOurServicesContent.description as string).split('\n').filter((part: string) => part.trim()).map((part: string, index: number) => (
                     <span key={index}>
@@ -494,8 +495,8 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                 )}
               </p>
 
-              <div className="mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-3 rounded-full border border-emerald-700 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+              <div className="mt-6 sm:mt-8 md:mt-10">
+                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
