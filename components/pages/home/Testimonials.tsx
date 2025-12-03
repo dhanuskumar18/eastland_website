@@ -217,9 +217,9 @@ export default function Testimonials({ content, sectionId }: TestimonialsProps =
         </div>
 
         {/* Right Section - Carousel */}
-        <div className="relative mt-6 md:mt-0 overflow-hidden">
+        <div className="relative mt-6 md:mt-0 overflow-hidden md:overflow-visible">
           {/* Static Card Container */}
-          <div className="relative w-full max-w-4xl mx-auto overflow-hidden">
+          <div className="relative w-full max-w-4xl mx-auto overflow-hidden md:overflow-visible">
             {/* Fixed decorative rectangles - outside of sliding content - hidden on mobile to prevent overflow */}
             <div className="hidden sm:block absolute -top-5 -left-5 h-[150px] w-[150px] md:h-[200px] md:w-[200px] border border-slate-500 rounded-lg"></div>
             <div className="hidden sm:block absolute -bottom-5 -right-5 h-[150px] w-[150px] md:h-[200px] md:w-[200px] border border-slate-500 -z-10 rounded-lg"></div>
