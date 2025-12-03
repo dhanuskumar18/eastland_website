@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import LazyImage from "@/components/ui/LazyImage"
 
 interface GalleryProps {
@@ -103,7 +104,7 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-full group-hover:translate-y-0">
                 <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between">
                   <h3 className="text-lg font-semibold text-white">View Project</h3>
-                  <button className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 group">
+                  <Link href="/portfolio" className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 group">
                     <svg
                       width="16"
                       height="16"
@@ -117,7 +118,7 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
                     >
                       <path d="M7 17L17 7M17 7H7M17 7V17"/>
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -58,7 +58,7 @@ export default function HomeFirstSection({ content, sectionId }: HomeFirstSectio
     subtitle: slider.subtitle || '',
     description: slider.description || '',
     buttonText: slider.buttonText || '',
-    buttonLink: '#contact' // Default link, can be made dynamic if needed
+    buttonLink: '/contact' // Default link, can be made dynamic if needed
   }))
 
   return (
