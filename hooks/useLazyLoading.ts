@@ -9,6 +9,11 @@ import type {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
+// Simple in-memory cache so we only call the API once on the client
+let cachedSettings: LazyLoadingSettings | null = null
+let cachedSectionConfigs: LazyLoadingSectionConfig[] | null = null
+let settingsFetchPromise: Promise<void> | null = null
+
 /**
  * Parse threshold string (e.g., "20%", "300px") to pixels
  */
@@ -54,42 +59,61 @@ export function useLazyLoading() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchSettings() {
-      try {
-        const res = await fetch(`${API_URL}api/seo/lazy-loading`, {
-          cache: 'no-store',
-        })
+    // If we already have cached values, use them immediately and skip network
+    if (cachedSettings) {
+      setSettings(cachedSettings)
+      setSectionConfigs(cachedSectionConfigs)
+      setLoading(false)
+      return
+    }
 
-        if (res.ok) {
-          const json = await res.json()
-          const data = json?.data
-          if (data) {
-            setSettings(data)
-            
-            // If whereToApply is 'custom', fetch section configs
-            if (data.whereToApply === 'custom') {
-              try {
-                const sectionsRes = await fetch(`${API_URL}api/seo/lazy-loading/sections`, {
-                  cache: 'no-store',
-                })
-                if (sectionsRes.ok) {
-                  const sectionsJson = await sectionsRes.json()
-                  setSectionConfigs(sectionsJson?.data || [])
+    // Ensure only one actual network request is in-flight
+    if (!settingsFetchPromise) {
+      settingsFetchPromise = (async () => {
+        try {
+          const res = await fetch(`${API_URL}api/seo/lazy-loading`, {
+            cache: 'no-store',
+          })
+
+          if (res.ok) {
+            const json = await res.json()
+            const data = json?.data as LazyLoadingSettings | undefined
+
+            if (data) {
+              cachedSettings = data
+
+              // Only fetch section configs when lazy loading is enabled AND using custom sections
+              if (data.enabled === 'enable' && data.whereToApply === 'custom') {
+                try {
+                  const sectionsRes = await fetch(`${API_URL}api/seo/lazy-loading/sections`, {
+                    cache: 'no-store',
+                  })
+
+                  if (sectionsRes.ok) {
+                    const sectionsJson = await sectionsRes.json()
+                    cachedSectionConfigs = sectionsJson?.data || []
+                  }
+                } catch (error) {
+                  console.error('Error fetching lazy loading sections:', error)
                 }
-              } catch (error) {
-                console.error('Error fetching lazy loading sections:', error)
               }
             }
           }
+        } catch (error) {
+          console.error('Error fetching lazy loading settings:', error)
         }
-      } catch (error) {
-        console.error('Error fetching lazy loading settings:', error)
-      } finally {
-        setLoading(false)
-      }
+      })()
     }
 
-    fetchSettings()
+    // Subscribe to the shared fetch promise
+    settingsFetchPromise
+      ?.then(() => {
+        setSettings(cachedSettings)
+        setSectionConfigs(cachedSectionConfigs)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
 
   return { settings, sectionConfigs, loading }
@@ -128,13 +152,13 @@ export function useShouldLazyLoad(
     case 'all-images':
       shouldLazyLoad = true
       break
-    case 'page-images-only':
+    case 'page-images':
       shouldLazyLoad = imageType === 'page'
       break
-    case 'product-images-only':
+    case 'product-images':
       shouldLazyLoad = imageType === 'product'
       break
-    case 'gallery-images-only':
+    case 'gallery-images':
       shouldLazyLoad = imageType === 'gallery'
       break
     case 'custom':

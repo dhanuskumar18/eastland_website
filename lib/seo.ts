@@ -99,9 +99,9 @@ export async function buildPageMetadata(
 // Lazy Loading Types
 export type LazyLoadingWhereToApply = 
   | 'all-images' 
-  | 'page-images-only' 
-  | 'product-images-only' 
-  | 'gallery-images-only' 
+  | 'page-images' 
+  | 'product-images' 
+  | 'gallery-images' 
   | 'custom'
 
 export interface LazyLoadingSettings {
