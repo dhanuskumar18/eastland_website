@@ -41,12 +41,11 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
         <div className={`mx-auto grid w-full max-w-xl grid-cols-2 items-start transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'}`} style={{ overflow: 'visible' }}>
           {/* Image 1 - Top Left */}
           <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent" style={{ overflow: 'visible' }}>
-            <div className="absolute -right-4 top-0 z-10" style={{ width: '220px', height: '200px' }}>
+            <div className="absolute -right-7 top-5 z-10" style={{ width: '230px', height: '230px' }}>
               <LazyImage 
                 src={collage[0]} 
                 alt="Why choose image 1" 
-                width={220} 
-                height={200} 
+               fill
                 className="w-full h-full object-cover rounded-lg" 
                 imageType="page"
                 sectionId={sectionId}
@@ -60,7 +59,7 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
               alt="Why choose image 2" 
               width={530} 
               height={540} 
-              className="w-full h-auto object-cover rounded-lg relative -right-8" 
+              className="w-full h-auto object-cover rounded-lg relative right-7" 
               imageType="page"
               sectionId={sectionId}
             />
@@ -79,13 +78,11 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
           </div>
           {/* Image 4 - Bottom Right */}
           <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent" style={{ overflow: 'visible' }}>
-            <div className="absolute -left-3 -top-4 z-10" style={{ width: '200px', height: '200px' }}>
+            <div className="absolute -left-3 -top-4 z-10" style={{ width: '200px', height: '230px' }}>
               <LazyImage 
                 src={collage[3]} 
-                alt="Why choose image 4" 
-                width={200} 
-                height={200} 
-                className="w-full h-full object-cover rounded-lg" 
+                fill
+                className="w-full h-full object-cover rounded-lg " 
                 imageType="page"
                 sectionId={sectionId}
               />
