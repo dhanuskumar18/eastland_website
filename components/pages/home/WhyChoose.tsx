@@ -24,60 +24,72 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
     "/images/Why4.png",
   ]
 
-  // Use API images if available, otherwise use defaults
-  const collage = content?.images && content.images.length > 0
-    ? content.images
-    : defaultCollage
+  // Process images: filter out empty strings and ensure we always have 4 images
+  const apiImages = content?.images?.filter(img => img && img.trim() !== '') || []
+  const collage = defaultCollage.map((defaultImg, index) => {
+    // Use API image if available and valid, otherwise use default
+    return (apiImages[index] && apiImages[index].trim() !== '') 
+      ? apiImages[index] 
+      : defaultImg
+  })
 
 
   return (
-    <section ref={ref} className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 py-12 sm:py-16 md:py-24 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2">
+    <section ref={ref} className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 py-12 sm:py-16 md:py-24 sm:px-6 lg:px-8" style={{ overflow: 'visible' }}>
+      <div className="grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-2" style={{ overflow: 'visible' }}>
         {/* Collage */}
-        <div className={`mx-auto grid w-full max-w-xl grid-cols-2 items-start transition-all duration-1000 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
-          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent">
-            <LazyImage 
-              src={collage[0] || defaultCollage[0]} 
-              alt="Why choose image 1" 
-              width={220} 
-              height={200} 
-              className="absolute -right-4 -z-10" 
-              imageType="page"
-              sectionId={sectionId}
-            />
+        <div className={`mx-auto grid w-full max-w-xl grid-cols-2 items-start transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'}`} style={{ overflow: 'visible' }}>
+          {/* Image 1 - Top Left */}
+          <div className="rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-3/4 h-5/6 bg-transparent" style={{ overflow: 'visible' }}>
+            <div className="absolute -right-4 top-0 z-10" style={{ width: '220px', height: '200px' }}>
+              <LazyImage 
+                src={collage[0]} 
+                alt="Why choose image 1" 
+                width={220} 
+                height={200} 
+                className="w-full h-full object-cover rounded-lg" 
+                imageType="page"
+                sectionId={sectionId}
+              />
+            </div>
           </div>
-          <div className="">
+          {/* Image 2 - Top Right */}
+          <div style={{ overflow: 'visible' }}>
             <LazyImage 
-              src={collage[1] || defaultCollage[1]} 
+              src={collage[1]} 
               alt="Why choose image 2" 
               width={530} 
               height={540} 
-              className="w-full h-auto relative right-8" 
+              className="w-full h-auto object-cover rounded-lg relative -right-8" 
               imageType="page"
               sectionId={sectionId}
             />
           </div>
-          <div className="mt-6">
+          {/* Image 3 - Bottom Left */}
+          <div className="mt-6" style={{ overflow: 'visible' }}>
             <LazyImage 
-              src={collage[2] || defaultCollage[2]} 
+              src={collage[2]} 
               alt="Why choose image 3" 
               width={287} 
               height={265} 
-              className="w-full h-auto" 
+              className="w-full h-auto object-cover rounded-lg" 
               imageType="page"
               sectionId={sectionId}
             />
           </div>
-          <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent">
-            <LazyImage 
-              src={collage[3] || defaultCollage[3]} 
-              alt="Why choose image 4" 
-              width={200} 
-              height={200} 
-              className="absolute -left-3 -top-4" 
-              imageType="page"
-              sectionId={sectionId}
-            />
+          {/* Image 4 - Bottom Right */}
+          <div className="mt-6 ml-10 rounded-[12px] border border-slate-400 p-2 shadow-sm relative w-[200px] h-5/6 bg-transparent" style={{ overflow: 'visible' }}>
+            <div className="absolute -left-3 -top-4 z-10" style={{ width: '200px', height: '200px' }}>
+              <LazyImage 
+                src={collage[3]} 
+                alt="Why choose image 4" 
+                width={200} 
+                height={200} 
+                className="w-full h-full object-cover rounded-lg" 
+                imageType="page"
+                sectionId={sectionId}
+              />
+            </div>
           </div>
         </div>
 
