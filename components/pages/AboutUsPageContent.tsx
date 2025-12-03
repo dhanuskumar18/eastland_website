@@ -285,7 +285,7 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
           {/* Mission Part */}
           <div ref={missionRef} className="mb-12 sm:mb-16 md:mb-20 grid items-center gap-8 sm:gap-12 md:gap-16 md:grid-cols-[60%_40%]">
             {/* Text on the left */}
-            <div className="md:col-span-1">
+            <div className="md:col-span-1 order-2 md:order-1">
               <p className="mb-2 text-xs sm:text-sm font-semibold text-white/80">Mission</p>
               <h2 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold leading-tight md:text-4xl">
                 {missionContent.title || "Delivering efficient, high-quality restaurant setups with precision and speed."}
@@ -295,7 +295,7 @@ export default function AboutUsPageContent({ pageData }: AboutUsPageContentProps
               </p>
             </div>
             {/* Image on the right */}
-            <div className="relative w-full max-w-[520px] md:col-span-1">
+            <div className="relative w-full max-w-[520px] md:col-span-1 order-1 md:order-2">
               <div className="relative aspect-[519/442] overflow-hidden rounded-[18px]">
                 <LazyImage
                   src={missionContent.image || "/images/aboutUs/Rectangle 54.png"}
@@ -417,6 +417,8 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
   const [api, setApi] = useState<any>(null)
   const [previousMember, setPreviousMember] = useState<TeamMember | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const isDesktopRef = useRef(false)
 
   // Use dynamic team members if available, otherwise fall back to static
   const dynamicMembers: TeamMember[] = teamContent?.members?.map((member, index) => ({
@@ -432,6 +434,20 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
   // Limit to only 4 members for display on about us page
   const membersToUse = allMembers.slice(0, 4)
 
+  // Detect screen size to determine which card to feature
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const desktop = window.innerWidth >= 768 // md breakpoint
+      setIsDesktop(desktop)
+      isDesktopRef.current = desktop
+    }
+    
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
+
   useEffect(() => {
     if (!api) {
       return
@@ -441,10 +457,17 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
 
     api.on("select", () => {
       const newIndex = api.selectedScrollSnap()
-      const newMember = membersToUse[newIndex % membersToUse.length]
+      // Calculate featured index based on screen size (same logic as currentMember)
+      const newFeaturedIndex = isDesktopRef.current
+        ? (newIndex + 1) % membersToUse.length
+        : newIndex % membersToUse.length
+      const newMember = membersToUse[newFeaturedIndex]
       
-      // Get current member before updating
-      const currentMember = membersToUse[currentIndex % membersToUse.length]
+      // Get current member before updating (using same logic)
+      const currentFeaturedIndex = isDesktopRef.current
+        ? (currentIndex + 1) % membersToUse.length
+        : currentIndex % membersToUse.length
+      const currentMember = membersToUse[currentFeaturedIndex]
       
       if (currentMember.name !== newMember.name) {
         setPreviousMember(currentMember)
@@ -574,8 +597,10 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
   // On mobile: basis-full (1 item) - use currentIndex directly
   // On tablet: basis-1/2 (2 items) - use currentIndex (first visible)
   // On desktop: basis-1/3 (3 items) - use currentIndex + 1 (middle item)
-  // For simplicity, we'll use currentIndex to match the first visible card
-  const currentMember = membersToUse[currentIndex % membersToUse.length]
+  const featuredIndex = isDesktop 
+    ? (currentIndex + 1) % membersToUse.length  // Middle item on desktop (3 items visible)
+    : currentIndex % membersToUse.length        // First visible item on mobile/tablet
+  const currentMember = membersToUse[featuredIndex]
 
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white">
