@@ -242,7 +242,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               )}
 
               <div className="mt-6 sm:mt-8 md:mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                <a href="/contact" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -314,9 +314,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                     {displayCards[0]?.description || defaultCards[0].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <a href="/contact" className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit inline-block">
                   Enquiry Now
-                </button>
+                </a>
               </div>
             </div>
 
@@ -346,9 +346,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                     {displayCards[1]?.description || defaultCards[1].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <a href="/contact" className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit inline-block">
                   Enquiry Now
-                </button>
+                </a>
               </div>
             </div>
 
@@ -378,9 +378,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                     {displayCards[2]?.description || defaultCards[2].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <a href="/contact" className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit inline-block">
                   Enquiry Now
-                </button>
+                </a>
               </div>
             </div>
 
@@ -410,9 +410,9 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
                     {displayCards[3]?.description || defaultCards[3].description}
                   </p>
                 </div>
-                <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit">
+                <a href="/contact" className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 hover:scale-105 w-fit inline-block">
                   Enquiry Now
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -487,7 +487,7 @@ export default function ServicesPageContent({ pageData }: ServicesPageContentPro
               </p>
 
               <div className="mt-6 sm:mt-8 md:mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                <a href="/contact" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"

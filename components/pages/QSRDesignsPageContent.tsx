@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useEffect, useRef } from "react"
 import LazyImage from "@/components/ui/LazyImage"
 import { PageData } from '@/types/page'
@@ -198,7 +199,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               )}
 
               <div className="mt-6 sm:mt-8 md:mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                <a href="/contact" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"
@@ -260,7 +261,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                     <h3 className="font-semibold text-white drop-shadow-lg text-sm sm:text-base md:text-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">{featured[0]?.title || defaultFeatured[0].title}</h3>
                   </div>
                   <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 right-2 sm:right-3 md:right-4">
-                    <button className="inline-flex h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
+                    <Link href="/services" className="inline-flex h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
                       <svg
                         width="16"
                         height="16"
@@ -274,7 +275,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                       >
                         <path d="M7 17L17 7M17 7H7M17 7V17"/>
                       </svg>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -353,7 +354,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                     <h3 className="font-semibold text-white drop-shadow-lg text-sm sm:text-base md:text-lg transition-transform duration-300 translate-y-full group-hover:translate-y-0 absolute bottom-0 left-0">{featured[1]?.title || defaultFeatured[1].title}</h3>
                   </div>
                   <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 right-2 sm:right-3 md:right-4">
-                    <button className="inline-flex h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
+                    <Link href="/services" className="inline-flex h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-black text-white transition-all duration-300 group-hover:bg-emerald-700 group-hover:scale-110">
                       <svg
                         width="16"
                         height="16"
@@ -367,7 +368,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
                       >
                         <path d="M7 17L17 7M17 7H7M17 7V17"/>
                       </svg>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -452,7 +453,7 @@ export default function QSRDesignsPageContent({ pageData }: QSRDesignsPageConten
               )}
 
               <div className="mt-6 sm:mt-8 md:mt-10">
-                <a href="#enquiry" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
+                <a href="/contact" className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group">
                   Enquiry Now
                   <svg
                     width="16"

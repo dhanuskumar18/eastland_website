@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { useScroll } from '../../../hooks/useScroll'
 import LazyImage from '@/components/ui/LazyImage'
 
@@ -109,7 +110,10 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
             </div>
             <p className="mt-4 sm:mt-5 text-xs sm:text-sm leading-relaxed text-slate-600">{description}</p>
             <div className="mt-4 sm:mt-6">
-              <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer">
+              <Link 
+                href="/products/all"
+                className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-emerald-700 text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:scale-110 group cursor-pointer"
+              >
                 <svg
                   width="14"
                   height="14"
@@ -123,7 +127,7 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
                 >
                   <path d="M7 17L17 7M17 7H7M17 7V17"/>
                 </svg>
-              </span>
+              </Link>
             </div>
           </div>
         ))}
