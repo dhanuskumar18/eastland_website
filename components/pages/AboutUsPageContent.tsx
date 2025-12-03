@@ -441,12 +441,10 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
 
     api.on("select", () => {
       const newIndex = api.selectedScrollSnap()
-      const newMiddleIndex = (newIndex + 1) % membersToUse.length
-      const newMember = membersToUse[newMiddleIndex]
+      const newMember = membersToUse[newIndex % membersToUse.length]
       
       // Get current member before updating
-      const currentMiddleIndex = (currentIndex + 1) % membersToUse.length
-      const currentMember = membersToUse[currentMiddleIndex]
+      const currentMember = membersToUse[currentIndex % membersToUse.length]
       
       if (currentMember.name !== newMember.name) {
         setPreviousMember(currentMember)
@@ -572,10 +570,12 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
     }
   }, [])
 
-  // Get the middle member from the current visible carousel items
-  // Since we show 3 items at a time, the middle item is always currentIndex + 1
-  const middleIndex = (currentIndex + 1) % membersToUse.length
-  const currentMember = membersToUse[middleIndex]
+  // Get the current member based on the carousel index
+  // On mobile: basis-full (1 item) - use currentIndex directly
+  // On tablet: basis-1/2 (2 items) - use currentIndex (first visible)
+  // On desktop: basis-1/3 (3 items) - use currentIndex + 1 (middle item)
+  // For simplicity, we'll use currentIndex to match the first visible card
+  const currentMember = membersToUse[currentIndex % membersToUse.length]
 
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white">
@@ -645,7 +645,7 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
         </div>
 
         {/* Featured Image - Large Center Display */}
-        <div className="relative mb-8 sm:mb-12 md:mb-16 z-10" style={{ height: 'clamp(200px, 25vw, 400px)', minHeight: '200px' }}>
+        <div className="relative mb-8 sm:mb-12 md:mb-16 z-10" style={{ height: 'clamp(200px, 25vw, 400px)', minHeight: '200px', maxHeight: '400px' }}>
           {/* Previous image (exiting) */}
           {isTransitioning && previousMember && (
             <div
@@ -656,14 +656,16 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
                 transform: 'translate(-50%, -50%)',
                 transformOrigin: 'bottom center',
                 zIndex: 4,
+                minWidth: '180px',
+                minHeight: '180px',
               }}
             >
-              <div className="relative w-full h-full">
+              <div className="relative w-full h-full" style={{ width: '100%', height: '100%' }}>
                 <LazyImage
                   src={previousMember.image || "/placeholder.svg"}
                   alt={previousMember.name}
                   fill
-                  className="object-cover"
+                  className="object-cover rounded-2xl sm:rounded-3xl"
                   imageType="page"
                   sectionId={sectionId}
                 />
@@ -680,14 +682,16 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
               transform: 'translate(-50%, -50%)',
               transformOrigin: 'bottom center',
               zIndex: 5,
+              minWidth: '180px',
+              minHeight: '180px',
             }}
           >
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full" style={{ width: '100%', height: '100%' }}>
               <LazyImage
                 src={currentMember.image || "/placeholder.svg"}
                 alt={currentMember.name}
                 fill
-                className="object-cover"
+                className="object-cover rounded-2xl sm:rounded-3xl"
                 imageType="page"
                 sectionId={sectionId}
               />
@@ -713,15 +717,17 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
                     className={`bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border transition-all duration-300 cursor-pointer h-full relative`}
                   >
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="absolute -top-2 w-20 h-20 flex-shrink-0 rounded-lg ">
-                        <LazyImage
-                          src={member.image || "/placeholder.svg"}
-                          alt={member.name}
-                          fill
-                          className="object-cover"
-                          imageType="page"
-                          sectionId={sectionId}
-                        />
+                      <div className="absolute -top-2 left-4 w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                        <div className="relative w-full h-full">
+                          <LazyImage
+                            src={member.image || "/placeholder.svg"}
+                            alt={member.name}
+                            fill
+                            className="object-cover rounded-lg"
+                            imageType="page"
+                            sectionId={sectionId}
+                          />
+                        </div>
                       </div>
                       <div className="flex-1 text-center">
                         <h3 className="font-semibold text-base sm:text-lg text-gray-900 mb-1">{member.name}</h3>
