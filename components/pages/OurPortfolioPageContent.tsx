@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import LazyImage from "@/components/ui/LazyImage"
 import { PageData } from "@/types/page"
@@ -8,7 +9,13 @@ interface OurPortfolioPageContentProps {
   pageData?: PageData
 }
 
+interface PortfolioItem {
+  image?: string
+  title?: string
+}
+
 export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageContentProps) {
+  const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null)
   // Extract content from API sections
   const bannerSection = pageData?.sections?.find(s => s.type === 'portfolio_banner' || s.type === 'banner')
   const gallerySection = pageData?.sections?.find(s => s.type === 'portfolio_gallery')
@@ -40,6 +47,34 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
   const displayItems = items.length > 0 
     ? items.filter(item => item.image) // Only include items with images
     : defaultGalleryImages.map((img, idx) => ({ image: img, title: `Project ${idx + 1}` }))
+
+  const handleItemClick = (item: PortfolioItem) => {
+    setSelectedItem(item)
+  }
+
+  const closeModal = () => {
+    setSelectedItem(null)
+  }
+
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedItem) {
+        closeModal()
+      }
+    }
+
+    if (selectedItem) {
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'unset'
+    }
+  }, [selectedItem])
+
   return (
     <main className="flex min-h-dvh flex-col">
       {/* Hero Section */}
@@ -92,7 +127,11 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
               const imageAlt = it.title || `Project ${idx + 1}`
               
               return (
-                <div key={it.image || `portfolio-${idx}`} className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer">
+                <div 
+                  key={it.image || `portfolio-${idx}`} 
+                  onClick={() => handleItemClick(it)}
+                  className="group relative h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer"
+                >
                   <LazyImage
                     src={imageSrc}
                     alt={imageAlt}
@@ -113,6 +152,56 @@ export default function OurPortfolioPageContent({ pageData }: OurPortfolioPageCo
           </div>
         </div>
       </section>
+
+      {/* Portfolio Image Modal */}
+      {selectedItem && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-2 sm:p-4"
+          onClick={closeModal}
+        >
+          <div 
+            className="relative w-full max-w-6xl max-h-[90vh] mx-2 sm:mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeModal}
+              className="absolute -top-8 sm:-top-10 right-0 text-white hover:text-emerald-400 transition-colors p-1.5 sm:p-2 rounded-full hover:bg-white/10 z-10"
+              aria-label="Close modal"
+            >
+              <svg
+                width="24"
+                height="24"
+                className="sm:w-8 sm:h-8"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+            <div className="relative w-full bg-white rounded-lg overflow-hidden shadow-2xl flex items-center justify-center">
+              <div className="relative w-full max-w-full max-h-[90vh] flex items-center justify-center">
+                <img
+                  src={selectedItem.image || defaultGalleryImages[0]}
+                  alt={selectedItem.title || "Portfolio Image"}
+                  className="w-auto h-auto max-w-full max-h-[90vh] object-contain"
+                  style={{ display: 'block' }}
+                />
+                {selectedItem.title && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-4 sm:p-6 pointer-events-none">
+                    <h3 className="text-white text-lg sm:text-xl md:text-2xl font-semibold">
+                      {selectedItem.title}
+                    </h3>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
