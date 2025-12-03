@@ -37,33 +37,33 @@ export default async function Footer() {
           {/* Company Info Column */}
           <div className="space-y-3 sm:space-y-4 w-full sm:w-auto">
             {/* Logo Section */}
-            <div className="flex justify-center sm:justify-start">
+            <div className="flex justify-start">
               <Link href="/">
                 <img src="/images/logo.png" alt="Eastland Logo" className="h-10 sm:h-12 md:h-14 w-auto" />
               </Link>
             </div>
             {about ? (
-              <p className="text-xs sm:text-sm leading-relaxed text-gray-300 text-center sm:text-left">{about}</p>
+              <p className="text-xs sm:text-sm leading-relaxed text-gray-300 text-left">{about}</p>
             ) : null}
           </div>
 
           {/* Quick Links Column */}
           <div className="space-y-3 sm:space-y-4 w-full sm:w-auto">
-            <h3 className="text-base sm:text-lg font-semibold text-center sm:text-left">Quick Links:</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-left">Quick Links:</h3>
             <ul className="space-y-1.5 sm:space-y-2">
               {links.length > 0 ? (
                 links.map((l, i) => (
-                  <li key={`${l.href}-${i}`} className="text-center sm:text-left">
+                  <li key={`${l.href}-${i}`} className="text-left">
                     <Link href={`/${l.href}`} className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">{l.label}</Link>
                   </li>
                 ))
               ) : (
                 <>
-                  <li className="text-center sm:text-left"><Link href="/" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Home</Link></li>
-                  <li className="text-center sm:text-left"><Link href="/AboutUs" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">About Us</Link></li>
-                  <li className="text-center sm:text-left"><Link href="/Products" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Products</Link></li>
-                  <li className="text-center sm:text-left"><Link href="/Services/OurPortfolio" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Gallery</Link></li>
-                  <li className="text-center sm:text-left"><Link href="/Contact" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Contact Us</Link></li>
+                  <li className="text-left"><Link href="/" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Home</Link></li>
+                  <li className="text-left"><Link href="/AboutUs" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">About Us</Link></li>
+                  <li className="text-left"><Link href="/Products" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Products</Link></li>
+                  <li className="text-left"><Link href="/Services/OurPortfolio" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Gallery</Link></li>
+                  <li className="text-left"><Link href="/Contact" className="text-xs sm:text-sm text-gray-300 hover:text-yellow-400 hover:underline transition-colors">Contact Us</Link></li>
                 </>
               )}
             </ul>
@@ -71,10 +71,10 @@ export default async function Footer() {
 
           {/* Contact Info Column */}
           <div className="space-y-3 sm:space-y-4 w-full sm:w-auto">
-            <h3 className="text-base sm:text-lg font-semibold text-center sm:text-left">Contact Info:</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-left">Contact Info:</h3>
             <div className="space-y-2 sm:space-y-3">
               {email ? (
-                <div className="flex items-center gap-2 sm:gap-3 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 sm:gap-3 justify-start">
                   <svg className="h-3 w-3 sm:h-4 sm:w-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -82,7 +82,7 @@ export default async function Footer() {
                 </div>
               ) : null}
               {phone ? (
-                <div className="flex items-center gap-2 sm:gap-3 justify-center sm:justify-start">
+                <div className="flex items-center gap-2 sm:gap-3 justify-start">
                   <svg className="h-3 w-3 sm:h-4 sm:w-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
@@ -90,7 +90,7 @@ export default async function Footer() {
                 </div>
               ) : null}
               {address ? (
-                <div className="flex items-start gap-2 sm:gap-3 justify-center sm:justify-start">
+                <div className="flex items-start gap-2 sm:gap-3 justify-start">
                   <svg className="h-3 w-3 sm:h-4 sm:w-4 text-gray-300 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -103,8 +103,8 @@ export default async function Footer() {
 
           {/* Social Media Column */}
           <div className="space-y-3 sm:space-y-4 w-full sm:w-auto">
-            <h3 className="text-base sm:text-lg font-semibold text-center sm:text-left">Social Media:</h3>
-            <div className="flex gap-3 sm:gap-4 justify-center sm:justify-start">
+            <h3 className="text-base sm:text-lg font-semibold text-left">Social Media:</h3>
+            <div className="flex gap-3 sm:gap-4 justify-start">
               {twitter ? (
                 <a href={twitter} target="_blank" rel="noreferrer" className="text-gray-300 hover:text-yellow-400 transition-colors">
                   <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -139,7 +139,7 @@ export default async function Footer() {
 
         {/* Bottom Section with Copyright */}
         <div className="mt-6 sm:mt-8 border-t border-white/20 pt-6 sm:pt-8">
-          <div className="text-center">
+          <div className="text-left">
             <p className="text-xs sm:text-sm text-gray-300">© 2025. All Rights Reserved.</p>
           </div>
         </div>
