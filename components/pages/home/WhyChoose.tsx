@@ -2,6 +2,7 @@
 
 import LazyImage from "@/components/ui/LazyImage"
 import { useScroll } from "@/hooks/useScroll"
+import Link from "next/link"
 
 interface WhyChooseProps {
   content?: {
@@ -106,8 +107,8 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
           </p>
 
           <div className="mt-6 sm:mt-8">
-            <a
-              href="/about"
+            <Link
+              href="/aboutus"
               className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-emerald-700 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-emerald-700 transition-all duration-300 hover:bg-emerald-700 hover:text-white hover:border-emerald-800 hover:shadow-lg hover:scale-105 group"
             >
               See More
@@ -124,7 +125,7 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
               >
                 <path d="M7 17L17 7M17 7H7M17 7V17"/>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
