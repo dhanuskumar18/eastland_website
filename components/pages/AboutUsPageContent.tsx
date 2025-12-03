@@ -608,7 +608,7 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
           {isTransitioning && previousMember && (
             <h2
               className="text-4xl sm:text-6xl md:text-8xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-bold text-center whitespace-nowrap name-exit"
-              style={{
+              style={{  
                 background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -645,11 +645,11 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
         </div>
 
         {/* Featured Image - Large Center Display */}
-        <div className="relative mb-8 sm:mb-12 md:mb-16 z-10" style={{ height: 'clamp(250px, 30vw, 600px)', minHeight: '250px' }}>
+        <div className="relative mb-8 sm:mb-12 md:mb-16 z-10" style={{ height: 'clamp(200px, 25vw, 400px)', minHeight: '200px' }}>
           {/* Previous image (exiting) */}
           {isTransitioning && previousMember && (
             <div
-              className="absolute rounded-2xl sm:rounded-3xl overflow-hidden w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px] xl:w-[650px] xl:h-[650px] 2xl:w-[800px] 2xl:h-[800px] image-exit"
+              className="absolute rounded-2xl sm:rounded-3xl overflow-hidden w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[260px] md:h-[260px] lg:w-[300px] lg:h-[300px] xl:w-[340px] xl:h-[340px] 2xl:w-[380px] 2xl:h-[380px] image-exit"
               style={{
                 top: '50%',
                 left: '50%',
@@ -658,20 +658,22 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
                 zIndex: 4,
               }}
             >
-              <LazyImage
-                src={previousMember.image || "/placeholder.svg"}
-                alt={previousMember.name}
-                fill
-                className="object-cover"
-                imageType="page"
-                sectionId={sectionId}
-              />
+              <div className="relative w-full h-full">
+                <LazyImage
+                  src={previousMember.image || "/placeholder.svg"}
+                  alt={previousMember.name}
+                  fill
+                  className="object-cover"
+                  imageType="page"
+                  sectionId={sectionId}
+                />
+              </div>
             </div>
           )}
           
           {/* Current image (entering) */}
           <div
-            className={`absolute rounded-2xl sm:rounded-3xl overflow-hidden w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[450px] md:h-[450px] lg:w-[550px] lg:h-[550px] xl:w-[650px] xl:h-[650px] 2xl:w-[800px] 2xl:h-[800px] ${isTransitioning ? 'image-enter' : 'image-static'}`}
+            className={`absolute rounded-2xl sm:rounded-3xl overflow-hidden w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[260px] md:h-[260px] lg:w-[300px] lg:h-[300px] xl:w-[340px] xl:h-[340px] 2xl:w-[380px] 2xl:h-[380px] ${isTransitioning ? 'image-enter' : 'image-static'}`}
             style={{
               top: '50%',
               left: '50%',
@@ -680,19 +682,21 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
               zIndex: 5,
             }}
           >
-            <LazyImage
-              src={currentMember.image || "/placeholder.svg"}
-              alt={currentMember.name}
-              fill
-              className="object-cover"
-              imageType="page"
-              sectionId={sectionId}
-            />
+            <div className="relative w-full h-full">
+              <LazyImage
+                src={currentMember.image || "/placeholder.svg"}
+                alt={currentMember.name}
+                fill
+                className="object-cover"
+                imageType="page"
+                sectionId={sectionId}
+              />
+            </div>
           </div>
         </div>
 
         {/* Team Cards Container - Shows 3 at a time - Overlay on featured image */}
-        <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[80%] mx-auto relative z-20 -mt-16 sm:-mt-24 md:-mt-32">
+        <div className="max-w-[95%] sm:max-w-[90%] md:max-w-[80%] mx-auto relative z-20 -mt-12 sm:-mt-16 md:-mt-20">
           <Carousel
             setApi={setApi}
             opts={{
