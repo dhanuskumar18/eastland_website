@@ -607,7 +607,7 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
           {/* Previous name (exiting) */}
           {isTransitioning && previousMember && (
             <h2
-              className="text-4xl sm:text-6xl md:text-8xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-bold text-center whitespace-nowrap name-exit"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold text-center whitespace-nowrap name-exit"
               style={{  
                 background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
                 WebkitBackgroundClip: 'text',
@@ -627,7 +627,7 @@ function TeamSection({ teamContent, sectionId }: TeamSectionProps = {}) {
           
           {/* Current name (entering) */}
           <h2
-            className={`text-4xl sm:text-6xl md:text-8xl lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] font-bold text-center whitespace-nowrap ${isTransitioning ? 'name-enter' : 'name-static'}`}
+            className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold text-center whitespace-nowrap ${isTransitioning ? 'name-enter' : 'name-static'}`}
             style={{
               background: 'linear-gradient(180deg, #017850 39.72%, #BEFFE9 80.93%)',
               WebkitBackgroundClip: 'text',
