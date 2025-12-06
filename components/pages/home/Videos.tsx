@@ -343,22 +343,19 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
 
   // Build title with subTitle1 and subTitle2
   const buildTitle = () => {
-    if (content?.title && content?.subTitle1 && content?.subTitle2) {
+    if (content?.subTitle1 && content?.subTitle2) {
       return (
         <>
-          {content.title}
-          <span className="text-emerald-700"> {content.subTitle1}</span>
-          <br /> {content.subTitle2}
+          {content.subTitle1} <span className="text-emerald-700">{content.subTitle2}</span>
         </>
       )
     }
-    if (content?.title) {
-      return content.title
+    if (content?.subTitle1) {
+      return content.subTitle1
     }
     return (
       <>
-        Watch How We Transform <span className="text-emerald-700">Empty Spaces</span>
-        <br /> Into Full-Scale Restaurants
+        Watch How We Transform <span className="text-emerald-700">Empty Spaces Into Full-Scale Restaurants</span>
       </>
     )
   }
@@ -367,7 +364,7 @@ export default function Videos({ content, sectionId }: VideosProps = {}) {
     <>
       <section ref={ref} className="mx-auto max-w-[90%] sm:max-w-[80%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8">
         <p ref={featuredTextRef} className="text-xs sm:text-sm font-semibold text-slate-500">
-          {content?.subTitle1 || "Featured Videos"}
+          {content?.title || "Featured Videos"}
         </p>
 
         <div className="mt-2 grid items-start gap-4 sm:gap-6 md:gap-8 md:grid-cols-2">

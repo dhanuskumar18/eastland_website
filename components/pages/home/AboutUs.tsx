@@ -7,6 +7,7 @@ import LazyImage from "@/components/ui/LazyImage"
 interface AboutUsProps {
   content?: {
     title?: string
+    subTitle?: string
     subTitle1?: string
     subTitle2?: string
     descSubTitle?: string
@@ -88,7 +89,16 @@ export default function AboutUs({ content, sectionId }: AboutUsProps = {}) {
         <div className="mt-6 md:mt-0">
           <p className="text-xs sm:text-sm font-semibold text-slate-500">About Us</p>
           <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
-            {content?.title || (
+            {content?.title ? (
+              <>
+                {content.title}
+                {content.subTitle && (
+                  <>
+                    <br className="hidden sm:block" /> <span className="text-emerald-700">{content.subTitle}</span>
+                  </>
+                )}
+              </>
+            ) : (
               <>
                 Shaping the Future of <span className="text-emerald-700">Quick Service</span>
                 <br className="hidden sm:block" /> <span className="text-emerald-700">Restaurant Design</span>

@@ -7,6 +7,7 @@ interface GalleryProps {
     title?: string
     description?: string
     descSubTitle?: string
+    subTitle?: string
     images?: Array<{
       image?: string
       title?: string
@@ -70,7 +71,16 @@ export default function Gallery({ content, sectionId }: GalleryProps = {}) {
       
       <div className="mt-2 grid items-start gap-4 sm:gap-6 md:gap-8 md:grid-cols-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
-          {content?.descSubTitle || (
+          {content?.descSubTitle ? (
+            <>
+              {content.descSubTitle}
+              {content.subTitle && (
+                <>
+                  <br /> <span className="text-emerald-700">{content.subTitle}</span>
+                </>
+              )}
+            </>
+          ) : (
             <>
               Explore Cafes and Quick Service
               <br /> <span className="text-emerald-700">Spaces We've Built</span>

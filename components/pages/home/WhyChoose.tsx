@@ -9,6 +9,7 @@ interface WhyChooseProps {
     title?: string
     description?: string
     descSubTitle?: string
+    subTitle?: string
     images?: string[]
   }
   sectionId?: number | string
@@ -95,7 +96,16 @@ export default function WhyChoose({ content, sectionId }: WhyChooseProps = {}) {
         <div className={`mt-6 md:mt-0 transition-all duration-1000 delay-200 ${isInView ? 'animate-slide-up-shake' : 'opacity-0 translate-y-8'}`}>
           <p className="text-xs sm:text-sm font-semibold text-slate-500">{content?.title || "Why Choose Us"}</p>
           <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">
-            {content?.descSubTitle || (
+            {content?.descSubTitle ? (
+              <>
+                {content.descSubTitle}
+                {content.subTitle && (
+                  <>
+                    <br /> <span className="text-emerald-700">{content.subTitle}</span>
+                  </>
+                )}
+              </>
+            ) : (
               <>
                 Excellence, Efficiency, &
                 <br /> <span className="text-emerald-700">Innovation In Every Project</span>

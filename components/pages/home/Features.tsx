@@ -83,7 +83,16 @@ export default function Features({ content, sectionId }: FeaturesProps = {}) {
     <section ref={ref} className="mx-auto max-w-[100%] px-4 py-12 sm:py-16 md:py-20 sm:px-6 lg:px-8 bg-green-50/50">
       <div className="max-w-[90%] sm:max-w-[80%] mx-auto">
       <h2 className={`text-center text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl transition-opacity duration-300 ${isInView ? 'opacity-100 animate-slide-up-bounce' : 'opacity-0'}`}>
-        {content?.title || (
+        {content?.title ? (
+          <>
+            {content.title}
+            {content.subTitle && (
+              <>
+                <br /> <span className="text-emerald-700">{content.subTitle}</span>
+              </>
+            )}
+          </>
+        ) : (
           <>
             Future-Ready Quick Service <span className="text-emerald-700">Installations</span>
             <br /> <span className="text-emerald-700">With Efficient Workflow</span>
